@@ -1,0 +1,27 @@
+<nb-card>
+    <nb-card-body>
+        <button 
+            nbButton 
+            outline
+            size="small" 
+            status="primary"
+            class="m-2"
+            *ngFor="let button of [
+                { name : 'New', icon : 'plus-outline' },
+                { name : 'Import', icon : 'download-outline' },
+                { name : 'Export', icon : 'upload-outline' },
+            ]"
+            (click)="
+                    button.name == 'New'        ? addNew()
+                :   button.name == 'Import'     ? import()
+                :   button.name == 'Export'     ? export()
+                :   button.name == 'Print'      ? print()
+                :   button.name == 'QR Print'   ? qrPrint()
+                :   null
+                    "
+            >
+                <nb-icon [icon]="button.icon" [pack]="button.pack ?? 'eva' " class="m-1"></nb-icon>
+                <span>{{ button.name }}</span>
+            </button>
+    </nb-card-body>
+</nb-card>
