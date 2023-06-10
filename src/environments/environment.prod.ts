@@ -5,5 +5,6 @@
  */
 export const environment = {
   production: true,
-  apiUrl: "http://127.0.0.1:8000/api"
+  apiUrl: "https://pipnginspection.000webhostapp.com/api",
+  // apiUrl: "http://127.0.0.1:8000/api"
 };
