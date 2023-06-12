@@ -42,25 +42,21 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-
           token: {
-            class: NbAuthJWTToken,
-
+            // class: NbAuthJWTToken,
             key: 'data.access_token'
           },
          
           baseEndpoint: environment.apiUrl,
            login: {
-             // ...
-             endpoint: '/auth/login',
+             endpoint: '/login',
              redirect: {
               success: '/pages',
               failure: null,
              }
            },
            logout: {
-             // ...
-             endpoint: '/auth/logout',
+             endpoint: '/logout',
              redirect: {
               success: '/'
              }

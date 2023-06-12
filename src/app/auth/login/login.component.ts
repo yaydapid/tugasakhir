@@ -19,29 +19,28 @@ export class NgxLoginComponent extends NbLoginComponent {
   // }
   
   login(): void {
-    this.router.navigateByUrl('/pages/dashboards/piping-assets')
-    // this.errors = [];
-    // this.messages = [];
-    // this.submitted = true;
-    // this.service.authenticate(this.strategy, {
-    //   user_email: this.user.email, 
-    //   password: this.user.password, 
-    //   remember: this.rememberMe
-    // }).subscribe((result: NbAuthResult) => {
-    //   this.submitted = false;
-    //   console.log(result)
+    // this.router.navigateByUrl('/pages/dashboards/piping-assets')
+    this.errors = [];
+    this.messages = [];
+    this.submitted = true;
+    this.service.authenticate(this.strategy, {
+      username: this.user.email, 
+      password: this.user.password, 
+      remember: this.rememberMe
+    }).subscribe((result: NbAuthResult) => {
+      this.submitted = false;
       
-    //   if (result.isSuccess()) {
-    //     this.messages = result.getMessages();
-    //   } else {
-    //     this.errors = result.getErrors();
-    //   }
+      if (result.isSuccess()) {
+        this.messages = result.getMessages();
+      } else {
+        this.errors = result.getErrors();
+      }
 
-    //   const redirect = result.getRedirect();
-    //   if (redirect) {
-    //       this.router.navigateByUrl(redirect);
-    //   }
-    //   this.cd.detectChanges();
-    // });
+      const redirect = result.getRedirect();
+      if (redirect) {
+          this.router.navigateByUrl(redirect);
+      }
+      this.cd.detectChanges();
+    });
   } 
 }
