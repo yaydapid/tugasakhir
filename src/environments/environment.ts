@@ -10,6 +10,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://pipingmonitoring.my.id/api"
-  // apiUrl: "http://127.0.0.1:8000/api"
+  // apiUrl: "https://pipingmonitoring.my.id/api"
+  apiUrl: "http://127.0.0.1:8000/api"
+  // apiUrl: "Laravel_10.test/api"
 };
