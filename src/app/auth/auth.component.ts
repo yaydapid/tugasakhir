@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginBateraService } from './login/login.service';
 
 @Component({
   selector: 'ngx-auth',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private loginService : LoginBateraService
+  ) { }
 
   ngOnInit(): void {
+    // this.loginService.testAPI()
+    // .subscribe(res => console.log(res))
   }
 
 }

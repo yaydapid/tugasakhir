@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgxAuthRoutingModule } from './auth-routing.module';
-import { NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthModule, NbAuthSimpleToken, NbAuthToken, NbPasswordAuthStrategy } from '@nebular/auth';
 import { 
   NbAlertModule,
   NbButtonModule,
@@ -38,15 +38,15 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
     NgxAuthRoutingModule,
     ThemeModule,
     NbMenuModule,
+    // NbAuthModule,
     NbAuthModule.forRoot({
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
           token: {
-            // class: NbAuthJWTToken,
-            key: 'data.access_token'
+            class: NbAuthJWTToken,
+            key: 'access_token'
           },
-         
           baseEndpoint: environment.apiUrl,
            login: {
              endpoint: '/login',
