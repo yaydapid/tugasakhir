@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { NbAuthComponent, NbAuthResult, NbLoginComponent,} from '@nebular/auth';
-import { LoginBateraService } from './login.service';
+import { NbAuthResult, NbLoginComponent,} from '@nebular/auth';
 
 @Component({
   selector: 'ngx-login',
