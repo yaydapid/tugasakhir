@@ -44,7 +44,7 @@
                 <div *ngIf="column.type == 'text'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
-                        {{element[column.prop]}}
+                        {{element[column.prop] || '-'}}
                     </td>
                 </div>
 
@@ -70,7 +70,7 @@
                 <div *ngIf="column.type == 'navto'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
-                        <span class="text-primary" style="cursor: pointer;" (click)="navigateTo(column.nav, element)">{{element[column.prop]}}</span>
+                        <span class="text-primary" style="cursor: pointer;" (click)="navigateTo(column.nav, element)">{{element[column.prop] || '-'}}</span>
                     </td>
                 </div>
 
