@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { 
     NbAccordionModule, 
+    NbButtonModule, 
     NbCardModule, 
     NbCheckboxModule, 
     NbInputModule, 
@@ -42,7 +43,8 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
         NbSelectModule,
         NbOptionModule,
         NbListModule,
-        NbCheckboxModule
+        NbCheckboxModule,
+        NbButtonModule
     ],
     declarations: [
         MatTableComponent,
