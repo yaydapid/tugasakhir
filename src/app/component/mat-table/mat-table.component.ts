@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -36,6 +36,13 @@ export class MatTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  @Output("onClickTable") onClickTable: EventEmitter<any> = new EventEmitter();
+
+  handleClick(data) {
+    // console.log(data)
+    this.onClickTable.emit(data)
+  }
+  
   resultsLength = 0;
   selection = new SelectionModel(true, []);
   dataSource
