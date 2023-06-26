@@ -38,11 +38,6 @@ export class MatTableComponent implements OnInit {
 
   @Output("onClickTable") onClickTable: EventEmitter<any> = new EventEmitter();
 
-  handleClick(data) {
-    // console.log(data)
-    this.onClickTable.emit(data)
-  }
-  
   resultsLength = 0;
   selection = new SelectionModel(true, []);
   dataSource

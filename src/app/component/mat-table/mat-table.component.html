@@ -5,7 +5,7 @@
             <nb-select [placeholder]="tableHeader?.filter" class="mx-5" status="primary">
                 <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
             </nb-select>
-        </div>
+        </div>  
         <mat-form-field>
             <mat-label>Hit Enter To Search</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -53,7 +53,7 @@
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex justify-content-between">
-                            <button *ngFor="let button of column.button" nbButton size="tiny" status="basic" (click)="onClickTable.emit(element)">
+                            <button *ngFor="let button of column.button" nbButton size="tiny" status="basic" (click)="onClickTable.emit({data : element, title : button.title})">
                                 <nb-icon [icon]="button.icon" [status]="button.status"></nb-icon>
                             </button>
                         </div> 
