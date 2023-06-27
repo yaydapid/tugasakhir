@@ -43,6 +43,11 @@ export class MatTableComponent implements OnInit {
   dataSource
 
   checked = false;
+
+  regenerateTable(tableData) {
+    this.dataSource = new MatTableDataSource(tableData)
+  }
+
   toggle(checked: boolean) {
     this.checked = checked;
   }

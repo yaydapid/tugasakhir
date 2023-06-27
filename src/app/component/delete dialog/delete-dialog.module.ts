@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { DeleteDialogComponent } from "./delete-dialog.component";
 import { CommonModule } from "@angular/common";
-import { NbDialogModule } from "@nebular/theme";
+import { NbButtonModule, NbCardModule, NbDialogModule, NbIconModule } from "@nebular/theme";
 import { ThemeModule } from "../../@theme/theme.module";
 
 @NgModule({ 
@@ -11,6 +11,9 @@ import { ThemeModule } from "../../@theme/theme.module";
         NbDialogModule.forChild({
             closeOnBackdropClick : true
         }),
+        NbCardModule,
+        NbIconModule,
+        NbButtonModule
     ],
     declarations : [
         DeleteDialogComponent

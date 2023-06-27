@@ -1,1 +1,20 @@
-<h5>Delete dialog</h5>
+<div class="w-100 d-flex justify-content-center mt-5">
+    <nb-card class="mt-5" style="max-height: 35rem; min-width: 20rem;">
+        <nb-card-header class="d-flex">
+            <h5 class="w-100">Delete</h5>
+            <div class="flex-shrink-1">
+                <button nbButton status="danger" size="tiny" (click)="closeDialog()">
+                    <nb-icon icon="close-outline"></nb-icon>
+                </button>
+            </div>
+        </nb-card-header>
+        <nb-card-body>  
+            <span class="d-flex justify-content-center">Are you sure to delete this?</span>
+            <div class="d-flex justify-content-center">
+                <button status="success" size="small" nbButton class="m-1" (click)="closeDialog(dialogData)">Yes</button>
+                <button status="danger" size="small" nbButton class="m-1" (click)="closeDialog()">No</button>
+            </div>
+        </nb-card-body>
+
+    </nb-card>
+</div>

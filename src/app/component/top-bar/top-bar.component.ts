@@ -24,14 +24,15 @@ export class TopBarComponent implements OnInit {
   }
 
   addNew() {
-    const route : any = this.activeRoute.snapshot.data?.routename || this.activeRoute.snapshot.firstChild.data.routename
-    console.log(route)
+    const route : any = this.activeRoute.snapshot.data?.routename 
+    || this.activeRoute.snapshot.firstChild.data.routename
 
     if(route == 'assets')
     this.dialogService.open(AddAssetsComponent, {
       context: {
-        dialogData : 'hello'
-        // title: 'This is a title passed to the dialog component',
+        dialogData : {
+          title: 'Add Assets',
+        }
       },
     });
 

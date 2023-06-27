@@ -12,11 +12,7 @@ export class DeleteDialogComponent {
 
     @Input() dialogData;
     closeDialog(arr = null) {
-        if(!arr) this.dialog.close()
-        if(arr) {
-          console.log(arr)
-          // this.assetsService.addPipingAssets(arr)
-          // .subscribe(res => console.log(res))
-        }
+        if(!arr) this.dialog.close();
+        if(arr) this.dialog.close(arr);
     }
 }
