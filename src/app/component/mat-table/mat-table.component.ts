@@ -19,7 +19,7 @@ export class MatTableComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.tableData)
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit() { 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -29,7 +29,7 @@ export class MatTableComponent implements OnInit {
     show : true,
     pageSize : 30
   }; 
-  @Input() tableData;
+  @Input() public tableData;
   @Input() columnDetails
   displayedColumns: string[]
   
@@ -40,12 +40,15 @@ export class MatTableComponent implements OnInit {
 
   resultsLength = 0;
   selection = new SelectionModel(true, []);
-  dataSource
+  public dataSource
 
   checked = false;
 
   regenerateTable(tableData) {
+    console.log(tableData)
+    this.tableData = tableData
     this.dataSource = new MatTableDataSource(tableData)
+    this.ngAfterViewInit()
   }
 
   toggle(checked: boolean) {

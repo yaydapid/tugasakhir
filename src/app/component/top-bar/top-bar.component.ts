@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { PrintQRCodeComponent } from './qr-code/qr-code.dialog';
-import { AddAssetsComponent } from '../../pages/dashboard/piping-assets/add-assets/add-assets.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AddCircuitComponent } from '../../pages/dashboard/piping-circuits/add-circuit/add-circuit.component';
-import { AddProposalComponent } from '../../pages/dashboard/view-proposal/add-proposal/add-proposal.component';
-import { AddCMLComponent } from '../../pages/cml/add-cml/add-cml.component';
+import { ActivatedRoute } from '@angular/router';
+import { PipingAssetsComponent } from '../../pages/dashboard/piping-assets/piping-assets.component';
+import { PipingCircuitsComponent } from '../../pages/dashboard/piping-circuits/piping-circuits.component';
+import { ViewProposalComponent } from '../../pages/dashboard/view-proposal/view-proposal.component';
+import { CmlComponent } from '../../pages/cml/cml.component';
 
 @Component({
   selector: 'ngx-top-bar',
@@ -16,49 +16,29 @@ export class TopBarComponent implements OnInit {
   constructor(
     private dialogService: NbDialogService,
     private activeRoute : ActivatedRoute,
-    private router : Router
+    private assetComponent : PipingAssetsComponent,
+    private circuitComponent : PipingCircuitsComponent,
+    private proposalComponent : ViewProposalComponent,
+    private cmlComponent : CmlComponent
   ) { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   addNew() {
     const route : any = this.activeRoute.snapshot.data?.routename 
     || this.activeRoute.snapshot.firstChild.data.routename
 
     if(route == 'assets')
-    this.dialogService.open(AddAssetsComponent, {
-      context: {
-        dialogData : {
-          title: 'Add Assets',
-        }
-      },
-    });
-
+    this.assetComponent.addAssets()
+    
     if(route == 'circuit')
-    this.dialogService.open(AddCircuitComponent, {
-      context: {
-        dialogData : 'hello'
-        // title: 'This is a title passed to the dialog component',
-      },
-    });
+    this.circuitComponent.addCircuit()
 
     if(route == 'proposal')
-    this.dialogService.open(AddProposalComponent, {
-      context: {
-        dialogData : 'hello'
-        // title: 'This is a title passed to the dialog component',
-      },
-    });
+    this.proposalComponent.addProposal()
 
     if(route == 'cml')
-    this.dialogService.open(AddCMLComponent, {
-      context: {
-        dialogData : 'hello'
-        // title: 'This is a title passed to the dialog component',
-      },
-    });
+    this.cmlComponent.addCML();
   }
 
   import() {
