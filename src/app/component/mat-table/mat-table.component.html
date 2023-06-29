@@ -7,14 +7,17 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
             </mat-form-field>
         </div>
-        <div *ngFor="let filter of tableHeader?.filter">
-            <nb-select [placeholder]="filter.name" size='small' class="mx-5" status="primary">
-                <nb-option 
-                [value]="option" 
-                *ngFor="let option of filter.value"
-                (click)="onClickTable.emit({data : option, title : filter.title})"
-                >{{ option }}</nb-option>
-            </nb-select>
+        <div *ngFor="let filter of tableHeader?.filter" class="row">
+            <div class="col">{{ filter?.name }}</div>
+            <div class="col"> 
+                <nb-select [placeholder]="filter?.name" size='small' class="mx-5" status="primary">
+                    <nb-option 
+                    [value]="option" 
+                    *ngFor="let option of filter?.value"
+                    (click)="onClickTable.emit({data : option, title : filter?.title})"
+                    >{{ option }}</nb-option>
+                </nb-select>
+            </div>
         </div>
     </nb-card-header>
     
