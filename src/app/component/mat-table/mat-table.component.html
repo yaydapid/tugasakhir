@@ -1,15 +1,21 @@
 <nb-card>
     <nb-card-header class="d-flex justify-content-between" *ngIf="tableHeader.show ?? true">
-        <div class="d-flex">
+        <div>
             <h5>{{ tableHeader?.title }}</h5>
-            <nb-select [placeholder]="tableHeader?.filter" class="mx-5" status="primary">
-                <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
+            <mat-form-field>
+                <mat-label>Hit Enter To Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+            </mat-form-field>
+        </div>
+        <div *ngFor="let filter of tableHeader?.filter">
+            <nb-select [placeholder]="filter.name" size='small' class="mx-5" status="primary">
+                <nb-option 
+                [value]="option" 
+                *ngFor="let option of filter.value"
+                (click)="onClickTable.emit({data : option, title : filter.title})"
+                >{{ option }}</nb-option>
             </nb-select>
-        </div>  
-        <mat-form-field>
-            <mat-label>Hit Enter To Search</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-        </mat-form-field>
+        </div>
     </nb-card-header>
     
     <nb-card-body class="row">
@@ -94,8 +100,3 @@
         
     </nb-card-body>
 </nb-card>
-
-
-<!-- style="cursor : pointer"
-(mouseover)="nameCell.style.color = '#0492c2'"
-(mouseout)="nameCell.style.color = 'black'" -->

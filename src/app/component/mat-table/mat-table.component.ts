@@ -45,7 +45,6 @@ export class MatTableComponent implements OnInit {
   checked = false;
 
   regenerateTable(tableData) {
-    console.log(tableData)
     this.tableData = tableData
     this.dataSource = new MatTableDataSource(tableData)
     this.ngAfterViewInit()
