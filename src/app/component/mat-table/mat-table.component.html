@@ -74,7 +74,7 @@
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
                         <div class="d-flex justify-content-center w-50">
-                            <nb-checkbox (checkedChange)="toggle($event)"></nb-checkbox>
+                            <nb-checkbox (checkedChange)="toggle($event)" [checked]="element[column.prop]" ></nb-checkbox>
                         </div>
                     </td>
                 </div>
@@ -84,6 +84,26 @@
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
                         <span class="text-primary" style="cursor: pointer;" (click)="navigateTo(column.nav, element)">{{element[column.prop] || '-'}}</span>
+                    </td>
+                </div>
+
+                <div *ngIf="column.type == 'drop-down'">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
+                    <td mat-cell *matCellDef="let element"> 
+                        <mat-form-field class="my-2">
+                            <mat-label>{{ column.head }}</mat-label>
+                            <mat-select>
+                            <mat-option [value]="item" *ngFor="let item of column.value">{{ item }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </div>
+
+                <div *ngIf="column.type == 'editable'">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
+                    <td mat-cell *matCellDef="let element" (dblclick)="onClickTable.emit({data : element, title : 'edit row'})"> 
+                        <!-- <span>{{element[column.prop] || '-'}}</span> -->
+                        <input type="text" nbInput fieldSize="small" class="m-1">
                     </td>
                 </div>
 
