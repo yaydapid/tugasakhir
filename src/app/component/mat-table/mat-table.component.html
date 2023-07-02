@@ -1,5 +1,5 @@
 <nb-card>
-    <nb-card-header class="d-flex justify-content-between" *ngIf="tableHeader.show ?? true">
+    <nb-card-header class="d-flex justify-content-between" *ngIf="tableHeader?.show ?? true">
         <div>
             <h5>{{ tableHeader?.title }}</h5>
             <mat-form-field>
@@ -31,11 +31,14 @@
                         <mat-checkbox (change)="$event ? toggleAllRows() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                    [aria-label]="checkboxLabel()">
+                                    [aria-label]="checkboxLabel()"
+                                    (click)="selectTableRow();"
+                                    >
                         </mat-checkbox>
                     </th>
                     <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()" 
+                        <mat-checkbox 
+                                    (click)="$event.stopPropagation(); selectTableRow();" 
                                     (change)="$event ? selection.toggle(row) : null"
                                     [checked]="selection.isSelected(row)"
                                     [aria-label]="checkboxLabel(row)">
@@ -74,7 +77,7 @@
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
                         <div class="d-flex justify-content-center w-50">
-                            <nb-checkbox (checkedChange)="toggle($event)" [checked]="element[column.prop]" ></nb-checkbox>
+                            <nb-checkbox (checkedChange)="toggle($event)" [checked]="element[column.prop]" [(ngModel)]="element[column.prop]"></nb-checkbox>
                         </div>
                     </td>
                 </div>
@@ -92,18 +95,26 @@
                     <td mat-cell *matCellDef="let element"> 
                         <mat-form-field class="my-2">
                             <mat-label>{{ column.head }}</mat-label>
-                            <mat-select>
+                            <mat-select [(ngModel)]="element[column.prop]">
                             <mat-option [value]="item" *ngFor="let item of column.value">{{ item }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </td>
                 </div>
 
-                <div *ngIf="column.type == 'editable'">
+                <div *ngIf="column.type == 'editable text'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element" (dblclick)="onClickTable.emit({data : element, title : 'edit row'})"> 
-                        <!-- <span>{{element[column.prop] || '-'}}</span> -->
-                        <input type="text" nbInput fieldSize="small" class="m-1">
+                        <!-- <span>{{element | json}}</span> -->
+                        <input type="text" nbInput fieldSize="small" class="m-1" [(ngModel)]="element[column.prop]" >
+                    </td>
+                </div>
+
+                <div *ngIf="column.type == 'editable date'">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
+                    <td mat-cell *matCellDef="let element" (dblclick)="onClickTable.emit({data : element, title : 'edit row'})"> 
+                        <input type="text" nbInput fieldSize="small" [nbDatepicker]="datepicker" class="m-1" value="" [(ngModel)]="element[column?.prop]" >
+                        <nb-datepicker #datepicker></nb-datepicker>
                     </td>
                 </div>
 
@@ -115,7 +126,7 @@
             </tr>
         </table>
 
-        <mat-paginator *ngIf="tableFooter.show ?? true"
+        <mat-paginator *ngIf="tableFooter?.show ?? true"
             [length]="resultsLength" 
             [pageSize]="tableFooter.pageSize ?? 30" 
             aria-label="Select page of GitHub search results">

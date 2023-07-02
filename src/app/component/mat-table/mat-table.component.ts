@@ -39,7 +39,7 @@ export class MatTableComponent implements OnInit {
   @Output("onClickTable") onClickTable: EventEmitter<any> = new EventEmitter();
 
   resultsLength = 0;
-  selection = new SelectionModel(true, []);
+  selection : any = new SelectionModel(true, []);
   public dataSource
 
   checked = false;
@@ -55,7 +55,7 @@ export class MatTableComponent implements OnInit {
   }
 
   navigateTo(nav, element) {
-    this.router.navigateByUrl(nav + element.piping_id)
+    this.router.navigateByUrl(nav + element.id)
   }
 
   applyFilter(event: Event) {
@@ -66,9 +66,16 @@ export class MatTableComponent implements OnInit {
     }
   }
 
+  selectTableRow() {
+    this.onClickTable.emit({data : this.selection["_selected"], title : 'Export To Excel'})
+  }
+
+  getDataSource() {
+    return this.dataSource
+  }
+
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    this.onClickTable.emit({data : this.selection["_selected"], title : 'Export To Excel'})
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;

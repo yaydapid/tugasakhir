@@ -9,7 +9,7 @@
             </div>
         </nb-card-header>
         <nb-card-body>  
-            <span class="d-flex justify-content-center">Are you sure to delete this?</span>
+            <span class="d-flex justify-content-center">Are you sure to delete {{ dialogData?.name }}?</span>
             <div class="d-flex justify-content-center">
                 <button status="success" size="small" nbButton class="m-1" (click)="closeDialog(dialogData)">Yes</button>
                 <button status="danger" size="small" nbButton class="m-1" (click)="closeDialog()">No</button>

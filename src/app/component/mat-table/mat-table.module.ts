@@ -14,6 +14,7 @@ import {
     NbButtonModule, 
     NbCardModule, 
     NbCheckboxModule, 
+    NbDatepickerModule, 
     NbIconModule, 
     NbInputModule, 
     NbListModule, 
@@ -46,7 +47,8 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
         NbOptionModule,
         NbListModule,
         NbCheckboxModule,
-        NbButtonModule
+        NbButtonModule,
+        NbDatepickerModule
     ],
     declarations: [
         MatTableComponent,
