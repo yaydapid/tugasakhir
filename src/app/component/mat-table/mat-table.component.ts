@@ -39,7 +39,7 @@ export class MatTableComponent implements OnInit {
   @Output("onClickTable") onClickTable: EventEmitter<any> = new EventEmitter();
 
   resultsLength = 0;
-  selection : any = new SelectionModel(true, []);
+  selection = new SelectionModel(true,[], true);
   public dataSource
 
   checked = false;
@@ -67,7 +67,8 @@ export class MatTableComponent implements OnInit {
   }
 
   selectTableRow() {
-    this.onClickTable.emit({data : this.selection["_selected"], title : 'Export To Excel'})
+    return this.selection.selected
+    // this.onClickTable.emit({data, title : 'Export To Excel'})
   }
 
   getDataSource() {
