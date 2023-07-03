@@ -68,7 +68,6 @@ export class MatTableComponent implements OnInit {
 
   selectTableRow() {
     return this.selection.selected
-    // this.onClickTable.emit({data, title : 'Export To Excel'})
   }
 
   getDataSource() {
