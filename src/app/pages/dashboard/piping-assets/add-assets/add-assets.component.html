@@ -1,0 +1,117 @@
+<div class="w-100 d-flex justify-content-center mt-5">
+    <nb-card class="mt-5" style="max-height: 35rem; min-width: 90rem;">
+
+    <!-- <nb-card class="mt-5"> -->
+        <nb-card-header class="d-flex">
+            <h5 class="w-100">{{ dialogData?.title }}</h5>
+            <div class="flex-shrink-1">
+                <button nbButton status="danger" size="tiny" (click)="closeDialog()">
+                    <nb-icon icon="close-outline"></nb-icon>
+                </button>
+            </div>
+        </nb-card-header>
+        <nb-card-body>  
+            
+            <form #addAssetsForm="ngForm" (ngSubmit)="closeDialog(addAssetsForm.value)">
+                
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row row-cols-3">
+                            <div *ngFor="let spec of spesificationItem" class="col mb-2">
+                                <label [for]="spec.id" class="d-block" style="font-size: .9rem;">{{ spec.name }}</label>
+                                <input fieldSize="small" required nbInput type="text" [id]="spec.id"  class="col-8" [name]="spec.id" [ngModel]="dialogData?.data?.[spec.id]">
+                                <span class="col"> {{ spec?.unit }} </span> 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                              <div *ngFor="let image of imageLink; let i = index;" class="carousel-item" [ngClass]="i == 0 ? 'active' : ''" data-bs-interval="10000">
+                                <div class="overflow-hidden d-flex align-justify-center" style="height: 13rem;">
+                                    <img [src]="image.src" class="w-100" [alt]="image?.alt" (click)="addImage.click()" >
+                                </div>
+                              </div>
+                              <label for="addImage">Image</label>
+                              <input  
+                                    placeholder="Add image"
+                                    multiple
+                                    fullWidth 
+                                    nbInput 
+                                    style="display: none;"
+                                    [ngStyle]=" {'display' : imageLink.length ? 'none' : 'block'} "
+                                    type="file" 
+                                    accept="image/png, image/gif, image/jpeg" 
+                                    #addImage 
+                                    id="addImage"
+                                    (change)="onFileChange($event)"
+                                >
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        
+                        <div class="row row-cols-2">
+                            <div>
+                                <label for="dateInService" class="mb-1 d-block">Date In Service</label>
+                                <input fullWidth 
+                                nbInput fieldSize="small" 
+                                [nbDatepicker]="datepicker" 
+                                name="date_in_service" [ngModel]="dialogData?.data?.date_in_service"
+                                required> 
+                                <nb-datepicker #datepicker></nb-datepicker>
+                            </div>
+                            <div>
+                                <label for="class" class="mb-1 d-block">Class</label>
+                                <nb-select 
+                                placeholder="Class" size='small' class="" status="primary"
+                                name="class" [ngModel]="parseToInt(dialogData?.data?.class)"    
+                                >
+                                    <nb-option 
+                                    [value]="option" 
+                                    *ngFor="let option of [1,2,3,4]"
+                                    >{{ option }}</nb-option>
+                                </nb-select>
+                            </div>
+                            <div>
+                                <label for="notes" class="mb-1 d-block">Notes</label>
+                                <input fullWidth nbInput fieldSize="small" type="text" id="notes" name="notes" [ngModel]="dialogData?.data?.notes">
+                            </div>
+                            <div>
+                                <label for="addAttach" class="d-block mb-1">Attachment</label>
+                                <input 
+                                    fullWidth 
+                                    fieldSize="tiny"
+                                    nbInput 
+                                    type="file" 
+                                    id="addAttach"
+                                    accept="application/pdf" 
+                                    #addAttach 
+                                    id="addAttachment"
+                                    name="attachment"
+                                    ngModel
+                                    (change)="onUploadAttachment($event)"
+                                    >
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <label for="recomendation" class="d-block mb-1">Recomendation</label>
+                <textarea fullWidth nbInput name="recomendation" id="recomendation" rows="2" [ngModel]="dialogData?.data?.recomendation"></textarea>
+
+                <div class="d-flex justify-content-center"> 
+                    <button nbButton status="success" type="submit" class="m-1 w-100" [disabled]="!addAssetsForm.form.valid">Add Asset</button>
+                </div>
+            </form>
+        </nb-card-body>
+    </nb-card> 
+</div>

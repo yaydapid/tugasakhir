@@ -1,0 +1,34 @@
+<nb-card>
+    <nb-card-body>
+        <button 
+            nbButton 
+            outline
+            size="small" 
+            status="primary"
+            class="m-2"
+            [disabled]="button?.name == 'Export' && !tableData?.length"
+            *ngFor="let button of [
+                { name : 'New', icon : 'plus-outline' },
+                { name : 'Import', icon : 'download-outline' },
+                { name : 'Export', icon : 'upload-outline' },
+            ]"
+            (click)="
+                    button.name == 'New'        ? addAssets()
+                :   button.name == 'Import'     ? importExcel.click()
+                :   button.name == 'Export'     ? exportExcelFile()
+                :   null
+                    "
+            >
+            <input type="file" style="display: none;" #importExcel accept=".xls,.xlsx" (change)="importExcelFile($event)">
+                <nb-icon [icon]="button.icon" [pack]="button.pack ?? 'eva' " class="m-1"></nb-icon>
+                <span>{{ button.name }}</span>
+            </button>
+    </nb-card-body>
+</nb-card>
+
+<ngx-mat-table 
+    [tableHeader]="tableHeader"
+    [columnDetails]="columnDetails"
+    [tableData]="tableData"
+    (onClickTable)="onClickTable($event.data, $event.title)"
+></ngx-mat-table>

@@ -1,0 +1,73 @@
+<div class="w-100 d-flex justify-content-center mt-5">
+    <nb-card class="mt-5" >
+        <nb-card-header class="d-flex">
+            <h5 class="w-100">{{ dialogData?.title }}</h5>
+            <div class="flex-shrink-1">
+                <button nbButton status="danger" size="tiny" (click)="closeDialog()">
+                    <nb-icon icon="close-outline"></nb-icon>
+                </button>
+            </div>
+        </nb-card-header>
+        <nb-card-body>  
+            <form #cmlForm="ngForm" (ngSubmit)="closeDialog(cmlForm.value)">
+                <div class="">
+                    <div>
+                        <label for="cml_id" class="d-block">CML ID</label>
+                        <input type="text" id="cml_id" 
+                        nbInput fieldSize="small" 
+                        required
+                        [ngModel]="dialogData?.data?.cml_id" 
+                        name="cml_id">
+                        
+                        <label for="gauge_point" class="d-block">Gaguge Point</label>
+                        <input type="text" id="gauge_point" 
+                        nbInput fieldSize="small" 
+                        required
+                        [ngModel]="dialogData?.data?.gauge_point" 
+                        name="gauge_point">
+            
+                        <label for="point_location" class="d-block">Point Location</label>
+                        <input type="text" id="point_location" 
+                        nbInput fieldSize="small" 
+                        required
+                        [ngModel]="dialogData?.data?.point_location"
+                        name="point_location"> 
+            
+                        <!-- <label for="nominal_thickness" class="d-block">Nominal Thickness</label>
+                        <input type="text" id="nominal_thickness" 
+                        nbInput fieldSize="small" 
+                        required
+                        ngModel 
+                        name="nominal_thickness">
+            
+                        <label for="min_required_thickness" class="d-block">Min. Required Thickness</label>
+                        <input type="text" id="min_required_thickness" 
+                        nbInput fieldSize="small" 
+                        ngModel 
+                        required
+                        name="min_required_thickness"> -->
+            
+                        <label for="last_thickness_reading" class="d-block">Last Thickness Reading</label>
+                        <input type="text" id="last_thickness_reading" 
+                        nbInput fieldSize="small" 
+                        required
+                        [ngModel]="dialogData?.data?.last_thickness_reading"
+                        name="last_thickness_reading">
+            
+                        <label for="last_thickness_reading_date" class="d-block">Last Thickness Reading Date</label>
+                        <input type="text" id="last_thickness_reading_date" 
+                        required
+                        nbInput fieldSize="small" 
+                        [nbDatepicker]="datepicker" 
+                        name="last_thickness_reading_date"
+                        [ngModel]="dialogData?.data?.last_thickness_reading_date"
+                        >
+                        <nb-datepicker #datepicker></nb-datepicker>
+                    </div>
+
+                    <button nbButton size="small" status="success" type="submit" class="mt-2 w-100" [disabled]="!cmlForm.form.valid">{{ dialogData?.title }}</button>
+                </div>
+            </form>
+        </nb-card-body>
+    </nb-card>
+</div>

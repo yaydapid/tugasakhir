@@ -1,0 +1,162 @@
+<nb-card>
+    <nb-card-header class="d-flex justify-content-between">
+        <div class="d-flex">
+            <h5>Visual Condition</h5>
+            <!-- <nb-select placeholder="Piping Id" class="mx-5" status="primary">
+                <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
+            </nb-select> -->
+        </div>
+        <mat-form-field>
+            <mat-label>Hit Enter To Search</mat-label>
+            <input matInput 
+                placeholder="Ex. Mia" #input>
+        </mat-form-field>
+    </nb-card-header>
+    <nb-card-body class="row" > 
+
+        <div class="col-3">
+            <table 
+            style="width: 100%; box-shadow: none;" 
+            mat-table [dataSource]="dataSource" 
+            class="mat-elevation-z8">
+                <!-- Position Column -->
+                <ng-container matColumnDef="piping_id">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} "> Piping ID </th>
+                    <td mat-cell *matCellDef="let element" #nameCell
+                        style="cursor : pointer"
+                        [ngStyle]="{'color' : selectionData.piping_id == element.piping_id ? '#0492c2' : 'black'}"
+                        (mouseover)="nameCell.style.color = '#0492c2'"
+                        (mouseout)="selectionData.piping_id == element.piping_id 
+                        ? nameCell.style.color = '#0492c2' 
+                        : nameCell.style.color = 'black'"
+                        (click)="showData(element)"
+                    > {{element.piping_id}} </td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+            </table>
+            
+            <mat-paginator 
+                [length]="resultsLength" 
+                [pageSize]="30" 
+                aria-label="Select page of GitHub search results">
+            </mat-paginator>
+        </div>
+
+        <form class="col-9" #visualConditionForm="ngForm" (ngSubmit)="onSubmit(visualConditionForm.value)" >
+            <nb-accordion multi>
+                <nb-accordion-item expanded="true">
+                <nb-accordion-item-header>General</nb-accordion-item-header>
+                <nb-accordion-item-body>
+
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold text-info">Selected Pipe : {{ selectionData?.piping_id }}</span>
+                        <div>
+                            <mat-form-field class="my-2">
+                                <mat-label>Condition</mat-label>
+                                <mat-select
+                                [ngModel]="selectionData?.visual_condition?.general_condition" 
+                                name="general_condition"
+                                required
+                                >
+                                <mat-option [value]="item" *ngFor="let item of [
+                                    'Excellent',
+                                    'Good',
+                                    'Average',
+                                    'Below Average',
+                                    'Poor'
+                                ]">{{ item }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        
+                        <div class="w-100 px-2">
+                            <label class="d-block mb-2" for="finding">Finding</label>
+                            <textarea 
+                            [ngModel]="selectionData?.visual_condition?.general_finding"
+                            nbInput 
+                            id="finding" 
+                            fullWidth rows="5" 
+                            name="general_finding"></textarea>
+                        </div>
+                
+                        <div class="w-100 px-2">
+                            <label class="d-block mb-2" for="recomendation">Recomendation</label>
+                            <textarea 
+                            nbInput 
+                            name="general_recomendation" 
+                            id="recomendation" 
+                            [ngModel]="selectionData?.visual_condition?.general_recomendation"
+                            fullWidth rows="5"></textarea>
+                        </div>
+                    </div>
+
+                </nb-accordion-item-body>
+                </nb-accordion-item>
+
+                <nb-accordion-item expanded="true">
+                    <nb-accordion-item-header>External Checklist</nb-accordion-item-header>
+                    <nb-accordion-item-body >
+
+                        <div class="row">
+                            <section class="pb-5 px-4 col-6" *ngFor="let checkList of externalCheckList">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label class="d-block mb-2" for="finding">{{ checkList.title }}</label>
+                                    <mat-form-field>
+                                        <mat-label>Condition</mat-label>
+                                        <mat-select
+                                            [ngModel]="selectionData?.visual_condition[checkList?.conditions?.props]"
+                                            [name]="checkList?.conditions?.props"   
+                                            required
+                                        >
+                                        <mat-option 
+                                            [value]="level" 
+                                            *ngFor="let level of [
+                                                'Excellent',
+                                                'Good',
+                                                'Average',
+                                                'Below Average',
+                                                'Poor'
+                                            ]"
+                                            >{{ level }}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                
+                                <div class="w-100">
+                                    <textarea 
+                                    nbInput 
+                                    [ngModel]="selectionData?.visual_condition[checkList?.comment?.props]"
+                                    [name]="checkList?.comment?.props" 
+                                    [id]="checkList?.comment?.props" 
+                                    fullWidth 
+                                    rows="5"></textarea>
+                                </div>
+                
+                                <nb-list>
+                                    <nb-list-item 
+                                    *ngFor="let source of checkList.source" 
+                                    class="d-flex justify-content-between">
+                                        <span>{{ source?.title }}</span>
+                                        <nb-checkbox 
+                                        [ngModel]="selectionData?.visual_condition[source.props]"
+                                        [name]="source?.props"
+                                        class="mx-2"
+                                        ></nb-checkbox>
+                                    </nb-list-item>
+                                </nb-list>
+                            </section>
+                        </div>
+
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+            </nb-accordion>
+            <button nbButton status="success" class="w-100 m-2" [disabled]="!visualConditionForm.form.valid" type="submit">Submit</button>
+        </form>
+    </nb-card-body>
+</nb-card>

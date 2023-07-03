@@ -1,0 +1,44 @@
+<nb-card>
+    <nb-card-header>
+        <h5>Profile</h5>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="row w-100">
+            <div class="col-6">
+                <div class="row" *ngFor="let profile of profileDesc">
+                    <span class="col-5 my-2">{{ profile.title }}</span>
+                    <span class="col-2 my-2">:</span>
+                    <span *ngIf="editProfile.value == 0" class="col-5 my-2">{{ profileData[profile.prop] }}</span>
+                    <div *ngIf="editProfile.value == 1" class="col-5" >
+                        <input 
+                            nbInput type="text" 
+                            fieldSize="small"
+                            [placeholder]="profile.title" 
+                            [ngModel]="profileData[profile.prop]"
+                            >
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <img 
+                    src="https://th.bing.com/th/id/R.1897f97542abc7ed782d257ee781bc40?rik=xFlJ%2bhoKSCg5cA&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-male-user-icon-512.png&ehk=pivQjzqNrQFIa6FjMTnQevAdjpeQ4Sh3OXEgbMFIE2o%3d&risl=&pid=ImgRaw&r=0" 
+                    alt="profile name" 
+                    width="50%" 
+                    style="cursor: pointer;"
+                    class="img-thumbnail rounded mx-auto d-block">
+            </div>
+        </div>
+        <input type="hidden" #editProfile value="0">
+        <button 
+            nbButton 
+            [status]="editProfile.value == 0 ? 'primary' : 'success'" 
+            (click)="
+                editProfile.value == 1 ?  updateProfile() : null;
+                editProfile.value = editProfile.value == 1 ? 0 : 1;
+                "
+            >
+            {{ editProfile.value == 0 ? 'Edit Profile' : 'Update Profile' }}
+        </button>
+    </nb-card-body>
+</nb-card>

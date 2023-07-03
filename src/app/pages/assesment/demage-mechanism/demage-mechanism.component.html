@@ -1,0 +1,59 @@
+<nb-card>
+    <nb-card-header class="d-flex justify-content-between">
+        <div class="d-flex">
+            <h5>Damage Mechanism</h5>
+            <!-- <nb-select placeholder="Piping Id" class="mx-5" status="primary">
+                <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
+            </nb-select> -->
+        </div>
+        <mat-form-field>
+            <mat-label>Hit Enter To Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-3">
+                <table style="width: 100%; box-shadow: none;" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="piping_id">
+                        <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} "> Piping ID </th>
+                        <td mat-cell *matCellDef="let element" #nameCell
+                            style="cursor : pointer"
+                            [ngStyle]="{'color' : selectionData?.piping_id == element.piping_id ? '#0492c2' : 'black'}"
+                            (mouseover)="nameCell.style.color = '#0492c2'"
+                            (mouseout)="selectionData?.piping_id == element.piping_id 
+                            ? nameCell.style.color = '#0492c2' 
+                            : nameCell.style.color = 'black'"
+                            (click)="showData(element)"
+                        > {{element?.piping?.piping_id}} </td>
+                    </ng-container>
+        
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </tr>
+                </table>
+
+                <mat-paginator 
+                    [length]="resultsLength" 
+                    [pageSize]="30" 
+                    aria-label="Select page of GitHub search results">
+                </mat-paginator>
+            </div>
+
+            <div class="col-9">
+                <ngx-mat-table 
+                    [tableHeader]="{ show : false }"
+                    [tableFooter]="{ show : false }"
+                    [columnDetails]="columnDetails"
+                    [tableData]="tableData"
+                    (onClickTable)="onClickTable($event.data, $event.title)"
+                ></ngx-mat-table>
+                <div class="w-100 d-flex justify-content-center">
+                    <button nbButton size="medium" status="success" (click)="onSubmit()">Save</button>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
+
