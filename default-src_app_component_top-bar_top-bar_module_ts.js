@@ -1112,7 +1112,6 @@ class PipingAssetsComponent {
                 class: Class
             };
         });
-        console.log(datas);
         datas.forEach(data => {
             this.reconstructAssetsData(data, 'add');
         });
@@ -2076,9 +2075,11 @@ function ViewProposalComponent_button_2_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]()();
 } if (rf & 2) {
     const button_r1 = ctx.$implicit;
-    let tmp_1_0;
+    const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵnextContext"]();
+    let tmp_2_0;
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("disabled", (button_r1 == null ? null : button_r1.name) == "Export" && !(ctx_r0.tableData == null ? null : ctx_r0.tableData.length));
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("icon", button_r1.icon)("pack", (tmp_1_0 = button_r1.pack) !== null && tmp_1_0 !== undefined ? tmp_1_0 : "eva");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("icon", button_r1.icon)("pack", (tmp_2_0 = button_r1.pack) !== null && tmp_2_0 !== undefined ? tmp_2_0 : "eva");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵadvance"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtextInterpolate"](button_r1.name);
 } }
@@ -2134,9 +2135,9 @@ ViewProposalComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODU
     } if (rf & 2) {
         let _t;
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵloadQuery"]()) && (ctx.viewTable = _t.first);
-    } }, decls: 4, vars: 10, consts: [["nbButton", "", "outline", "", "size", "small", "status", "primary", "class", "m-2", 3, "click", 4, "ngFor", "ngForOf"], [3, "tableHeader", "columnDetails", "tableData"], ["nbButton", "", "outline", "", "size", "small", "status", "primary", 1, "m-2", 3, "click"], [1, "m-1", 3, "icon", "pack"]], template: function ViewProposalComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, decls: 4, vars: 10, consts: [["nbButton", "", "outline", "", "size", "small", "status", "primary", "class", "m-2", 3, "disabled", "click", 4, "ngFor", "ngForOf"], [3, "tableHeader", "columnDetails", "tableData"], ["nbButton", "", "outline", "", "size", "small", "status", "primary", 1, "m-2", 3, "disabled", "click"], [1, "m-1", 3, "icon", "pack"]], template: function ViewProposalComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "nb-card")(1, "nb-card-body");
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](2, ViewProposalComponent_button_2_Template, 4, 3, "button", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](2, ViewProposalComponent_button_2_Template, 4, 4, "button", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]()();
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](3, "ngx-mat-table", 1);
     } if (rf & 2) {
