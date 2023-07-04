@@ -6,6 +6,7 @@ import { DamageMechanismService } from './damage-mechanism.service';
 import { MatTableComponent } from '../../../component/mat-table/mat-table.component';
 import { DatePipe } from '@angular/common';
 import { NbToastrService } from '@nebular/theme';
+import { Variables } from '../../../component/common-variable';
 
 @Component({
   selector: 'ngx-demage-mechanism',
@@ -15,7 +16,8 @@ export class DemageMechanismComponent implements OnInit {
   constructor(
     private damageMechanismService : DamageMechanismService,
     private datePipe : DatePipe,
-    private toastrService : NbToastrService
+    private toastrService : NbToastrService,
+    private variables : Variables
   ) {}
 
   @ViewChild(MatTableComponent) viewTable : MatTableComponent;
@@ -33,7 +35,7 @@ export class DemageMechanismComponent implements OnInit {
   }
 
   regenerateTableData(damage_mechanism) {
-    const tableData = this.tableData.map(item => {
+    const tableData = this.variables.damageMechanismName.map(item => {
       const {id} = item;
       if(damage_mechanism?.[id]) { 
         const {last_insp_date, insp_due_date} = damage_mechanism[id]
@@ -48,41 +50,10 @@ export class DemageMechanismComponent implements OnInit {
       return {...item}
     })
     this.viewTable.regenerateTable(tableData)
+    this.tableData = this.variables.damageMechanismName 
   }
 
-  tableData:any[] = [
-    { id : "01", piping_damage_mechanism : "General and localized metal loss", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "02", piping_damage_mechanism : "Sulfidation and High Temp. H2S/H2 Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "03", piping_damage_mechanism : "Oxidation", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "04", piping_damage_mechanism : "Microbiologically Induced Corrosion (MIC)", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "05", piping_damage_mechanism : "Naphthenic Acid Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "06", piping_damage_mechanism : "Erosion/Erosison-Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "07", piping_damage_mechanism : "Galvanic Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "08", piping_damage_mechanism : "Atmospheric Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "09", piping_damage_mechanism : "Corrosion Under Insulation (CUI)", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "10", piping_damage_mechanism : "Cooling Water Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "11", piping_damage_mechanism : "Boiler Water Condensate Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "12", piping_damage_mechanism : "Soil Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "13", piping_damage_mechanism : "Ammonium Bisulfide and Chloride Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "14", piping_damage_mechanism : "Carbon Dioxide Corrosion", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "15", piping_damage_mechanism : "Surface Connected Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "16", piping_damage_mechanism : "Mechanical Fatigue Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "17", piping_damage_mechanism : "Caustic Stress Corrosion Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "18", piping_damage_mechanism : "Polythionic Stress Corrosion Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "19", piping_damage_mechanism : "Sulfide Stress Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "20", piping_damage_mechanism : "Chloride Stress Corrosion Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "21", piping_damage_mechanism : "Subsurface Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "22", piping_damage_mechanism : "Hydrogen Induced Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "23", piping_damage_mechanism : "Wet Hydrogen Sulfide Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "24", piping_damage_mechanism : "High-Temperature Micro-fissuring/Micro-void Fromation and Eventual Macro Cracking", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "25", piping_damage_mechanism : "High-temperature Hydrogen Attack", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "26", piping_damage_mechanism : "Creep/Stress Rupture", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "27", piping_damage_mechanism : "Metallurgical Changes", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "28", piping_damage_mechanism : "Graphitization", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "29", piping_damage_mechanism : "Temper Embrittlement", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-    { id : "30", piping_damage_mechanism : "Hydrogen Embrittlement", active :false, notes : "", type_location : "", susceptibility : '', last_insp_date : "",  insp_due_date : "" },
-  ]
-
+  tableData
   columnDetails = [ 
     { type : 'text', prop : 'piping_damage_mechanism', head : 'Piping Damage Mechanism', width : '200px' },
     { type : 'check', prop : 'active', head : 'Active', width : '100px' },
@@ -99,7 +70,6 @@ export class DemageMechanismComponent implements OnInit {
 
   dataSource 
   displayedColumns: string[] = [ 'piping_id' ];
-  resultsLength = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -131,13 +101,6 @@ export class DemageMechanismComponent implements OnInit {
       () => this.toastrService.danger('Please check your connection and try again.', 'Your request failed.'),
       () => this.toastrService.success('Data has been updated.', 'Your request success.')
     )
-  }
-
-  onClickTable(data, title) {
-
-    // this.regenerateTableData(data)
-    // console.log("data",data)
-    // console.log("title", title)
   }
 
   showData(element) {

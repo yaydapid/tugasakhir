@@ -36,4 +36,8 @@ export class Variables {
         { id : "29", piping_damage_mechanism : "Temper Embrittlement" },
         { id : "30", piping_damage_mechanism : "Hydrogen Embrittlement" },
     ]
+
+    getAverageCML() {
+        
+    }
 }

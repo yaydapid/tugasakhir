@@ -1,15 +1,12 @@
 <nb-card>
     <nb-card-header class="d-flex justify-content-between">
-        <div class="d-flex">
+        <div>
             <h5>Damage Mechanism</h5>
-            <!-- <nb-select placeholder="Piping Id" class="mx-5" status="primary">
-                <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
-            </nb-select> -->
+            <mat-form-field>
+                <mat-label>Hit Enter To Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+            </mat-form-field>
         </div>
-        <mat-form-field>
-            <mat-label>Hit Enter To Search</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-        </mat-form-field>
     </nb-card-header>
     <nb-card-body>
         <div class="row">
@@ -35,7 +32,6 @@
                 </table>
 
                 <mat-paginator 
-                    [length]="resultsLength" 
                     [pageSize]="30" 
                     aria-label="Select page of GitHub search results">
                 </mat-paginator>
@@ -47,10 +43,9 @@
                     [tableFooter]="{ show : false }"
                     [columnDetails]="columnDetails"
                     [tableData]="tableData"
-                    (onClickTable)="onClickTable($event.data, $event.title)"
                 ></ngx-mat-table>
                 <div class="w-100 d-flex justify-content-center">
-                    <button nbButton size="medium" status="success" (click)="onSubmit()">Save</button>
+                    <button nbButton size="medium" status="success" [disabled]="!selectionData" (click)="onSubmit()">Save</button>
                 </div>
             </div>
         </div>

@@ -1,16 +1,14 @@
 <nb-card>
     <nb-card-header class="d-flex justify-content-between">
-        <div class="d-flex">
+        <div>
             <h5>Visual Condition</h5>
-            <!-- <nb-select placeholder="Piping Id" class="mx-5" status="primary">
-                <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
-            </nb-select> -->
+            <mat-form-field>
+                <mat-label>Hit Enter To Search</mat-label>
+                <input matInput 
+                (keyup)="applyFilter($event)"
+                    placeholder="Ex. Mia" #input>
+            </mat-form-field>
         </div>
-        <mat-form-field>
-            <mat-label>Hit Enter To Search</mat-label>
-            <input matInput 
-                placeholder="Ex. Mia" #input>
-        </mat-form-field>
     </nb-card-header>
     <nb-card-body class="row" > 
 
@@ -156,7 +154,7 @@
                     </nb-accordion-item-body>
                 </nb-accordion-item>
             </nb-accordion>
-            <button nbButton status="success" class="w-100 m-2" [disabled]="!visualConditionForm.form.valid" type="submit">Submit</button>
+            <button nbButton status="success" class="w-100 m-2" [disabled]="!(visualConditionForm.form.valid && selectionData)" type="submit">Submit</button>
         </form>
     </nb-card-body>
 </nb-card>

@@ -28,6 +28,7 @@ export class ReportPipingCircuit implements OnInit {
     ngOnInit(): void {
         this.pipingCircuitService.getPipingCircuits()
         .subscribe(({data} : any) => {
+            this.tablePosition = data
             const firstData = data[0] 
             if(!firstData) return
             this.showData(firstData)
@@ -40,6 +41,7 @@ export class ReportPipingCircuit implements OnInit {
     }
 
     getCircuitReport(id) {
+
         this.reportService.getCircuitReport(id)
         .subscribe(({data : {assets, circuit}} : any) => {
 
@@ -48,7 +50,15 @@ export class ReportPipingCircuit implements OnInit {
                 data : this.switchToLevel(Math.round(this.visualConditionAvg(assets, props) / assets.length))  
             }))
 
-            assets.forEach(({damage_mechanism}) => {
+            assets.forEach(({damage_mechanism, proposal}) => {
+                const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal.id)
+                if(!inspectionProposal) {
+                    const inspection_summary = proposal
+                    .inspection_method.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
+
+                    this.inspectionHistoryData.push({...proposal, inspection_summary})
+                }
+
                 const damage = this.variables.damageMechanismName
                 .map(({id ,piping_damage_mechanism} : any) => {
                     const damage = damage_mechanism?.[id]
@@ -56,16 +66,18 @@ export class ReportPipingCircuit implements OnInit {
                     return null
                 }) 
                 .filter(item => item!=null)
-                .map(({piping_damage_mechanism}) => ({name : piping_damage_mechanism}))
+                .map(({piping_damage_mechanism}) => piping_damage_mechanism)
 
                 damage.forEach(element => {
                     if(!this.activeDamageMechaninsm.includes(element)) 
                     this.activeDamageMechaninsm.push(element)
                 });
+
             });
 
             this.pipingThicknessData = assets.map(asset => asset.asset)
-            console.log(assets)
+
+            console.log(this.inspectionHistoryData)
         })
     }
 
@@ -91,6 +103,12 @@ export class ReportPipingCircuit implements OnInit {
         if(l == 1) return 'Poor'
         return null
     }
+    
+    filterByClass(val) {
+        let tableData = this.tablePosition.filter(item => item.class == val)
+        if(val == "All") tableData = this.tablePosition
+        this.dataSource = new MatTableDataSource(tableData)
+    }
   
     tablePosition:any[] = []
     dataSource = new MatTableDataSource(this.tablePosition);
@@ -112,7 +130,6 @@ export class ReportPipingCircuit implements OnInit {
     ]
 
     activeDamageMechaninsm : any[] = [ ]
-
     pipingThicknessData:any[]
     columnDetails = [ 
         { type : 'text', prop : 'piping_id', head : 'Piping Id', width : '200px' },
@@ -122,18 +139,23 @@ export class ReportPipingCircuit implements OnInit {
         { type : 'text', prop : 'st_cr', head : 'ST CR (mm/Year)', width : '200px' },
         { type : 'text', prop : 'rl', head : 'RL (Years)', width : '200px' },
         { type : 'text', prop : 'hl', head : 'HL (Years)', width : '200px' },
-        { type : 'text', prop : 'retriement_date', head : 'Retriement date', width : '200px' },
+        { type : 'text', prop : 'retriement_date', head : 'Retirement date', width : '200px' },
+        { type : 'text', prop : 'next_tm', head : 'Next TM', width : '200px' },
+        { type : 'text', prop : 'next_ve', head : 'Next VE', width : '200px' },
+        { type : 'text', prop : 'mawp', head : 'MAWP', width : '200px' },
     ]
 
+    inspectionHistoryData : any[] = []
     inspectionHistoryDetails = [
-        { type : 'text', prop : 'inspection_id', head : 'Inspection Id', width : '200px' },
-        { type : 'text', prop : 'inspection_date', head : 'Inspection Date', width : '200px' },
-        { type : 'text', prop : 'inspection_summary', head : 'Inspection Summary', width : '200px' },
-        { type : 'text', prop : 'caried_out', head : 'Caried Out', width : '200px' },
+        { type : 'text', prop : 'proposal_id', head : 'Inspection Id', width : '100px' },
+        { type : 'editable date', prop : 'inspection_date', head : 'Inspection Date', width : '200px' },
+        { type : 'text', prop : 'inspection_summary', head : 'Inspection Summary', width : '300px' },
+        { type : 'check', prop : 'caried_out', head : 'Caried Out', width : '50px' },
     ]
 
     showData(element) {
         this.selectionData = element;
+        this.getCircuitReport(element.id)
         this.imageLink = element?.images?.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
         );  

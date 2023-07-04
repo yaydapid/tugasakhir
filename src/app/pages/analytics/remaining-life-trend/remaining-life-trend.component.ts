@@ -18,7 +18,7 @@ export class RemainingLifeTrendComponent implements OnInit {
   ngOnInit(): void {
     this.pipingAssetsService.getPipingAssets()
     .subscribe(({data} : any) => {
-      this.selectionData = data[0]?.piping_id;
+      this.selectionData = data[0];
       this.tableData = data
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
@@ -26,7 +26,7 @@ export class RemainingLifeTrendComponent implements OnInit {
     })
   }
 
-  selectionData = 1;
+  selectionData;
   tableData : any[] = [];
 
   dataSource 
@@ -43,7 +43,7 @@ export class RemainingLifeTrendComponent implements OnInit {
   }
 
   showData(element) {
-      this.selectionData = element.position
+      this.selectionData = element
   }
 
   applyFilter(event: Event) {

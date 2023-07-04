@@ -335,8 +335,6 @@ export class PipingAssetsComponent implements OnInit {
       }
     })
 
-    console.log(datas)
-
     datas.forEach(data => {
       this.reconstructAssetsData(data, 'add')
     });

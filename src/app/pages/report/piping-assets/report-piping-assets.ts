@@ -31,6 +31,7 @@ export class ReportPipingAssets implements OnInit {
     ngOnInit(): void {
         this.pipingAssetsService.getPipingAssets()
         .subscribe(({data} : any) => {
+            this.tablePosition = data
             const firsData = data[0]
             if(!firsData) return
             this.showData(firsData)
@@ -46,7 +47,7 @@ export class ReportPipingAssets implements OnInit {
     @ViewChild(MatTableComponent) viewTable : MatTableComponent;
     getReportData(id) {
         this.reportService.getAssetsReport(id)
-        .subscribe(({data : {damage_mechanism, visual_condition}} : any) => {
+        .subscribe(({data : {damage_mechanism, visual_condition, proposal}} : any) => {
             this.damageMechanismData = this.variables.damageMechanismName.map(({id ,piping_damage_mechanism} : any) => {
                 const damage = damage_mechanism?.[id]
                 if(damage) return {...damage, piping_damage_mechanism}
@@ -59,14 +60,20 @@ export class ReportPipingAssets implements OnInit {
                 name, props, data : visual_condition[props] ?? null
             })) 
 
-            console.log(this.pipingVisual)
+            this.inspectionHistoryData = [{
+                ...proposal, 
+                inspection_summary : proposal.inspection_method
+                .map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
+            }]
+            // this.viewTable.regenerateTable(this.inspectionHistoryData)
+
         },
         () => this.toastr.danger('Please add asset data.', 'Data not found.')
         )
     }
   
     tablePosition:any[] = []
-    dataSource = new MatTableDataSource(this.tablePosition);
+    dataSource
     displayedColumns: string[] = ['piping_id'];
     resultsLength = 0;
     pipeData : any;
@@ -80,6 +87,12 @@ export class ReportPipingAssets implements OnInit {
         this.imageLink = element?.images?.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
         );
+    }
+
+    filterByClass(val) {
+        let tableData = this.tablePosition.filter(item => item.class == val)
+        if(val == "All") tableData = this.tablePosition
+        this.dataSource = new MatTableDataSource(tableData)
     }
 
     spesificationItem = [
@@ -132,11 +145,10 @@ export class ReportPipingAssets implements OnInit {
 
     inspectionHistoryData:any[] = []
     inspectionHistoryDetails = [ 
-        { type : 'text', prop : 'inspection_id', head : 'Inspection Id', width : '200px' },
-        { type : 'text', prop : 'inspection_date', head : 'Inspection Date', width : '200px' },
-        { type : 'text', prop : 'damage_mechanism', head : 'Damage Mechanism', width : '200px' },
-        { type : 'text', prop : 'inspection_summary', head : 'Inspection Summary', width : '200px' },
-        { type : 'text', prop : 'caried_out', head : 'Caried Out', width : '200px' },
+        { type : 'text', prop : 'proposal_id', head : 'Inspection Id', width : '100px' },
+        { type : 'editable date', prop : 'inspection_date', head : 'Inspection Date', width : '200px' },
+        { type : 'text', prop : 'inspection_summary', head : 'Inspection Summary', width : '300px' },
+        { type : 'check', prop : 'caried_out', head : 'Caried Out', width : '50px' },
     ]
 
     applyFilter(event: Event) {

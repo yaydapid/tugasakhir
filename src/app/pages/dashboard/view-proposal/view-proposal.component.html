@@ -5,6 +5,7 @@
             outline
             size="small" 
             status="primary"
+            [disabled]="button?.name == 'Export' && !tableData?.length"
             class="m-2"
             *ngFor="let button of [
                 { name : 'New', icon : 'plus-outline' },

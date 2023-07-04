@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { ThemeModule } from "../../@theme/theme.module";
-import { NbAccordionModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbGlobalPhysicalPosition, NbInputModule, NbListModule, NbMenuModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
+import { NbAccordionModule, NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbGlobalPhysicalPosition, NbInputModule, NbListModule, NbMenuModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
 import { NgModule } from "@angular/core";
 import { AssesmentRoutingModule } from "./assesment.routing";
 import { AssesmentComponent } from "./assesment.component";
@@ -42,6 +42,7 @@ import { FormsModule } from "@angular/forms";
         MatSelectModule,
         MatPaginatorModule,
         FormsModule,
+        NbAlertModule,
         NbToastrModule.forRoot({
             destroyByClick	: true,
             duration : 3000,

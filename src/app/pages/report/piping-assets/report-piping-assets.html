@@ -11,7 +11,11 @@
           <div class="col">Class</div>
           <div class="col">
             <nb-select placeholder="Class" class="mx-5" status="primary" size="small">
-              <nb-option value="option" *ngFor="let option of ['All',1,2,3,4]">{{ option }}</nb-option>
+              <nb-option 
+              (click)="filterByClass(option)"
+              [value]="option"
+              *ngFor="let option of ['All',1,2,3,4]"
+              >{{ option }}</nb-option>
             </nb-select>
           </div>
         </div>
@@ -153,7 +157,7 @@
                   <ngx-mat-table 
                     *ngIf="inspectionHistoryData.length"
                     [tableHeader]="{ show : false }"
-                    [tableFooter]="{ pageSize : 5 }"
+                    [tableFooter]="{ show : false }"
                     [columnDetails]="inspectionHistoryDetails"
                     [tableData]="inspectionHistoryData"
                 ></ngx-mat-table>

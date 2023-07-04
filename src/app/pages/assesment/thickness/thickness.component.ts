@@ -71,7 +71,7 @@ export class ThicknessComponent implements OnInit {
           corrosion_allowance + mechanical_allowance
           const reading = total ? last_thickness_reading / total : 0
           const lt_cr = total ? calculated_cr / total : 0
-          const st_cr = 0.222
+          const st_cr = 'N'
           const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0
           const half_life = remaining_life / 2  
           const retirement_date = remaining_life * 12;
@@ -83,12 +83,12 @@ export class ThicknessComponent implements OnInit {
             t_min,
             reading : reading.toFixed(3),
             lt_cr : lt_cr.toFixed(3),
-            st_cr : st_cr.toFixed(3),
+            st_cr : st_cr,
             remaining_life : remaining_life.toFixed(3),
             half_life : half_life.toFixed(3),
             retirement_date,
-            next_tm_insp_date : "8",
-            next_ve_insp_date : "9",
+            next_tm_insp_date : "N",
+            next_ve_insp_date : "N",
             mawp,
           }
         })

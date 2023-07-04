@@ -1,4 +1,4 @@
-<span *ngIf="!tableData.length">Data Not Available. Please add asset.</span>
+<nb-alert status="danger" *ngIf="!tableData.length" >Data Not Available. Please add asset.</nb-alert>
 <ngx-mat-table 
     *ngIf="tableData.length"
     [tableHeader]="{ title : 'Thickness' }"
