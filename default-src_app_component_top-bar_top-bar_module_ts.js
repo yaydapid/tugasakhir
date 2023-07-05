@@ -422,8 +422,7 @@ class CmlComponent {
                 const calculated_cr = this.variables.getCalculatedCR(Object.assign(Object.assign({}, data), piping));
                 if (!years.includes(data.year))
                     years.push(data.year);
-                return Object.assign(Object.assign({}, data), { nominal_thickness,
-                    min_required_thickness, calculated_cr: calculated_cr.toFixed(3) });
+                return Object.assign(Object.assign({}, data), { nominal_thickness, min_required_thickness: min_required_thickness.toFixed(4), calculated_cr: calculated_cr.toFixed(3) });
             });
             this.viewTable.regenerateTable(this.tableData);
         });
