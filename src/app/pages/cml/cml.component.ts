@@ -6,6 +6,7 @@ import { AddCMLComponent } from './add-cml/add-cml.component';
 import { MatTableComponent } from '../../component/mat-table/mat-table.component';
 import { DatePipe } from '@angular/common';
 import { DeleteDialogComponent } from '../../component/delete dialog/delete-dialog.component';
+import { Variables } from '../../component/common-variable';
 
 @Injectable({
   providedIn : 'root'
@@ -22,53 +23,42 @@ export class CmlComponent implements OnInit {
     private cmlService : CMLService,
     private dialogService : NbDialogService,
     private datePipe: DatePipe,
-    private toastrService : NbToastrService
+    private toastrService : NbToastrService,
+    private variables : Variables
   ) { }
 
-  @ViewChild(MatTableComponent) viewTable : MatTableComponent;
-
-  piping
   ngOnInit(): void {
     const paramId = this.activatedroute.snapshot.paramMap.get('id')
     this.cmlService.getCML(paramId)
     .subscribe(({data, piping} : any) => {
-      const {min_structural_thickness, min_alert_thickness, min_design_pressure, outside_diameter, 
-        longtd_quality_factor, weld_joint_factor, allowable_unit_stress, piping_id,
-        coefficient, corrosion_allowance, mechanical_allowance, nominal_thickness} 
-        = piping;
-
       this.piping = piping;
-      let years : any = ['All']
 
+      let years : any = ['All']
       this.tableHeader = { 
-        title : piping_id, 
+        title : piping.piping_id, 
         filter : [
-          { name : "Year", value : years, title : 'cml-year' } 
+          { name : "Year", value : years.sort((a,b) => a - b), title : 'cml-year' } 
         ]
       }
 
-      const pressure_design_thickness = (min_design_pressure * outside_diameter) 
-      / (2 * ((longtd_quality_factor * weld_joint_factor * allowable_unit_stress) + (coefficient * min_design_pressure)))
-
-      this.tableData = data.map(item => {
-        const year = this.getYear(item.last_thickness_reading_date)
-        if(!years.includes(year)) years.push(year);
+      const {nominal_thickness, min_required_thickness} = this.variables.getAssetsFormula(piping);
+      this.tableData = data.map((data : any) => {
+        const calculated_cr : any = this.variables.getCalculatedCR({...data, ...piping})
+        if(!years.includes(data.year)) years.push(data.year);
         return {
-          ...item,
-          year,
+          ...data,
           nominal_thickness,
-          min_required_thickness : (Math.max(
-            min_structural_thickness, min_alert_thickness, pressure_design_thickness
-            ) + corrosion_allowance + mechanical_allowance).toFixed(3),
+          min_required_thickness,
+          calculated_cr : calculated_cr.toFixed(3),
         }
       })
+
       this.viewTable.regenerateTable(this.tableData)
     })
   }
 
-  getYear(date) {
-    return new Date(date).getFullYear()
-  }
+  @ViewChild(MatTableComponent) viewTable : MatTableComponent;
+  piping
 
   tableHeader : any
   tableData:any[] = []
@@ -87,13 +77,7 @@ export class CmlComponent implements OnInit {
     ]},
   ]
 
-  inputDetail = [
-    {name : "Gauge Point", prop : "gauge_point"},
-    {name : "Point Location", prop : "point_location"},
-  ]
-
   onClickTable(data, title) {
-    console.log(data)
     if(title == 'delete-cml') this.deleteCML(data)
     if(title == 'edit-cml') this.updateCML(data)
     if(title == 'cml-year') {
@@ -115,17 +99,7 @@ export class CmlComponent implements OnInit {
     .onClose  
     .subscribe(newData => {
       if(newData) {
-        const {nominal_thickness, date_in_service} = this.piping
-        const year_diff = (this.getYear(newData.last_thickness_reading_date) - this.getYear(date_in_service))
-        const calculated_cr = year_diff ==  0 ? '0' : (nominal_thickness - newData.last_thickness_reading) / year_diff
-        newData = {
-          ...newData,
-          piping_id : this.piping.id,
-          last_thickness_reading_date :
-          this.datePipe.transform(newData.last_thickness_reading_date, "yyyy-MM-dd"),
-          calculated_cr
-        }
-        
+        newData = this.reconstructCMLData(newData),
         this.cmlService.addCML(newData)
         .subscribe(
           () => this.ngOnInit(),
@@ -151,17 +125,9 @@ export class CmlComponent implements OnInit {
     .onClose
     .subscribe(newData => {
       if(newData) {
-        const {nominal_thickness, date_in_service} = this.piping
-        const year_diff = (this.getYear(newData.last_thickness_reading_date) - this.getYear(date_in_service))
-        const calculated_cr = year_diff ==  0 ? '0' : (nominal_thickness - newData.last_thickness_reading) / year_diff
-        
         newData = {
-          ...newData,
+          ...this.reconstructCMLData(newData),
           id : data.id,
-          piping_id : this.piping.id,
-          last_thickness_reading_date :
-          this.datePipe.transform(newData.last_thickness_reading_date, "yyyy-MM-dd"),
-          calculated_cr
         }
         
         this.cmlService.updateCML(newData)
@@ -172,6 +138,16 @@ export class CmlComponent implements OnInit {
         )
       }
     });
+  }
+
+  reconstructCMLData(newData) {
+    return {
+      ...newData,
+      piping_id : this.piping.id,
+      last_thickness_reading_date :
+      this.datePipe.transform(newData.last_thickness_reading_date, "yyyy-MM-dd"),
+      year : new Date(newData.last_thickness_reading_date).getFullYear()
+    }
   }
 
   deleteCML(data) {

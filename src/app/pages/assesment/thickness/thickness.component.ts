@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PipingAssetsService } from '../../dashboard/piping-assets/piping-assets.service';
-import { CMLService } from '../../cml/cml.servivce';
+import { ThicknessService } from './thickness-service';
+import { Variables } from '../../../component/common-variable';
+import moment from 'moment';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'ngx-thickness',
@@ -9,90 +11,52 @@ import { CMLService } from '../../cml/cml.servivce';
 export class ThicknessComponent implements OnInit {
 
   constructor (
-    private assetsService : PipingAssetsService,
-    private cmlService : CMLService,
+    private thicknessService : ThicknessService,
+    private variables : Variables,
   ) {}
 
   ngOnInit(): void {
-    let averageOfCML = {}
-    this.assetsService.getPipingAssets()
-    .subscribe(({data} : any)  => {
+    this.thicknessService.getDataThickness()
+    .subscribe(({data} : any) => {
+      this.tableData = data.map(asset => {
+        const { class : assetClass, allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
+        const { min_required_thickness } = this.variables.getAssetsFormula(asset);
+        const { reading, lt_cr, st_cr, last_cml_reading_date : lcrd } = this.variables.getAverageCML(asset);
+        const remaining_life = lt_cr ?? (reading - min_required_thickness) / lt_cr;
+        const half_life = remaining_life / 2;
+        const { tm_inspection_interval } = this.variables.getInspectionInt(assetClass)
+ 
+        let retirement_date = lcrd 
+        ? this.variables.addMonths(lcrd, remaining_life * 12)
+        : 'Undefined';
 
-      this.cmlService.getCMLs() 
-      .subscribe(({data : dataCML} : any) => {
-        dataCML.forEach(item => {
-          const {piping_id, last_thickness_reading_date} = item
-          let cml = averageOfCML[piping_id]
-          if(!cml)
-          cml = {
-            ...item, 
-            total : 0,
-            last_thickness_reading : 0,
-            last_thickness_reading_date
-          };
+        let next_tm_insp_date = 
+        st_cr < half_life 
+        ? this.variables.addMonths(lcrd, st_cr * 12) 
+        : this.variables.addMonths(lcrd, half_life * 12) 
 
-          if(cml) {
-            cml['total']++;
-            cml['last_thickness_reading'] += item.last_thickness_reading;
-            if(new Date(last_thickness_reading_date) > new Date(cml['last_thickness_reading_date'])) {}
-          }
+        let next_ve_insp_date =
+        tm_inspection_interval < half_life
+        ? this.variables.addMonths(lcrd, tm_inspection_interval * 12) 
+        : this.variables.addMonths(lcrd, half_life * 12) 
 
-          averageOfCML[piping_id] = cml
-        });
+        if(!lcrd) retirement_date = next_tm_insp_date = next_ve_insp_date = 'Undefined'
 
-        this.tableData = data.map(item => {
-          const {min_alert_thickness, min_structural_thickness, 
-            piping_id, pressure_design_thickness, min_required_thickness,
-          class : classes, allowable_unit_stress, longtd_quality_factor, outside_diameter,
-        corrosion_allowance, mechanical_allowance} = item;
-
-          let tm_inspection_interval, ve_inspection_interval;
-
-          switch(classes) {
-            case "1":
-              tm_inspection_interval = 5
-              ve_inspection_interval = 5
-            break;
-            case "2":
-              tm_inspection_interval = 10
-              ve_inspection_interval = 5
-            break;
-            case "3":
-              tm_inspection_interval = 10
-              ve_inspection_interval = 5
-            break;
-            case "4":
-            break;
-          }
-
-          const { last_thickness_reading, total, calculated_cr } = averageOfCML[piping_id] ?? 0;
-
-          const t_min = Math.max(pressure_design_thickness, min_alert_thickness, min_structural_thickness) +
-          corrosion_allowance + mechanical_allowance
-          const reading = total ? last_thickness_reading / total : 0
-          const lt_cr = total ? calculated_cr / total : 0
-          const st_cr = 'N'
-          const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0
-          const half_life = remaining_life / 2  
-          const retirement_date = remaining_life * 12;
-          const tMawp = reading - tm_inspection_interval * lt_cr
-          const mawp = 2 * allowable_unit_stress * longtd_quality_factor * tMawp / outside_diameter
-
-          return {
-            ...item,
-            t_min,
-            reading : reading.toFixed(3),
-            lt_cr : lt_cr.toFixed(3),
-            st_cr : st_cr,
-            remaining_life : remaining_life.toFixed(3),
-            half_life : half_life.toFixed(3),
-            retirement_date,
-            next_tm_insp_date : "N",
-            next_ve_insp_date : "N",
-            mawp,
-          }
-        })
-
+        const tmawp = reading - ( tm_inspection_interval * st_cr);
+        const mawp = (2 * allowable_unit_stress * longtd_quality_factor * tmawp) / outside_diameter
+        return {
+          ...asset,
+          reading : reading.toFixed(4),
+          t_min : min_required_thickness.toFixed(4),
+          lt_cr : lt_cr.toFixed(4),
+          st_cr : st_cr.toFixed(4),
+          remaining_life : remaining_life.toFixed(4),
+          half_life : half_life.toFixed(4),
+          retirement_date,
+          next_tm_insp_date,
+          next_ve_insp_date,
+          mawp : mawp.toFixed(4)
+        }
       })
     })
   }

@@ -11,6 +11,8 @@ import * as FileSaver from 'file-saver';
 import { PageMenuService } from '../../pages-service';
 import 'rxjs/add/observable/forkJoin';
 import { DatePipe } from '@angular/common';
+import { CMLService } from '../../cml/cml.servivce';
+import { Variables } from '../../../component/common-variable';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -28,7 +30,9 @@ export class PipingAssetsComponent implements OnInit {
     private dialogService : NbDialogService,
     private toastrService: NbToastrService,
     private pageMenuService : PageMenuService,
-    private datePipe : DatePipe
+    private datePipe : DatePipe,
+    private getCML : CMLService,
+    private variables : Variables
   ) {}
   
   @ViewChild(MatTableComponent) viewTable : MatTableComponent;
@@ -39,24 +43,8 @@ export class PipingAssetsComponent implements OnInit {
     .subscribe(
       ({data} : any)  => {
         this.tableData = data.map(item => {
-          let {class : classes, tm_inspection_interval, ve_inspection_interval} = item;
-          switch(classes) {
-            case "1":
-              tm_inspection_interval = 5
-              ve_inspection_interval = 5
-            break;
-            case "2":
-              tm_inspection_interval = 10
-              ve_inspection_interval = 5
-            break;
-            case "3":
-              tm_inspection_interval = 10
-              ve_inspection_interval = 5
-            break;
-            case "4":
-            break;
-          }
-
+          let {class : classes, tm_inspection_interval, ve_inspection_interval, cml} = item;
+          ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(classes, cml))
           return {
             ...item,
             tm_inspection_interval,
@@ -94,7 +82,7 @@ export class PipingAssetsComponent implements OnInit {
 
   onClickTable(data, title) {
     if(title == 'delete-assets') this.deleteAsset(data)
-    if(title == 'edit-assets') this.editAsset(data)
+    if(title == 'edit-assets') this.updateAssets(data)
     if(title == 'class-assets') this.filterByClass(data)
     if(title == 'Export To Excel') this.exportExcelFile();
   }
@@ -138,7 +126,7 @@ export class PipingAssetsComponent implements OnInit {
     });
   }
   
-  editAsset(data) {
+  updateAssets(data) {
     this.dialogService.open(AddAssetsComponent, {
       context: {
         dialogData : {  
@@ -158,18 +146,12 @@ export class PipingAssetsComponent implements OnInit {
   }
 
   reconstructAssetsData(newData, title, oldData = null) {
-    const {min_design_pressure, outside_diameter, longtd_quality_factor, weld_joint_factor, allowable_unit_stress, 
-      coefficient, min_alert_thickness, min_structural_thickness, corrosion_allowance, mechanical_allowance, image} = newData;
+    const {image} = newData;
 
-    const pressure_design_thickness = (min_design_pressure * outside_diameter) / (2 * (
-      (longtd_quality_factor * weld_joint_factor * allowable_unit_stress) + (coefficient * min_design_pressure)
-    ))
-    const min_required_thickness = 
-    Math.max(pressure_design_thickness, min_alert_thickness, min_structural_thickness) + corrosion_allowance + mechanical_allowance
-    newData = {
+    const uploadData = {
+      ...oldData,
       ...newData,
-      pressure_design_thickness,
-      min_required_thickness
+      date_in_service : this.datePipe.transform(newData.date_in_service, 'yyyy-MM-dd')
     }
 
     if(image)
@@ -180,22 +162,11 @@ export class PipingAssetsComponent implements OnInit {
       let images = [...oldData?.images ?? []];
       let lastId = res.data.id
       for(let i = lastId; i < lastId + image.length; i++) images.push(i)
-      const data = {
-        ...oldData,
-        ...newData,
-        images,
-        date_in_service : this.datePipe.transform(newData.date_in_service, 'yyyy-MM-dd')
-      }
-      if(title == 'add') this.onUploadaddAsset(data)
-      if(title == 'update') this.onUploadUpdateAsset(data)
+      uploadData['images'] = images;
+      if(title == 'add') this.onUploadaddAsset(uploadData)
+      if(title == 'update') this.onUploadUpdateAsset(uploadData)
     })
     
-    const uploadData = {
-      ...oldData,
-      ...newData,
-      date_in_service : this.datePipe.transform(newData.date_in_service, 'yyyy-MM-dd')
-    }
-
     if(title == 'add' && !image) this.onUploadaddAsset(uploadData)
     if(title == 'update' && !image) this.onUploadUpdateAsset(uploadData)
   }

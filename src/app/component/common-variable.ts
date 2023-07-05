@@ -1,9 +1,15 @@
+import { DatePipe } from "@angular/common";
 import { Injectable } from "@angular/core";
+import moment from 'moment';
+
 
 @Injectable({
     providedIn : 'root'
 })
 export class Variables {
+    constructor(
+        private datePipe : DatePipe
+    ) {}
     damageMechanismName:any[] = [
         { id : "01", piping_damage_mechanism : "General and localized metal loss" },
         { id : "02", piping_damage_mechanism : "Sulfidation and High Temp. H2S/H2 Corrosion" },
@@ -37,7 +43,106 @@ export class Variables {
         { id : "30", piping_damage_mechanism : "Hydrogen Embrittlement" },
     ]
 
-    getAverageCML() {
-        
+    getAverageCML(asset) {
+        const { cml } = asset;
+        let allYear = cml.map(c => c.year)
+        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+        const maxYear = allYear.at(-1);
+        const lastYear = allYear.at(-2);
+
+        const cmls = cml.filter(c => c.year == maxYear)
+        .map(c => {
+            return {
+                ...c,
+                calculated_cr : this.getCalculatedCR({...asset, ...c}),
+                calculated_st : this.getCalculatedSTCR({...asset, ...c, lastYear})
+            }
+        })
+
+        const last_cml_reading_date = cmls
+        .map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date) )
+        .sort((a,b) => a-b)
+        // .map(i=>this.datePipe.transform(i, 'yyyy-MM-dd'))
+
+        function getAvg(i) {
+            const avg = cmls.map(c => c[i])
+            .reduce((x,y) => x + y, 0) / cml.length;
+            if(!avg) return 0;
+            return avg;
+        }
+
+        const reading = getAvg("last_thickness_reading");
+        const lt_cr = getAvg("calculated_cr");
+        const st_cr = getAvg("calculated_st");
+
+        return { 
+            reading, 
+            lt_cr, 
+            st_cr,
+            last_cml_reading_date : last_cml_reading_date.at(-1)
+        }
+    }
+
+    addMonths(date, month) {
+        return this.datePipe.transform(moment(date).add(month, 'M').toDate(), 'yyyy-MM-dd')
+    }
+
+    getInspectionInt(c, cml = null) {
+        let tm_inspection_interval;
+        let ve_inspection_interval;
+        switch(c) {
+            case "1":
+              tm_inspection_interval = 5
+              ve_inspection_interval = 5
+            break;
+            case "2":
+              tm_inspection_interval = 10
+              ve_inspection_interval = 5
+            break;
+            case "3":
+              tm_inspection_interval = 10
+              ve_inspection_interval = 5
+            break;
+            case "4":
+            break;
+        }
+
+        return { tm_inspection_interval , ve_inspection_interval }
+    }
+
+    getAssetsFormula(asset) {
+        const {
+            min_design_pressure, outside_diameter, longtd_quality_factor, weld_joint_factor, allowable_unit_stress, 
+            coefficient, min_alert_thickness, min_structural_thickness, corrosion_allowance, mechanical_allowance
+        } = asset;
+      
+        const pressure_design_thickness = 
+        (min_design_pressure * outside_diameter) / 
+        (2 * ((longtd_quality_factor * weld_joint_factor * allowable_unit_stress) 
+        + (coefficient * min_design_pressure)
+        ))
+
+        const min_required_thickness = 
+        Math.max(min_structural_thickness, min_alert_thickness, pressure_design_thickness ) 
+        + corrosion_allowance + mechanical_allowance
+
+        return {...asset, pressure_design_thickness, min_required_thickness}
+    }
+
+    getThicknessFormula(asset) {
+
+    }
+
+    getCalculatedCR(data) {
+        const {last_thickness_reading_date, last_thickness_reading, date_in_service, nominal_thickness } = data
+        const diff = new Date(last_thickness_reading_date).getFullYear() - new Date(date_in_service).getFullYear()
+        const cal_cr = diff ==  0 ? '0' : (nominal_thickness - last_thickness_reading) / diff
+        return cal_cr
+    }
+
+    getCalculatedSTCR(data) {
+        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, lastYear } = data
+        const diff = new Date(last_thickness_reading_date).getFullYear() - lastYear
+        return diff ==  0 ? '0' : (nominal_thickness - last_thickness_reading) / diff
     }
 }
