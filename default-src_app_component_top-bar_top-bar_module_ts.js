@@ -902,10 +902,10 @@ class PipingAssetsComponent {
     ngOnInit() {
         this.assetsService.getPipingAssets()
             .subscribe(({ data }) => {
-            this.tableData = data.map(item => {
-                let { class: classes, tm_inspection_interval, ve_inspection_interval, cml } = item;
-                ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(classes, cml));
-                return Object.assign(Object.assign({}, item), { tm_inspection_interval,
+            this.tableData = data.map(asset => {
+                let { tm_inspection_interval, ve_inspection_interval } = asset;
+                ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(asset));
+                return Object.assign(Object.assign({}, asset), { tm_inspection_interval,
                     ve_inspection_interval });
             });
             this.viewTable.regenerateTable(this.tableData);
