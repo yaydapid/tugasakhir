@@ -47,7 +47,7 @@ export class ReportPipingAssets implements OnInit {
     @ViewChild(MatTableComponent) viewTable : MatTableComponent;
     getReportData(id) {
         this.reportService.getAssetsReport(id)
-        .subscribe(({data : {damage_mechanism, visual_condition, proposal}} : any) => {
+        .subscribe(({data : {damage_mechanism, visual_condition, proposal, asset, cml}} : any) => {
             this.damageMechanismData = this.variables.damageMechanismName.map(({id ,piping_damage_mechanism} : any) => {
                 const damage = damage_mechanism?.[id]
                 if(damage) return {...damage, piping_damage_mechanism}
@@ -65,7 +65,38 @@ export class ReportPipingAssets implements OnInit {
                 inspection_summary : proposal.inspection_method
                 .map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
             }]
-            // this.viewTable.regenerateTable(this.inspectionHistoryData)
+            
+            this.pipingThickness = this.pipingThickness.map(({name, props}) => {
+                const { 
+                    reading, 
+                    min_required_thickness, 
+                    lt_cr, st_cr, 
+                    remaining_life, 
+                    half_life, 
+                    retirement_date, 
+                    next_tm_insp_date, 
+                    next_ve_insp_date, 
+                    mawp 
+                } = this.variables.getThicknessCalculation({...asset, cml})
+                const dataThickness = {
+                    ...asset,
+                    reading : reading.toFixed(4),
+                    t_min : min_required_thickness.toFixed(4),
+                    lt_cr : lt_cr.toFixed(4),
+                    st_cr : st_cr.toFixed(4),
+                    remaining_life : remaining_life.toFixed(4),
+                    half_life : half_life.toFixed(4),
+                    retirement_date,
+                    next_tm_insp_date,
+                    next_ve_insp_date,
+                    mawp : mawp.toFixed(4)
+                }
+                return {
+                    name,
+                    props,
+                    data : dataThickness[props]
+                }
+            })
 
         },
         () => this.toastr.danger('Please add asset data.', 'Data not found.')
@@ -126,10 +157,10 @@ export class ReportPipingAssets implements OnInit {
 
     pipingThickness = [
         { name : 'Reading', props : 'reading' },
-        { name : 'Long Term Cr', props : 'long_term_cr' },
+        { name : 'Long Term Cr', props : 'lt_cr' },
         { name : 'Remaining Life', props : 'remaining_life' },
-        { name : 'Thick. Min', props : 'thick_min' },
-        { name : 'Short Term CR', props : 'short_term_cr' },
+        { name : 'Thick. Min', props : 't_min' },
+        { name : 'Short Term CR', props : 'st_cr' },
         { name : 'Half Life', props : 'half_life' },
         { name : 'Retirement Date', props : 'retirement_date' },
     ]

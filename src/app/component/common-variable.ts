@@ -2,7 +2,6 @@ import { DatePipe } from "@angular/common";
 import { Injectable } from "@angular/core";
 import moment from 'moment';
 
-
 @Injectable({
     providedIn : 'root'
 })
@@ -43,14 +42,13 @@ export class Variables {
         { id : "30", piping_damage_mechanism : "Hydrogen Embrittlement" },
     ]
 
-    getAverageCML(asset) {
+    getAverageCML(asset, year) {
         const { cml } = asset;
         let allYear = cml.map(c => c.year)
         allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const maxYear = allYear.at(-1);
         const lastYear = allYear.at(-2);
 
-        const cmls = cml.filter(c => c.year == maxYear)
+        const cmls = cml.filter(c => c.year == year)
         .map(c => {
             return {
                 ...c,
@@ -62,11 +60,10 @@ export class Variables {
         const last_cml_reading_date = cmls
         .map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date) )
         .sort((a,b) => a-b)
-        // .map(i=>this.datePipe.transform(i, 'yyyy-MM-dd'))
 
         function getAvg(i) {
             const avg = cmls.map(c => c[i])
-            .reduce((x,y) => x + y, 0) / cml.length;
+            .reduce((x,y) => x + y, 0) / cmls.length;
             if(!avg) return 0;
             return avg;
         }
@@ -76,6 +73,7 @@ export class Variables {
         const st_cr = getAvg("calculated_st");
 
         return { 
+            cml_details : cmls.find(c=> c.year = year),
             reading, 
             lt_cr, 
             st_cr,
@@ -129,10 +127,6 @@ export class Variables {
         return {...asset, pressure_design_thickness, min_required_thickness}
     }
 
-    getThicknessFormula(asset) {
-
-    }
-
     getCalculatedCR(data) {
         const {last_thickness_reading_date, last_thickness_reading, date_in_service, nominal_thickness } = data
         const diff = new Date(last_thickness_reading_date).getFullYear() - new Date(date_in_service).getFullYear()
@@ -144,5 +138,57 @@ export class Variables {
         const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, lastYear } = data
         const diff = new Date(last_thickness_reading_date).getFullYear() - lastYear
         return diff ==  0 ? '0' : (nominal_thickness - last_thickness_reading) / diff
+    }
+
+    removeChartData(chart) {
+        chart.data.labels = [];
+        chart.chart.data.datasets = [];
+        chart.chart.update();
+    }
+
+    getThicknessCalculation(asset) {
+        const { class : assetClass, allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
+        const { min_required_thickness } = this.getAssetsFormula(asset);
+
+        let allYear = asset.cml.map(c => c.year)
+        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+        const lastYear = allYear.at(-2);
+
+        const { reading, lt_cr, st_cr, last_cml_reading_date : lcrd } = this.getAverageCML(asset, lastYear);
+        const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;
+        const half_life = remaining_life / 2;
+        const { tm_inspection_interval } = this.getInspectionInt(assetClass)
+ 
+        let retirement_date = lcrd 
+        ? this.addMonths(lcrd, remaining_life * 12)
+        : 'Undefined';
+
+        let next_tm_insp_date = 
+        st_cr < half_life 
+        ? this.addMonths(lcrd, st_cr * 12) 
+        : this.addMonths(lcrd, half_life * 12) 
+
+        let next_ve_insp_date =
+        tm_inspection_interval < half_life
+        ? this.addMonths(lcrd, tm_inspection_interval * 12) 
+        : this.addMonths(lcrd, half_life * 12) 
+
+        if(!lcrd) retirement_date = next_tm_insp_date = next_ve_insp_date = 'Undefined'
+
+        const tmawp = reading - ( tm_inspection_interval * st_cr);
+        const mawp = (2 * allowable_unit_stress * longtd_quality_factor * tmawp) / outside_diameter
+        return {
+          ...asset,
+          min_required_thickness,
+          reading,
+          lt_cr,
+          st_cr,
+          remaining_life,
+          half_life,
+          retirement_date,
+          next_tm_insp_date,
+          next_ve_insp_date,
+          mawp
+        }
     }
 }

@@ -130,11 +130,10 @@
                 <section class="mt-2">
                   <h6 class="fw-bolder text-primary mb-2 d-block">Piping Calculation</h6>
 
-                  <div class="row row-cols-3 mt-3">
+                  <div class="row row-cols-2 mt-3">
                     <div *ngFor="let spec of pipingThickness" class="row mb-2">
                       <span class="col-8 text-secondary" >{{ spec.name }}</span>
-                      <!-- <span class="col" >{{ spec.props || '-'}}</span> -->
-                      <span class="col" >0.3</span>
+                      <span class="col" >{{ spec?.data || '-' }}</span>
                     </div>
                   </div>  
                 </section>

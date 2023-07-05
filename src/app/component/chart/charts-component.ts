@@ -6,10 +6,7 @@ Chart.register(...registerables);
     template : ""
 })
 export class ChartsComponent implements OnInit {
-    constructor() {
-
-    }
-
+    constructor() {}
     public chartType :any = 'line';
     public datasets : any = [
         {
@@ -64,7 +61,7 @@ export class ChartsComponent implements OnInit {
     ]
 
     public yLabels : any[] = ['2020', '2021', '2022', '2023', '2024']
-
+    public chartId : any
     defineOptions({chartTitle = '', yTitle = '', xTitle = ''}) {
         let delayed;
         this.options = {
@@ -144,6 +141,7 @@ export class ChartsComponent implements OnInit {
             labels: this.yLabels, 
             datasets: this.datasets
         }
+        
         this.chart = new Chart(id, {
             type: this.chartType,
             data: this.data,
@@ -157,5 +155,5 @@ export class ChartsComponent implements OnInit {
     public legendPosition : any = 'right';
     public showRightSclae : any = false;
 
-    ngOnInit(): void {  }
+    ngOnInit(): void {}
 }

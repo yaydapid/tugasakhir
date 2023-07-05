@@ -28,19 +28,12 @@ export class RemainingLifeTrendComponent implements OnInit {
 
   selectionData;
   tableData : any[] = [];
-
   dataSource 
   displayedColumns: string[] = [ 'piping_id' ];
   selection = new SelectionModel(true, []);
-  resultsLength = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
-  ngAfterViewInit() {
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
-  }
 
   showData(element) {
       this.selectionData = element
@@ -54,5 +47,4 @@ export class RemainingLifeTrendComponent implements OnInit {
         this.dataSource.paginator.firstPage();
       }
   }
-
 }

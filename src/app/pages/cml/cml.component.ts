@@ -48,7 +48,7 @@ export class CmlComponent implements OnInit {
         return {
           ...data,
           nominal_thickness,
-          min_required_thickness,
+          min_required_thickness : min_required_thickness.toFixed(4),
           calculated_cr : calculated_cr.toFixed(3),
         }
       })
