@@ -419,7 +419,7 @@ class CmlComponent {
             };
             const { nominal_thickness, min_required_thickness } = this.variables.getAssetsFormula(piping);
             this.tableData = data.map((data) => {
-                const calculated_cr = this.variables.getCalculatedCR(Object.assign(Object.assign({}, data), piping));
+                const calculated_cr = this.variables.getCalculatedLTCR(Object.assign(Object.assign({}, data), piping));
                 if (!years.includes(data.year))
                     years.push(data.year);
                 return Object.assign(Object.assign({}, data), { nominal_thickness, min_required_thickness: min_required_thickness.toFixed(4), calculated_cr: calculated_cr.toFixed(3) });
@@ -905,6 +905,8 @@ class PipingAssetsComponent {
             this.tableData = data.map(asset => {
                 let { tm_inspection_interval, ve_inspection_interval } = asset;
                 ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(asset));
+                tm_inspection_interval = tm_inspection_interval ? tm_inspection_interval.toFixed(1) : 0;
+                ve_inspection_interval = ve_inspection_interval ? ve_inspection_interval.toFixed(1) : 0;
                 return Object.assign(Object.assign({}, asset), { tm_inspection_interval,
                     ve_inspection_interval });
             });

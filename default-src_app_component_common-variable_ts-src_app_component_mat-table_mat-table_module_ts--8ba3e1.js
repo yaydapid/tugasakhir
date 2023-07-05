@@ -54,6 +54,19 @@ class Variables {
             { id: "30", piping_damage_mechanism: "Hydrogen Embrittlement" },
         ];
     }
+    getCMLCalc(asset) {
+        const { cml } = asset;
+        let allYear = asset.cml.map(c => c.year);
+        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
+        const stCrYear = allYear.at(-2);
+        const { min_required_thickness } = this.getAssetsFormula(asset);
+        return cml.map(c => {
+            const lt_cr = this.getCalculatedLTCR(Object.assign(Object.assign({}, asset), c));
+            const remaining_life = (c.last_thickness_reading - min_required_thickness) / lt_cr;
+            return Object.assign(Object.assign({}, c), { lt_cr, remaining_life,
+                min_required_thickness, st_cr: this.getCalculatedSTCR(Object.assign(Object.assign(Object.assign({}, asset), c), { stCrYear })) });
+        });
+    }
     getAverageCML(asset, year) {
         const { cml } = asset;
         let allYear = asset.cml.map(c => c.year);
@@ -61,7 +74,7 @@ class Variables {
         const stCrYear = allYear.at(-2);
         const cmls = cml.filter(c => c.year == year)
             .map(c => {
-            return Object.assign(Object.assign({}, c), { calculated_cr: this.getCalculatedCR(Object.assign(Object.assign({}, asset), c)), calculated_st: this.getCalculatedSTCR(Object.assign(Object.assign(Object.assign({}, asset), c), { stCrYear })) });
+            return Object.assign(Object.assign({}, c), { calculated_cr: this.getCalculatedLTCR(Object.assign(Object.assign({}, asset), c)), calculated_st: this.getCalculatedSTCR(Object.assign(Object.assign(Object.assign({}, asset), c), { stCrYear })) });
         });
         const last_cml_reading_date = cmls
             .map(({ last_thickness_reading_date }) => new Date(last_thickness_reading_date))
@@ -125,14 +138,14 @@ class Variables {
             + corrosion_allowance + mechanical_allowance;
         return Object.assign(Object.assign({}, asset), { pressure_design_thickness, min_required_thickness });
     }
-    getCalculatedCR(data) {
-        const { last_thickness_reading_date, last_thickness_reading, date_in_service, nominal_thickness } = data;
+    getCalculatedLTCR(asset) {
+        const { last_thickness_reading_date, last_thickness_reading, date_in_service, nominal_thickness } = asset;
         const diff = new Date(last_thickness_reading_date).getFullYear() - new Date(date_in_service).getFullYear();
         const cal_cr = diff == 0 ? '0' : (nominal_thickness - last_thickness_reading) / diff;
         return cal_cr;
     }
-    getCalculatedSTCR(data) {
-        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, stCrYear } = data;
+    getCalculatedSTCR(asset) {
+        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, stCrYear } = asset;
         const diff = new Date(last_thickness_reading_date).getFullYear() - stCrYear;
         return diff == 0 ? '0' : (nominal_thickness - last_thickness_reading) / diff;
     }
@@ -163,8 +176,6 @@ class Variables {
         if (!lcrd)
             retirement_date = next_tm_insp_date = next_ve_insp_date = 'Undefined';
         const tmawp = reading - (tm_inspection_interval * lt_cr);
-        console.log(asset);
-        console.log(tm_inspection_interval);
         const mawp = (2 * allowable_unit_stress * longtd_quality_factor * tmawp) / outside_diameter;
         return Object.assign(Object.assign({}, asset), { min_required_thickness,
             reading,
@@ -410,12 +421,12 @@ function MatTableComponent_ng_container_4_div_5_td_2_Template(rf, ctx) { if (rf 
     const element_r57 = ctx.$implicit;
     const column_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2).$implicit;
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("checked", element_r57[column_r15.prop])("ngModel", element_r57[column_r15.prop])("disabled", true);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("checked", element_r57[column_r15.prop])("ngModel", element_r57[column_r15.prop]);
 } }
 function MatTableComponent_ng_container_4_div_5_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, MatTableComponent_ng_container_4_div_5_th_1_Template, 2, 4, "th", 17);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](2, MatTableComponent_ng_container_4_div_5_td_2_Template, 3, 3, "td", 18);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](2, MatTableComponent_ng_container_4_div_5_td_2_Template, 3, 2, "td", 18);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } }
 function MatTableComponent_ng_container_4_div_6_th_1_Template(rf, ctx) { if (rf & 1) {
@@ -676,7 +687,7 @@ MatTableComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_0
         let _t;
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵloadQuery"]()) && (ctx.paginator = _t.first);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵloadQuery"]()) && (ctx.sort = _t.first);
-    } }, inputs: { tableHeader: "tableHeader", tableFooter: "tableFooter", tableData: "tableData", columnDetails: "columnDetails" }, outputs: { onClickTable: "onClickTable" }, decls: 8, vars: 7, consts: [["class", "d-flex justify-content-between", 4, "ngIf"], [1, "row"], ["mat-table", "", 1, "mat-elevation-z8", 2, "width", "100%", "box-shadow", "none", 3, "dataSource"], [3, "matColumnDef", 4, "ngFor", "ngForOf"], ["mat-header-row", "", 4, "matHeaderRowDef", "matHeaderRowDefSticky"], ["mat-row", "", 3, "click", 4, "matRowDef", "matRowDefColumns"], ["aria-label", "Select page of GitHub search results", 3, "length", "pageSize", 4, "ngIf"], [1, "d-flex", "justify-content-between"], ["matInput", "", "placeholder", "Ex. Mia", 3, "keyup"], ["input", ""], ["class", "row", 4, "ngFor", "ngForOf"], [1, "col"], ["size", "small", "status", "primary", 1, "mx-5", 3, "placeholder"], [3, "value", "click", 4, "ngFor", "ngForOf"], [3, "value", "click"], [3, "matColumnDef"], [4, "ngIf"], ["mat-header-cell", "", 3, "ngStyle", 4, "matHeaderCellDef"], ["mat-cell", "", 4, "matCellDef"], ["mat-header-cell", "", 3, "ngStyle"], [3, "checked", "indeterminate", "aria-label", "change", "click"], ["mat-cell", ""], [3, "checked", "aria-label", "click", "change"], ["nbButton", "", "size", "tiny", "status", "basic", 3, "click", 4, "ngFor", "ngForOf"], ["nbButton", "", "size", "tiny", "status", "basic", 3, "click"], [3, "icon", "status"], [1, "d-flex", "justify-content-center", "w-50"], [3, "checked", "ngModel", "disabled", "checkedChange", "ngModelChange"], [1, "text-primary", 2, "cursor", "pointer", 3, "click"], [1, "my-2"], [3, "ngModel", "ngModelChange"], [3, "value", 4, "ngFor", "ngForOf"], [3, "value"], ["mat-cell", "", 3, "dblclick", 4, "matCellDef"], ["mat-cell", "", 3, "dblclick"], ["type", "text", "nbInput", "", "fieldSize", "small", 1, "m-1", 3, "ngModel", "ngModelChange"], ["type", "text", "nbInput", "", "fieldSize", "small", "value", "", 1, "m-1", 3, "nbDatepicker", "ngModel", "ngModelChange"], ["datepicker", ""], ["mat-header-row", ""], ["mat-row", "", 3, "click"], ["aria-label", "Select page of GitHub search results", 3, "length", "pageSize"]], template: function MatTableComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, inputs: { tableHeader: "tableHeader", tableFooter: "tableFooter", tableData: "tableData", columnDetails: "columnDetails" }, outputs: { onClickTable: "onClickTable" }, decls: 8, vars: 7, consts: [["class", "d-flex justify-content-between", 4, "ngIf"], [1, "row"], ["mat-table", "", 1, "mat-elevation-z8", 2, "width", "100%", "box-shadow", "none", 3, "dataSource"], [3, "matColumnDef", 4, "ngFor", "ngForOf"], ["mat-header-row", "", 4, "matHeaderRowDef", "matHeaderRowDefSticky"], ["mat-row", "", 3, "click", 4, "matRowDef", "matRowDefColumns"], ["aria-label", "Select page of GitHub search results", 3, "length", "pageSize", 4, "ngIf"], [1, "d-flex", "justify-content-between"], ["matInput", "", "placeholder", "Ex. Mia", 3, "keyup"], ["input", ""], ["class", "row", 4, "ngFor", "ngForOf"], [1, "col"], ["size", "small", "status", "primary", 1, "mx-5", 3, "placeholder"], [3, "value", "click", 4, "ngFor", "ngForOf"], [3, "value", "click"], [3, "matColumnDef"], [4, "ngIf"], ["mat-header-cell", "", 3, "ngStyle", 4, "matHeaderCellDef"], ["mat-cell", "", 4, "matCellDef"], ["mat-header-cell", "", 3, "ngStyle"], [3, "checked", "indeterminate", "aria-label", "change", "click"], ["mat-cell", ""], [3, "checked", "aria-label", "click", "change"], ["nbButton", "", "size", "tiny", "status", "basic", 3, "click", 4, "ngFor", "ngForOf"], ["nbButton", "", "size", "tiny", "status", "basic", 3, "click"], [3, "icon", "status"], [1, "d-flex", "justify-content-center", "w-50"], [3, "checked", "ngModel", "checkedChange", "ngModelChange"], [1, "text-primary", 2, "cursor", "pointer", 3, "click"], [1, "my-2"], [3, "ngModel", "ngModelChange"], [3, "value", 4, "ngFor", "ngForOf"], [3, "value"], ["mat-cell", "", 3, "dblclick", 4, "matCellDef"], ["mat-cell", "", 3, "dblclick"], ["type", "text", "nbInput", "", "fieldSize", "small", 1, "m-1", 3, "ngModel", "ngModelChange"], ["type", "text", "nbInput", "", "fieldSize", "small", "value", "", 1, "m-1", 3, "nbDatepicker", "ngModel", "ngModelChange"], ["datepicker", ""], ["mat-header-row", ""], ["mat-row", "", 3, "click"], ["aria-label", "Select page of GitHub search results", 3, "length", "pageSize"]], template: function MatTableComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "nb-card");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, MatTableComponent_nb_card_header_1_Template, 10, 2, "nb-card-header", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "nb-card-body", 1)(3, "table", 2);

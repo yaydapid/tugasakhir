@@ -446,9 +446,9 @@ class ThicknessComponent {
             .subscribe(({ data }) => {
             this.tableData = data.map(asset => {
                 const { reading, min_required_thickness, lt_cr, st_cr, remaining_life, half_life, retirement_date, next_tm_insp_date, next_ve_insp_date, mawp } = this.variables.getThicknessCalculation(asset);
-                return Object.assign(Object.assign({}, asset), { reading: reading.toFixed(4), t_min: min_required_thickness.toFixed(4), lt_cr: lt_cr.toFixed(4), st_cr: st_cr.toFixed(4), remaining_life: remaining_life.toFixed(4), half_life: half_life.toFixed(4), retirement_date,
+                return Object.assign(Object.assign({}, asset), { reading: reading.toFixed(3), t_min: min_required_thickness.toFixed(3), lt_cr: lt_cr.toFixed(3), st_cr: st_cr.toFixed(3), remaining_life: remaining_life.toFixed(2), half_life: half_life.toFixed(2), retirement_date,
                     next_tm_insp_date,
-                    next_ve_insp_date, mawp: mawp.toFixed(4) });
+                    next_ve_insp_date, mawp: mawp.toFixed(2) });
             });
         });
     }

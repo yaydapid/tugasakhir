@@ -463,6 +463,7 @@ class ReportPipingAssets {
     getReportData(id) {
         this.reportService.getAssetsReport(id)
             .subscribe(({ data: { damage_mechanism, visual_condition, proposal, asset, cml } }) => {
+            var _a;
             this.damageMechanismData = this.variables.damageMechanismName.map(({ id, piping_damage_mechanism }) => {
                 const damage = damage_mechanism === null || damage_mechanism === void 0 ? void 0 : damage_mechanism[id];
                 if (damage)
@@ -477,8 +478,7 @@ class ReportPipingAssets {
                     name, props, data: (_a = visual_condition[props]) !== null && _a !== void 0 ? _a : null
                 });
             });
-            this.inspectionHistoryData = [Object.assign(Object.assign({}, proposal), { inspection_summary: proposal.inspection_method
-                        .map(({ type, method, technique }) => ` ${type} ${method} ${technique}`) })];
+            this.inspectionHistoryData = [Object.assign(Object.assign({}, proposal), { inspection_summary: (_a = proposal === null || proposal === void 0 ? void 0 : proposal.inspection_method) === null || _a === void 0 ? void 0 : _a.map(({ type, method, technique }) => ` ${type} ${method} ${technique}`) })];
             this.pipingThickness = this.pipingThickness.map(({ name, props }) => {
                 const { reading, min_required_thickness, lt_cr, st_cr, remaining_life, half_life, retirement_date, next_tm_insp_date, next_ve_insp_date, mawp } = this.variables.getThicknessCalculation(Object.assign(Object.assign({}, asset), { cml }));
                 const dataThickness = Object.assign(Object.assign({}, asset), { reading: reading.toFixed(4), t_min: min_required_thickness.toFixed(4), lt_cr: lt_cr.toFixed(4), st_cr: st_cr.toFixed(4), remaining_life: remaining_life.toFixed(4), half_life: half_life.toFixed(4), retirement_date,
