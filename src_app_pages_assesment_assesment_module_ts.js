@@ -388,6 +388,38 @@ DemageMechanismComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_M
 
 /***/ }),
 
+/***/ 19371:
+/*!****************************************************************!*\
+  !*** ./src/app/pages/assesment/thickness/thickness-service.ts ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ThicknessService": () => (/* binding */ ThicknessService)
+/* harmony export */ });
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../environments/environment */ 92340);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ 28784);
+
+
+
+class ThicknessService {
+    constructor(httpClient) {
+        this.httpClient = httpClient;
+        this.apiUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl;
+    }
+    getDataThickness() {
+        const url = this.apiUrl + '/thickness';
+        return this.httpClient.get(url);
+    }
+}
+ThicknessService.ɵfac = function ThicknessService_Factory(t) { return new (t || ThicknessService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__.HttpClient)); };
+ThicknessService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: ThicknessService, factory: ThicknessService.ɵfac, providedIn: 'root' });
+
+
+/***/ }),
+
 /***/ 41019:
 /*!******************************************************************!*\
   !*** ./src/app/pages/assesment/thickness/thickness.component.ts ***!
@@ -399,8 +431,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ThicknessComponent": () => (/* binding */ ThicknessComponent)
 /* harmony export */ });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _dashboard_piping_assets_piping_assets_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dashboard/piping-assets/piping-assets.service */ 78539);
-/* harmony import */ var _cml_cml_servivce__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../cml/cml.servivce */ 19271);
+/* harmony import */ var _thickness_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./thickness-service */ 19371);
+/* harmony import */ var _component_common_variable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../component/common-variable */ 47024);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ 36362);
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nebular/theme */ 68253);
 /* harmony import */ var _component_mat_table_mat_table_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../component/mat-table/mat-table.component */ 53858);
@@ -423,9 +455,9 @@ function ThicknessComponent_ngx_mat_table_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("tableHeader", _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵpureFunction0"](3, _c0))("columnDetails", ctx_r1.columnDetails)("tableData", ctx_r1.tableData);
 } }
 class ThicknessComponent {
-    constructor(assetsService, cmlService) {
-        this.assetsService = assetsService;
-        this.cmlService = cmlService;
+    constructor(thicknessService, variables) {
+        this.thicknessService = thicknessService;
+        this.variables = variables;
         this.tableData = [];
         this.columnDetails = [
             { type: 'navto', prop: 'piping_id', head: 'Piping ID', width: '200px', nav: '/pages/cml/' },
@@ -442,61 +474,36 @@ class ThicknessComponent {
         ];
     }
     ngOnInit() {
-        let averageOfCML = {};
-        this.assetsService.getPipingAssets()
+        this.thicknessService.getDataThickness()
             .subscribe(({ data }) => {
-            this.cmlService.getCMLs()
-                .subscribe(({ data: dataCML }) => {
-                dataCML.forEach(item => {
-                    const { piping_id, last_thickness_reading_date } = item;
-                    let cml = averageOfCML[piping_id];
-                    if (!cml)
-                        cml = Object.assign(Object.assign({}, item), { total: 0, last_thickness_reading: 0, last_thickness_reading_date });
-                    if (cml) {
-                        cml['total']++;
-                        cml['last_thickness_reading'] += item.last_thickness_reading;
-                        if (new Date(last_thickness_reading_date) > new Date(cml['last_thickness_reading_date'])) { }
-                    }
-                    averageOfCML[piping_id] = cml;
-                });
-                this.tableData = data.map(item => {
-                    var _a;
-                    const { min_alert_thickness, min_structural_thickness, piping_id, pressure_design_thickness, min_required_thickness, class: classes, allowable_unit_stress, longtd_quality_factor, outside_diameter, corrosion_allowance, mechanical_allowance } = item;
-                    let tm_inspection_interval, ve_inspection_interval;
-                    switch (classes) {
-                        case "1":
-                            tm_inspection_interval = 5;
-                            ve_inspection_interval = 5;
-                            break;
-                        case "2":
-                            tm_inspection_interval = 10;
-                            ve_inspection_interval = 5;
-                            break;
-                        case "3":
-                            tm_inspection_interval = 10;
-                            ve_inspection_interval = 5;
-                            break;
-                        case "4":
-                            break;
-                    }
-                    const { last_thickness_reading, total, calculated_cr } = (_a = averageOfCML[piping_id]) !== null && _a !== void 0 ? _a : 0;
-                    const t_min = Math.max(pressure_design_thickness, min_alert_thickness, min_structural_thickness) +
-                        corrosion_allowance + mechanical_allowance;
-                    const reading = total ? last_thickness_reading / total : 0;
-                    const lt_cr = total ? calculated_cr / total : 0;
-                    const st_cr = 'N';
-                    const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;
-                    const half_life = remaining_life / 2;
-                    const retirement_date = remaining_life * 12;
-                    const tMawp = reading - tm_inspection_interval * lt_cr;
-                    const mawp = 2 * allowable_unit_stress * longtd_quality_factor * tMawp / outside_diameter;
-                    return Object.assign(Object.assign({}, item), { t_min, reading: reading.toFixed(3), lt_cr: lt_cr.toFixed(3), st_cr: st_cr, remaining_life: remaining_life.toFixed(3), half_life: half_life.toFixed(3), retirement_date, next_tm_insp_date: "N", next_ve_insp_date: "N", mawp });
-                });
+            this.tableData = data.map(asset => {
+                const { class: assetClass, allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
+                const { min_required_thickness } = this.variables.getAssetsFormula(asset);
+                const { reading, lt_cr, st_cr, last_cml_reading_date: lcrd } = this.variables.getAverageCML(asset);
+                const remaining_life = lt_cr !== null && lt_cr !== void 0 ? lt_cr : (reading - min_required_thickness) / lt_cr;
+                const half_life = remaining_life / 2;
+                const { tm_inspection_interval } = this.variables.getInspectionInt(assetClass);
+                let retirement_date = lcrd
+                    ? this.variables.addMonths(lcrd, remaining_life * 12)
+                    : 'Undefined';
+                let next_tm_insp_date = st_cr < half_life
+                    ? this.variables.addMonths(lcrd, st_cr * 12)
+                    : this.variables.addMonths(lcrd, half_life * 12);
+                let next_ve_insp_date = tm_inspection_interval < half_life
+                    ? this.variables.addMonths(lcrd, tm_inspection_interval * 12)
+                    : this.variables.addMonths(lcrd, half_life * 12);
+                if (!lcrd)
+                    retirement_date = next_tm_insp_date = next_ve_insp_date = 'Undefined';
+                const tmawp = reading - (tm_inspection_interval * st_cr);
+                const mawp = (2 * allowable_unit_stress * longtd_quality_factor * tmawp) / outside_diameter;
+                return Object.assign(Object.assign({}, asset), { reading: reading.toFixed(4), t_min: min_required_thickness.toFixed(4), lt_cr: lt_cr.toFixed(4), st_cr: st_cr.toFixed(4), remaining_life: remaining_life.toFixed(4), half_life: half_life.toFixed(4), retirement_date,
+                    next_tm_insp_date,
+                    next_ve_insp_date, mawp: mawp.toFixed(4) });
             });
         });
     }
 }
-ThicknessComponent.ɵfac = function ThicknessComponent_Factory(t) { return new (t || ThicknessComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_dashboard_piping_assets_piping_assets_service__WEBPACK_IMPORTED_MODULE_0__.PipingAssetsService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_cml_cml_servivce__WEBPACK_IMPORTED_MODULE_1__.CMLService)); };
+ThicknessComponent.ɵfac = function ThicknessComponent_Factory(t) { return new (t || ThicknessComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_thickness_service__WEBPACK_IMPORTED_MODULE_0__.ThicknessService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_component_common_variable__WEBPACK_IMPORTED_MODULE_1__.Variables)); };
 ThicknessComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({ type: ThicknessComponent, selectors: [["ngx-thickness"]], decls: 2, vars: 2, consts: [["status", "danger", 4, "ngIf"], [3, "tableHeader", "columnDetails", "tableData", 4, "ngIf"], ["status", "danger"], [3, "tableHeader", "columnDetails", "tableData"]], template: function ThicknessComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](0, ThicknessComponent_nb_alert_0_Template, 2, 0, "nb-alert", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](1, ThicknessComponent_ngx_mat_table_1_Template, 1, 4, "ngx-mat-table", 1);
