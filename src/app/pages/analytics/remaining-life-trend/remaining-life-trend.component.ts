@@ -39,6 +39,12 @@ export class RemainingLifeTrendComponent implements OnInit {
       this.selectionData = element
   }
 
+  filterByClass(val) {
+    let tableData = this.tableData.filter(item => item.class == val)
+    if(val == "All") tableData = this.tableData
+    this.dataSource = new MatTableDataSource(tableData)
+  }
+
   applyFilter(event: Event) {
       const filterValue = (event.target as HTMLInputElement).value;
       this.dataSource.filter = filterValue.trim().toLowerCase();

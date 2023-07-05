@@ -62,8 +62,9 @@ export class ReportPipingAssets implements OnInit {
 
             this.inspectionHistoryData = [{
                 ...proposal, 
-                inspection_summary : proposal.inspection_method
-                .map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
+                inspection_summary : proposal
+                ?.inspection_method
+                ?.map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
             }]
             
             this.pipingThickness = this.pipingThickness.map(({name, props}) => {

@@ -1,15 +1,25 @@
 <nb-card>
     <nb-card-header class="d-flex justify-content-between">
-        <div class="d-flex">
+        <div>
             <h5>Piping Trend</h5>
-            <nb-select placeholder="Circuit Id" class="mx-5" status="primary">
-                <nb-option value="option" *ngFor="let option of [1,2,3,4,5]">{{ option }}</nb-option>
-            </nb-select>
+            <mat-form-field>
+                <mat-label>Hit Enter To Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+            </mat-form-field>
         </div>
-        <mat-form-field>
-            <mat-label>Hit Enter To Search</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-        </mat-form-field>
+
+        <div class="row">
+            <div class="col">Class</div>
+            <div class="col">
+              <nb-select placeholder="Class" class="mx-5" status="primary" size="small">
+                <nb-option 
+                (click)="filterByClass(option)"
+                [value]="option"
+                *ngFor="let option of ['All',1,2,3,4]"
+                >{{ option }}</nb-option>
+              </nb-select>
+            </div>
+        </div>
     </nb-card-header>
     <nb-card-body>
         <div class="row">

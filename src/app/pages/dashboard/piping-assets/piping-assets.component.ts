@@ -45,6 +45,8 @@ export class PipingAssetsComponent implements OnInit {
         this.tableData = data.map(asset => {
           let {tm_inspection_interval, ve_inspection_interval} = asset;
           ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(asset))
+          tm_inspection_interval = tm_inspection_interval ? tm_inspection_interval.toFixed(1) : 0
+          ve_inspection_interval = ve_inspection_interval ? ve_inspection_interval.toFixed(1) : 0
           return {
             ...asset,
             tm_inspection_interval,

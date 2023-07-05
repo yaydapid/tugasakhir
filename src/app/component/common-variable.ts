@@ -42,6 +42,25 @@ export class Variables {
         { id : "30", piping_damage_mechanism : "Hydrogen Embrittlement" },
     ]
 
+    getCMLCalc(asset) {
+        const { cml } = asset;
+
+        let allYear = asset.cml.map(c => c.year)
+        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+        const stCrYear = allYear.at(-2)
+        const { min_required_thickness } = this.getAssetsFormula(asset)
+
+        return cml.map(c => {
+            const lt_cr : any = this.getCalculatedLTCR({...asset, ...c})
+            const remaining_life = (c.last_thickness_reading - min_required_thickness) / lt_cr
+            return {
+                ...c, lt_cr, remaining_life,
+                min_required_thickness,
+                st_cr : this.getCalculatedSTCR({...asset, ...c, stCrYear})
+            }
+        })
+    }
+
     getAverageCML(asset, year) {
         const { cml } = asset;
 
@@ -53,7 +72,7 @@ export class Variables {
         .map(c => {
             return {
                 ...c,
-                calculated_cr : this.getCalculatedCR({...asset, ...c}),
+                calculated_cr : this.getCalculatedLTCR({...asset, ...c}),
                 calculated_st : this.getCalculatedSTCR({...asset, ...c, stCrYear})
             }
         })
@@ -139,15 +158,15 @@ export class Variables {
         return {...asset, pressure_design_thickness, min_required_thickness}
     }
 
-    getCalculatedCR(data) {
-        const {last_thickness_reading_date, last_thickness_reading, date_in_service, nominal_thickness } = data
+    getCalculatedLTCR(asset) {
+        const {last_thickness_reading_date, last_thickness_reading, date_in_service, nominal_thickness } = asset
         const diff = new Date(last_thickness_reading_date).getFullYear() - new Date(date_in_service).getFullYear()
         const cal_cr = diff ==  0 ? '0' : (nominal_thickness - last_thickness_reading) / diff
         return cal_cr
     }
 
-    getCalculatedSTCR(data) {
-        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, stCrYear } = data
+    getCalculatedSTCR(asset) {
+        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, stCrYear } = asset
         const diff = new Date(last_thickness_reading_date).getFullYear() - stCrYear
         return diff ==  0 ? '0' : (nominal_thickness - last_thickness_reading) / diff
     }
@@ -186,8 +205,6 @@ export class Variables {
         if(!lcrd) retirement_date = next_tm_insp_date = next_ve_insp_date = 'Undefined'
 
         const tmawp = reading - ( tm_inspection_interval * lt_cr);
-        console.log(asset)
-        console.log(tm_inspection_interval)
         const mawp = (2 * allowable_unit_stress * longtd_quality_factor * tmawp) / outside_diameter
         return {
           ...asset,

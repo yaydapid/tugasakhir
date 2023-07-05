@@ -7,6 +7,8 @@ import { Chart,  registerables} from 'chart.js'
 import { ThicknessService } from '../../assesment/thickness/thickness-service';
 import { Variables } from '../../../component/common-variable';
 import { ThicknessChartComponent } from './chart/thickness-chart.component';
+import { CorrosionRChartComponent } from './chart/corrosionR-chart.component';
+import { RemainingChartComponent } from './chart/remaining-chart.component';
 Chart.register(...registerables);
 
 @Component({
@@ -23,7 +25,7 @@ export class CorrosionRateTrendComponent implements OnInit {
     this.thicknessService.getDataThickness()
     .subscribe(({data} : any) => {
       this.selectionData = data[0];
-      this.tableData = data
+      this.tableData = data;
       
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
@@ -42,68 +44,75 @@ export class CorrosionRateTrendComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(ThicknessChartComponent) thicknessChart : ThicknessChartComponent
+  @ViewChild(CorrosionRChartComponent) corrosionChart : CorrosionRChartComponent
+  @ViewChild(RemainingChartComponent) remainingChart : RemainingChartComponent
 
   showData(element) {
       this.selectionData = element
       this.variables.removeChartData(this.thicknessChart)
       this.thicknessChartData(this.thicknessChart, element)
+      this.corrosionChartData(this.corrosionChart, element)
+      this.remainingLifeChartData(this.remainingChart, element)
   }
 
-  thicknessChartData(chart, asset) {
-    const {cml} = asset
+  filterByClass(val) {
+    let tableData = this.tableData.filter(item => item.class == val)
+    if(val == "All") tableData = this.tableData
+    this.dataSource = new MatTableDataSource(tableData)
+  }
+
+  getCharCML(cml, i) {
+    let cmlLabel = cml.map(c=>c.cml_id)
+    cmlLabel = cmlLabel.filter((c, i) => cmlLabel.indexOf(c) == i)
+
     let allYear = cml.map(c => c.year)
     allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-    let allCML = cml.map(c=>c.cml_id)
-    allCML = allCML.filter((c, i) => allCML.indexOf(c) == i)
 
-    console.log(allCML)
-
-
-    const thickness = allYear.map(year => {
-      const { reading, lt_cr, cml_details } = this.variables.getAverageCML(asset, year);
-      const { min_required_thickness } = this.variables.getAssetsFormula(asset);
-      const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;
-      return { year, reading, lt_cr, remaining_life, cml_details }
-    })
-
-    chart.data.labels = allYear
-    chart.chart.data.datasets = [
-      {
-        label: 'CML ID-102C-00144',
+    return {
+      allYear,
+      datasets : cmlLabel.map(c => ({
+        label: c,
         yAxisID: 'A',
-      data: [ 7, 6.8],
+        data: allYear.map(y => {
+          const thick = cml.find(item => item.year == y && item.cml_id == c) 
+          return thick[i]
+        }),
         backgroundColor: 'transparent',
         borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
-      },
-      // {
-      //   label: 'CML ID-102C-00142',
-      //   yAxisID: 'A',
-      //   data: [ 567, 100 ],
-      //   backgroundColor: 'transparent',
-      //   borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
-      // }
-    ]
-    
-    thickness.map(corr => {
-      const { cml_details : {cml_id} } = corr
-      return {
-          label: 'CML ID-102C-00144',
-          yAxisID: 'A',
-          data: [ 167, 200, '572', '79', '92'],
-          backgroundColor: 'transparent',
-          borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
-      }
-    })
+      }))
+    }
+  }
+
+  thicknessChartData(chart, {cml}) {
+    const {datasets, allYear} = this.getCharCML(cml, "last_thickness_reading")
+    chart.data.labels = allYear
+    chart.chart.data.datasets = datasets
+    chart.chart.update();
+  } 
+
+  corrosionChartData(chart, asset) {
+    const cml = this.variables.getCMLCalc(asset)
+    const {datasets, allYear} = this.getCharCML(cml, "lt_cr")
+    chart.data.labels = allYear
+    chart.chart.data.datasets = datasets
+    chart.chart.update();
+  }
+
+  remainingLifeChartData(chart, asset) {
+    const cml = this.variables.getCMLCalc(asset)
+    const {datasets, allYear} = this.getCharCML(cml, "remaining_life")
+    chart.data.labels = allYear
+    chart.chart.data.datasets = datasets
     chart.chart.update();
   }
  
   applyFilter(event: Event) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
 

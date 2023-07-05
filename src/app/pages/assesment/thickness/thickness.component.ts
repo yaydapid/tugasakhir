@@ -30,16 +30,16 @@ export class ThicknessComponent implements OnInit {
         } = this.variables.getThicknessCalculation(asset)
         return {
           ...asset,
-          reading : reading.toFixed(4),
-          t_min : min_required_thickness.toFixed(4),
-          lt_cr : lt_cr.toFixed(4),
-          st_cr : st_cr.toFixed(4),
-          remaining_life : remaining_life.toFixed(4),
-          half_life : half_life.toFixed(4),
+          reading : reading.toFixed(3),
+          t_min : min_required_thickness.toFixed(3),
+          lt_cr : lt_cr.toFixed(3),
+          st_cr : st_cr.toFixed(3),
+          remaining_life : remaining_life.toFixed(2),
+          half_life : half_life.toFixed(2),
           retirement_date,
           next_tm_insp_date,
           next_ve_insp_date,
-          mawp : mawp.toFixed(4)
+          mawp : mawp.toFixed(2)
         }
       })
     })

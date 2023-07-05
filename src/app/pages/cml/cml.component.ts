@@ -43,7 +43,7 @@ export class CmlComponent implements OnInit {
 
       const {nominal_thickness, min_required_thickness} = this.variables.getAssetsFormula(piping);
       this.tableData = data.map((data : any) => {
-        const calculated_cr : any = this.variables.getCalculatedCR({...data, ...piping})
+        const calculated_cr : any = this.variables.getCalculatedLTCR({...data, ...piping})
         if(!years.includes(data.year)) years.push(data.year);
         return {
           ...data,
