@@ -50,8 +50,14 @@ export class CorrosionRateTrendComponent implements OnInit {
   }
 
   thicknessChartData(chart, asset) {
-    let allYear = asset.cml.map(c => c.year)
+    const {cml} = asset
+    let allYear = cml.map(c => c.year)
     allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+    let allCML = cml.map(c=>c.cml_id)
+    allCML = allCML.filter((c, i) => allCML.indexOf(c) == i)
+
+    console.log(allCML)
+
 
     const thickness = allYear.map(year => {
       const { reading, lt_cr, cml_details } = this.variables.getAverageCML(asset, year);
@@ -60,13 +66,28 @@ export class CorrosionRateTrendComponent implements OnInit {
       return { year, reading, lt_cr, remaining_life, cml_details }
     })
 
-    console.log(thickness)
-
     chart.data.labels = allYear
-    chart.chart.data.datasets = thickness.map(corr => {
+    chart.chart.data.datasets = [
+      {
+        label: 'CML ID-102C-00144',
+        yAxisID: 'A',
+      data: [ 7, 6.8],
+        backgroundColor: 'transparent',
+        borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
+      },
+      // {
+      //   label: 'CML ID-102C-00142',
+      //   yAxisID: 'A',
+      //   data: [ 567, 100 ],
+      //   backgroundColor: 'transparent',
+      //   borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
+      // }
+    ]
+    
+    thickness.map(corr => {
       const { cml_details : {cml_id} } = corr
       return {
-          label: cml_id,
+          label: 'CML ID-102C-00144',
           yAxisID: 'A',
           data: [ 167, 200, '572', '79', '92'],
           backgroundColor: 'transparent',

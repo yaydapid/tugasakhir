@@ -44,16 +44,17 @@ export class Variables {
 
     getAverageCML(asset, year) {
         const { cml } = asset;
-        let allYear = cml.map(c => c.year)
+
+        let allYear = asset.cml.map(c => c.year)
         allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const lastYear = allYear.at(-2);
+        const stCrYear = allYear.at(-2)
 
         const cmls = cml.filter(c => c.year == year)
         .map(c => {
             return {
                 ...c,
                 calculated_cr : this.getCalculatedCR({...asset, ...c}),
-                calculated_st : this.getCalculatedSTCR({...asset, ...c, lastYear})
+                calculated_st : this.getCalculatedSTCR({...asset, ...c, stCrYear})
             }
         })
 
@@ -85,10 +86,10 @@ export class Variables {
         return this.datePipe.transform(moment(date).add(month, 'M').toDate(), 'yyyy-MM-dd')
     }
 
-    getInspectionInt(c, cml = null) {
+    getInspectionInt(asset = null) {
         let tm_inspection_interval;
         let ve_inspection_interval;
-        switch(c) {
+        switch(asset.class) {
             case "1":
               tm_inspection_interval = 5
               ve_inspection_interval = 5
@@ -102,6 +103,17 @@ export class Variables {
               ve_inspection_interval = 5
             break;
             case "4":
+                const { min_required_thickness } = this.getAssetsFormula(asset);
+        
+                let allYear = asset.cml.map(c => c.year)
+                allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+                const lastYear = allYear.at(-1);
+
+                const { reading, lt_cr } = this.getAverageCML(asset, lastYear);
+                const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;
+                const half_life = remaining_life / 2;
+
+                tm_inspection_interval = ve_inspection_interval = half_life
             break;
         }
 
@@ -135,8 +147,8 @@ export class Variables {
     }
 
     getCalculatedSTCR(data) {
-        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, lastYear } = data
-        const diff = new Date(last_thickness_reading_date).getFullYear() - lastYear
+        const { last_thickness_reading_date, last_thickness_reading, nominal_thickness, stCrYear } = data
+        const diff = new Date(last_thickness_reading_date).getFullYear() - stCrYear
         return diff ==  0 ? '0' : (nominal_thickness - last_thickness_reading) / diff
     }
 
@@ -147,35 +159,35 @@ export class Variables {
     }
 
     getThicknessCalculation(asset) {
-        const { class : assetClass, allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
+        const { allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
         const { min_required_thickness } = this.getAssetsFormula(asset);
 
         let allYear = asset.cml.map(c => c.year)
         allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const lastYear = allYear.at(-2);
+        const lastInsp = allYear.at(-1);
 
-        const { reading, lt_cr, st_cr, last_cml_reading_date : lcrd } = this.getAverageCML(asset, lastYear);
+        const { reading, lt_cr, st_cr, last_cml_reading_date : lcrd } = this.getAverageCML(asset, lastInsp);
         const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;
         const half_life = remaining_life / 2;
-        const { tm_inspection_interval } = this.getInspectionInt(assetClass)
+        const { tm_inspection_interval, ve_inspection_interval } = this.getInspectionInt(asset)
  
         let retirement_date = lcrd 
         ? this.addMonths(lcrd, remaining_life * 12)
         : 'Undefined';
 
-        let next_tm_insp_date = 
-        st_cr < half_life 
-        ? this.addMonths(lcrd, st_cr * 12) 
+        let next_tm_insp_date = tm_inspection_interval <= half_life 
+        ? this.addMonths(lcrd, tm_inspection_interval * 12) 
         : this.addMonths(lcrd, half_life * 12) 
 
-        let next_ve_insp_date =
-        tm_inspection_interval < half_life
-        ? this.addMonths(lcrd, tm_inspection_interval * 12) 
+        let next_ve_insp_date = ve_inspection_interval <= half_life
+        ? this.addMonths(lcrd, ve_inspection_interval * 12) 
         : this.addMonths(lcrd, half_life * 12) 
 
         if(!lcrd) retirement_date = next_tm_insp_date = next_ve_insp_date = 'Undefined'
 
-        const tmawp = reading - ( tm_inspection_interval * st_cr);
+        const tmawp = reading - ( tm_inspection_interval * lt_cr);
+        console.log(asset)
+        console.log(tm_inspection_interval)
         const mawp = (2 * allowable_unit_stress * longtd_quality_factor * tmawp) / outside_diameter
         return {
           ...asset,

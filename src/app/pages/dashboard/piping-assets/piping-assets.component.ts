@@ -42,11 +42,11 @@ export class PipingAssetsComponent implements OnInit {
     this.assetsService.getPipingAssets()
     .subscribe(
       ({data} : any)  => {
-        this.tableData = data.map(item => {
-          let {class : classes, tm_inspection_interval, ve_inspection_interval, cml} = item;
-          ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(classes, cml))
+        this.tableData = data.map(asset => {
+          let {tm_inspection_interval, ve_inspection_interval} = asset;
+          ({ tm_inspection_interval, ve_inspection_interval } = this.variables.getInspectionInt(asset))
           return {
-            ...item,
+            ...asset,
             tm_inspection_interval,
             ve_inspection_interval,
           }
