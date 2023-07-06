@@ -1,4 +1,4 @@
-(self["webpackChunkngx_admin_demo"] = self["webpackChunkngx_admin_demo"] || []).push([["default-src_app_component_common-variable_ts-src_app_component_mat-table_mat-table_module_ts--8ba3e1"],{
+(self["webpackChunkngx_admin_demo"] = self["webpackChunkngx_admin_demo"] || []).push([["default-src_app_component_common-variable_ts-src_app_component_mat-table_mat-table_module_ts--e6e212"],{
 
 /***/ 47024:
 /*!**********************************************!*\
@@ -68,20 +68,17 @@ class Variables {
         });
     }
     getAverageCML(asset, year) {
+        var _a, _b, _c;
         const { cml } = asset;
-        let allYear = asset.cml.map(c => c.year);
-        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
-        const stCrYear = allYear.at(-2);
-        const cmls = cml.filter(c => c.year == year)
-            .map(c => {
+        let allYear = (_a = asset === null || asset === void 0 ? void 0 : asset.cml) === null || _a === void 0 ? void 0 : _a.map(c => c.year);
+        allYear = allYear === null || allYear === void 0 ? void 0 : allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
+        const stCrYear = allYear === null || allYear === void 0 ? void 0 : allYear.at(-2);
+        const cmls = (_b = cml === null || cml === void 0 ? void 0 : cml.filter(c => c.year == year)) === null || _b === void 0 ? void 0 : _b.map(c => {
             return Object.assign(Object.assign({}, c), { calculated_cr: this.getCalculatedLTCR(Object.assign(Object.assign({}, asset), c)), calculated_st: this.getCalculatedSTCR(Object.assign(Object.assign(Object.assign({}, asset), c), { stCrYear })) });
         });
-        const last_cml_reading_date = cmls
-            .map(({ last_thickness_reading_date }) => new Date(last_thickness_reading_date))
-            .sort((a, b) => a - b);
+        const last_cml_reading_date = (_c = cmls === null || cmls === void 0 ? void 0 : cmls.map(({ last_thickness_reading_date }) => new Date(last_thickness_reading_date))) === null || _c === void 0 ? void 0 : _c.sort((a, b) => a - b);
         function getAvg(i) {
-            const avg = cmls.map(c => c[i])
-                .reduce((x, y) => x + y, 0) / cmls.length;
+            const avg = (cmls === null || cmls === void 0 ? void 0 : cmls.map(c => c[i]).reduce((x, y) => x + y, 0)) / (cmls === null || cmls === void 0 ? void 0 : cmls.length);
             if (!avg)
                 return 0;
             return avg;
@@ -90,15 +87,34 @@ class Variables {
         const lt_cr = getAvg("calculated_cr");
         const st_cr = getAvg("calculated_st");
         return {
-            cml_details: cmls.find(c => c.year = year),
+            cml_details: cmls === null || cmls === void 0 ? void 0 : cmls.find(c => c.year = year),
             reading,
             lt_cr,
             st_cr,
-            last_cml_reading_date: last_cml_reading_date.at(-1)
+            last_cml_reading_date: last_cml_reading_date === null || last_cml_reading_date === void 0 ? void 0 : last_cml_reading_date.at(-1)
         };
     }
     addMonths(date, month) {
         return this.datePipe.transform(moment__WEBPACK_IMPORTED_MODULE_0___default()(date).add(month, 'M').toDate(), 'yyyy-MM-dd');
+    }
+    getCharCML(cml, i) {
+        let cmlLabel = cml === null || cml === void 0 ? void 0 : cml.map(c => c.cml_id);
+        cmlLabel = cmlLabel === null || cmlLabel === void 0 ? void 0 : cmlLabel.filter((c, i) => cmlLabel.indexOf(c) == i);
+        let allYear = cml === null || cml === void 0 ? void 0 : cml.map(c => c.year);
+        allYear = allYear === null || allYear === void 0 ? void 0 : allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
+        return {
+            allYear,
+            datasets: cmlLabel === null || cmlLabel === void 0 ? void 0 : cmlLabel.map(c => ({
+                label: c,
+                yAxisID: 'A',
+                data: allYear === null || allYear === void 0 ? void 0 : allYear.map(y => {
+                    const thick = cml.find(item => item.year == y && item.cml_id == c);
+                    return thick[i];
+                }),
+                backgroundColor: 'transparent',
+                borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
+            }))
+        };
     }
     getInspectionInt(asset = null) {
         let tm_inspection_interval;
@@ -155,11 +171,12 @@ class Variables {
         chart.chart.update();
     }
     getThicknessCalculation(asset) {
+        var _a;
         const { allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
         const { min_required_thickness } = this.getAssetsFormula(asset);
-        let allYear = asset.cml.map(c => c.year);
-        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
-        const lastInsp = allYear.at(-1);
+        let allYear = (_a = asset === null || asset === void 0 ? void 0 : asset.cml) === null || _a === void 0 ? void 0 : _a.map(c => c.year);
+        allYear = allYear === null || allYear === void 0 ? void 0 : allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
+        const lastInsp = allYear === null || allYear === void 0 ? void 0 : allYear.at(-1);
         const { reading, lt_cr, st_cr, last_cml_reading_date: lcrd } = this.getAverageCML(asset, lastInsp);
         const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;
         const half_life = remaining_life / 2;
@@ -812,57 +829,47 @@ MaterialTableModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE
 
 /***/ }),
 
-/***/ 78539:
-/*!************************************************************************!*\
-  !*** ./src/app/pages/dashboard/piping-assets/piping-assets.service.ts ***!
-  \************************************************************************/
+/***/ 52787:
+/*!****************************************************************************!*\
+  !*** ./src/app/pages/dashboard/piping-circuits/piping-circuits.service.ts ***!
+  \****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PipingAssetsService": () => (/* binding */ PipingAssetsService)
+/* harmony export */   "PipingCircuitService": () => (/* binding */ PipingCircuitService)
 /* harmony export */ });
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ 28784);
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../environments/environment */ 92340);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ 28784);
 
 
 
-
-class PipingAssetsService {
+class PipingCircuitService {
     constructor(httpClient) {
         this.httpClient = httpClient;
         this.apiUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl;
     }
-    getPipingAssets() {
-        const url = this.apiUrl + "/assets";
-        const httpHeaders = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpHeaders();
-        httpHeaders.append("enctype", "multipart/form-data");
-        httpHeaders.append("Accept", "*/*");
+    getPipingCircuits() {
+        const url = this.apiUrl + "/circuit";
         return this.httpClient.get(url);
     }
-    addPipingAssets(data) {
-        const url = this.apiUrl + "/assets";
+    addPipingCircuits(data) {
+        const url = this.apiUrl + "/circuit";
         return this.httpClient.post(url, data);
     }
-    updatePipingAssets(data) {
-        const url = this.apiUrl + "/assets/" + data.id;
+    updatePipingCircuits(data) {
+        const url = this.apiUrl + "/circuit/" + data.id;
         return this.httpClient.put(url, data);
     }
-    deletePipingAssets(id) {
-        const url = this.apiUrl + "/assets/" + id;
+    deletePipingCircuits(id) {
+        const url = this.apiUrl + "/circuit/" + id;
         return this.httpClient.delete(url);
     }
-    uploadImage(postBody) {
-        const url = this.apiUrl + "/file/upload";
-        return this.httpClient.post(url, postBody, {
-            reportProgress: true, observe: 'events'
-        });
-    }
 }
-PipingAssetsService.ɵfac = function PipingAssetsService_Factory(t) { return new (t || PipingAssetsService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpClient)); };
-PipingAssetsService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: PipingAssetsService, factory: PipingAssetsService.ɵfac, providedIn: 'root' });
+PipingCircuitService.ɵfac = function PipingCircuitService_Factory(t) { return new (t || PipingCircuitService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__.HttpClient)); };
+PipingCircuitService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: PipingCircuitService, factory: PipingCircuitService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -40307,4 +40314,4 @@ const matTooltipAnimations = {
 /***/ })
 
 }]);
-//# sourceMappingURL=default-src_app_component_common-variable_ts-src_app_component_mat-table_mat-table_module_ts--8ba3e1.js.map
+//# sourceMappingURL=default-src_app_component_common-variable_ts-src_app_component_mat-table_mat-table_module_ts--e6e212.js.map

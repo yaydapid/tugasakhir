@@ -1123,6 +1123,61 @@ PipingAssetsComponent.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MOD
 
 /***/ }),
 
+/***/ 78539:
+/*!************************************************************************!*\
+  !*** ./src/app/pages/dashboard/piping-assets/piping-assets.service.ts ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PipingAssetsService": () => (/* binding */ PipingAssetsService)
+/* harmony export */ });
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ 28784);
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../environments/environment */ 92340);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
+
+
+
+
+class PipingAssetsService {
+    constructor(httpClient) {
+        this.httpClient = httpClient;
+        this.apiUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl;
+    }
+    getPipingAssets() {
+        const url = this.apiUrl + "/assets";
+        const httpHeaders = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpHeaders();
+        httpHeaders.append("enctype", "multipart/form-data");
+        httpHeaders.append("Accept", "*/*");
+        return this.httpClient.get(url);
+    }
+    addPipingAssets(data) {
+        const url = this.apiUrl + "/assets";
+        return this.httpClient.post(url, data);
+    }
+    updatePipingAssets(data) {
+        const url = this.apiUrl + "/assets/" + data.id;
+        return this.httpClient.put(url, data);
+    }
+    deletePipingAssets(id) {
+        const url = this.apiUrl + "/assets/" + id;
+        return this.httpClient.delete(url);
+    }
+    uploadImage(postBody) {
+        const url = this.apiUrl + "/file/upload";
+        return this.httpClient.post(url, postBody, {
+            reportProgress: true, observe: 'events'
+        });
+    }
+}
+PipingAssetsService.ɵfac = function PipingAssetsService_Factory(t) { return new (t || PipingAssetsService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpClient)); };
+PipingAssetsService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: PipingAssetsService, factory: PipingAssetsService.ɵfac, providedIn: 'root' });
+
+
+/***/ }),
+
 /***/ 24651:
 /*!**************************************************************************************!*\
   !*** ./src/app/pages/dashboard/piping-circuits/add-circuit/add-circuit.component.ts ***!
@@ -1564,51 +1619,6 @@ PipingCircuitsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MO
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("tableHeader", ctx.tableHeader)("columnDetails", ctx.columnDetails)("tableData", ctx.tableData);
     } }, directives: [_nebular_theme__WEBPACK_IMPORTED_MODULE_7__.NbCardComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_7__.NbCardBodyComponent, _angular_common__WEBPACK_IMPORTED_MODULE_8__.NgForOf, _nebular_theme__WEBPACK_IMPORTED_MODULE_7__.NbButtonComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_7__.NbIconComponent, _component_mat_table_mat_table_component__WEBPACK_IMPORTED_MODULE_1__.MatTableComponent], encapsulation: 2 });
 PipingCircuitsComponent.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineInjectable"]({ token: PipingCircuitsComponent, factory: PipingCircuitsComponent.ɵfac, providedIn: 'root' });
-
-
-/***/ }),
-
-/***/ 52787:
-/*!****************************************************************************!*\
-  !*** ./src/app/pages/dashboard/piping-circuits/piping-circuits.service.ts ***!
-  \****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PipingCircuitService": () => (/* binding */ PipingCircuitService)
-/* harmony export */ });
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../environments/environment */ 92340);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ 28784);
-
-
-
-class PipingCircuitService {
-    constructor(httpClient) {
-        this.httpClient = httpClient;
-        this.apiUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl;
-    }
-    getPipingCircuits() {
-        const url = this.apiUrl + "/circuit";
-        return this.httpClient.get(url);
-    }
-    addPipingCircuits(data) {
-        const url = this.apiUrl + "/circuit";
-        return this.httpClient.post(url, data);
-    }
-    updatePipingCircuits(data) {
-        const url = this.apiUrl + "/circuit/" + data.id;
-        return this.httpClient.put(url, data);
-    }
-    deletePipingCircuits(id) {
-        const url = this.apiUrl + "/circuit/" + id;
-        return this.httpClient.delete(url);
-    }
-}
-PipingCircuitService.ɵfac = function PipingCircuitService_Factory(t) { return new (t || PipingCircuitService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__.HttpClient)); };
-PipingCircuitService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: PipingCircuitService, factory: PipingCircuitService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),

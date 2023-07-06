@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkngx_admin_demo"] = self["webpackChunkngx_admin_demo"] || []).push([["default-src_app_component_chart_charts-component_ts"],{
+(self["webpackChunkngx_admin_demo"] = self["webpackChunkngx_admin_demo"] || []).push([["default-src_app_component_chart_charts-component_ts-src_app_pages_assesment_thickness_thickne-b99bc7"],{
 
 /***/ 17313:
 /*!*****************************************************!*\
@@ -19,58 +19,8 @@ chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register(...chart_js__WEBPACK_IMPORT
 class ChartsComponent {
     constructor() {
         this.chartType = 'line';
-        this.datasets = [
-            {
-                label: "CML 1A",
-                yAxisID: 'A',
-                data: ['467', '576', '572', '79', '92'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(255,0,0,.5)',
-            },
-            {
-                label: "CML 1B",
-                yAxisID: 'A',
-                data: ['542', '542', '536', '327', '17'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(100,100,0,.5)',
-            },
-            {
-                label: "CML 1C",
-                yAxisID: 'A',
-                data: ['504', '142', '336', '317', '100'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(10,50,100,.5)',
-            },
-            {
-                label: "CML 1D",
-                yAxisID: 'A',
-                data: ['52', '42', '336', '527', '517'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(90,190,90,.5)',
-            },
-            {
-                label: "CML 1E",
-                yAxisID: 'A',
-                data: ['50', '402', '336', '427', '217'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(190,190,10,.5)',
-            },
-            {
-                label: "CML 1F",
-                yAxisID: 'A',
-                data: ['92', '342', '536', '227', '117'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(200,200,20,.5)',
-            },
-            {
-                label: "CML 1G",
-                yAxisID: 'A',
-                data: ['52', '242', '436', '327', '217'],
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(20,150,200,.5)',
-            }
-        ];
-        this.yLabels = ['2020', '2021', '2022', '2023', '2024'];
+        this.datasets = [];
+        this.yLabels = [];
         this.legendPosition = 'right';
         this.showRightSclae = false;
     }
@@ -162,6 +112,38 @@ class ChartsComponent {
 }
 ChartsComponent.ɵfac = function ChartsComponent_Factory(t) { return new (t || ChartsComponent)(); };
 ChartsComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: ChartsComponent, selectors: [["ng-component"]], decls: 0, vars: 0, template: function ChartsComponent_Template(rf, ctx) { }, encapsulation: 2 });
+
+
+/***/ }),
+
+/***/ 19371:
+/*!****************************************************************!*\
+  !*** ./src/app/pages/assesment/thickness/thickness-service.ts ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ThicknessService": () => (/* binding */ ThicknessService)
+/* harmony export */ });
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../environments/environment */ 92340);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ 28784);
+
+
+
+class ThicknessService {
+    constructor(httpClient) {
+        this.httpClient = httpClient;
+        this.apiUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl;
+    }
+    getDataThickness() {
+        const url = this.apiUrl + '/thickness';
+        return this.httpClient.get(url);
+    }
+}
+ThicknessService.ɵfac = function ThicknessService_Factory(t) { return new (t || ThicknessService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__.HttpClient)); };
+ThicknessService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: ThicknessService, factory: ThicknessService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -15155,4 +15137,4 @@ function styleChanged(style, prevStyle) {
 /***/ })
 
 }]);
-//# sourceMappingURL=default-src_app_component_chart_charts-component_ts.js.map
+//# sourceMappingURL=default-src_app_component_chart_charts-component_ts-src_app_pages_assesment_thickness_thickne-b99bc7.js.map
