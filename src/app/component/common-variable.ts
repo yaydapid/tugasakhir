@@ -64,12 +64,12 @@ export class Variables {
     getAverageCML(asset, year) {
         const { cml } = asset;
 
-        let allYear = asset.cml.map(c => c.year)
-        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const stCrYear = allYear.at(-2)
+        let allYear = asset?.cml?.map(c => c.year)
+        allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+        const stCrYear = allYear?.at(-2)
 
-        const cmls = cml.filter(c => c.year == year)
-        .map(c => {
+        const cmls = cml?.filter(c => c.year == year)
+        ?.map(c => {
             return {
                 ...c,
                 calculated_cr : this.getCalculatedLTCR({...asset, ...c}),
@@ -78,12 +78,12 @@ export class Variables {
         })
 
         const last_cml_reading_date = cmls
-        .map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date) )
-        .sort((a,b) => a-b)
+        ?.map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date) )
+        ?.sort((a,b) => a-b)
 
         function getAvg(i) {
-            const avg = cmls.map(c => c[i])
-            .reduce((x,y) => x + y, 0) / cmls.length;
+            const avg = cmls?.map(c => c[i])
+            .reduce((x,y) => x + y, 0) / cmls?.length;
             if(!avg) return 0;
             return avg;
         }
@@ -93,16 +93,38 @@ export class Variables {
         const st_cr = getAvg("calculated_st");
 
         return { 
-            cml_details : cmls.find(c=> c.year = year),
+            cml_details : cmls?.find(c=> c.year = year),
             reading, 
             lt_cr, 
             st_cr,
-            last_cml_reading_date : last_cml_reading_date.at(-1)
+            last_cml_reading_date : last_cml_reading_date?.at(-1)
         }
     }
 
     addMonths(date, month) {
         return this.datePipe.transform(moment(date).add(month, 'M').toDate(), 'yyyy-MM-dd')
+    }
+
+    getCharCML(cml, i) {
+        let cmlLabel = cml?.map(c=>c.cml_id)
+        cmlLabel = cmlLabel?.filter((c, i) => cmlLabel.indexOf(c) == i)
+    
+        let allYear = cml?.map(c => c.year)
+        allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+    
+        return {
+          allYear,
+          datasets : cmlLabel?.map(c => ({
+            label: c,
+            yAxisID: 'A',
+            data: allYear?.map(y => {
+              const thick = cml.find(item => item.year == y && item.cml_id == c) 
+              return thick[i]
+            }),
+            backgroundColor: 'transparent',
+            borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
+          }))
+        }
     }
 
     getInspectionInt(asset = null) {
@@ -181,9 +203,9 @@ export class Variables {
         const { allowable_unit_stress, longtd_quality_factor, outside_diameter } = asset;
         const { min_required_thickness } = this.getAssetsFormula(asset);
 
-        let allYear = asset.cml.map(c => c.year)
-        allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const lastInsp = allYear.at(-1);
+        let allYear = asset?.cml?.map(c => c.year)
+        allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+        const lastInsp = allYear?.at(-1);
 
         const { reading, lt_cr, st_cr, last_cml_reading_date : lcrd } = this.getAverageCML(asset, lastInsp);
         const remaining_life = lt_cr ? (reading - min_required_thickness) / lt_cr : 0;

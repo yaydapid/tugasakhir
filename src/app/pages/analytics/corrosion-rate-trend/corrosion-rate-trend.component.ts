@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Chart,  registerables} from 'chart.js'
+import { Chart, registerables} from 'chart.js'
 import { ThicknessService } from '../../assesment/thickness/thickness-service';
 import { Variables } from '../../../component/common-variable';
 import { ThicknessChartComponent } from './chart/thickness-chart.component';
@@ -30,6 +30,8 @@ export class CorrosionRateTrendComponent implements OnInit {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
+      this.showData(this.selectionData)
     })
   }
 
@@ -50,6 +52,8 @@ export class CorrosionRateTrendComponent implements OnInit {
   showData(element) {
       this.selectionData = element
       this.variables.removeChartData(this.thicknessChart)
+      this.variables.removeChartData(this.corrosionChart)
+      this.variables.removeChartData(this.remainingChart)
       this.thicknessChartData(this.thicknessChart, element)
       this.corrosionChartData(this.corrosionChart, element)
       this.remainingLifeChartData(this.remainingChart, element)
@@ -61,30 +65,8 @@ export class CorrosionRateTrendComponent implements OnInit {
     this.dataSource = new MatTableDataSource(tableData)
   }
 
-  getCharCML(cml, i) {
-    let cmlLabel = cml.map(c=>c.cml_id)
-    cmlLabel = cmlLabel.filter((c, i) => cmlLabel.indexOf(c) == i)
-
-    let allYear = cml.map(c => c.year)
-    allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-
-    return {
-      allYear,
-      datasets : cmlLabel.map(c => ({
-        label: c,
-        yAxisID: 'A',
-        data: allYear.map(y => {
-          const thick = cml.find(item => item.year == y && item.cml_id == c) 
-          return thick[i]
-        }),
-        backgroundColor: 'transparent',
-        borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),
-      }))
-    }
-  }
-
   thicknessChartData(chart, {cml}) {
-    const {datasets, allYear} = this.getCharCML(cml, "last_thickness_reading")
+    const {datasets, allYear} = this.variables.getCharCML(cml, "last_thickness_reading")
     chart.data.labels = allYear
     chart.chart.data.datasets = datasets
     chart.chart.update();
@@ -92,7 +74,7 @@ export class CorrosionRateTrendComponent implements OnInit {
 
   corrosionChartData(chart, asset) {
     const cml = this.variables.getCMLCalc(asset)
-    const {datasets, allYear} = this.getCharCML(cml, "lt_cr")
+    const {datasets, allYear} = this.variables.getCharCML(cml, "lt_cr")
     chart.data.labels = allYear
     chart.chart.data.datasets = datasets
     chart.chart.update();
@@ -100,7 +82,7 @@ export class CorrosionRateTrendComponent implements OnInit {
 
   remainingLifeChartData(chart, asset) {
     const cml = this.variables.getCMLCalc(asset)
-    const {datasets, allYear} = this.getCharCML(cml, "remaining_life")
+    const {datasets, allYear} = this.variables.getCharCML(cml, "remaining_life")
     chart.data.labels = allYear
     chart.chart.data.datasets = datasets
     chart.chart.update();

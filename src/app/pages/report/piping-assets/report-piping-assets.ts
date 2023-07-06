@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
-import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } 
-        from '@techiediaries/ngx-qrcode';
+import { 
+    NgxQrcodeElementTypes, 
+    NgxQrcodeErrorCorrectionLevels 
+} from '@techiediaries/ngx-qrcode';
 import { MatPaginator } from "@angular/material/paginator";
 import { PipingAssetsService } from "../../dashboard/piping-assets/piping-assets.service";
 import { environment } from "../../../../environments/environment";
@@ -10,6 +12,9 @@ import { ReportService } from "../report-service";
 import { MatTableComponent } from "../../../component/mat-table/mat-table.component";
 import { Variables } from "../../../component/common-variable";
 import { NbToastrService } from "@nebular/theme";
+import { DashboardThicknessChart } from "./chart/thickness-chart.component";
+import { DashboardRemainingChart } from "./chart/remaining-chart.component";
+import { ThicknessService } from "../../assesment/thickness/thickness-service";
 
 @Component({
     selector: 'ngx-report-piping-assets',
@@ -25,14 +30,16 @@ export class ReportPipingAssets implements OnInit {
         private pipingAssetsService : PipingAssetsService,
         private reportService : ReportService,
         private variables : Variables,
-        private toastr : NbToastrService
+        private toastr : NbToastrService,
+        private thicknesService : ThicknessService
     ) {}    
 
     ngOnInit(): void {
-        this.pipingAssetsService.getPipingAssets()
+        this.thicknesService.getDataThickness()
         .subscribe(({data} : any) => {
             this.tablePosition = data
             const firsData = data[0]
+            console.log(firsData)
             if(!firsData) return
             this.showData(firsData)
             this.getReportData(firsData?.id)
@@ -48,6 +55,7 @@ export class ReportPipingAssets implements OnInit {
     getReportData(id) {
         this.reportService.getAssetsReport(id)
         .subscribe(({data : {damage_mechanism, visual_condition, proposal, asset, cml}} : any) => {
+
             this.damageMechanismData = this.variables.damageMechanismName.map(({id ,piping_damage_mechanism} : any) => {
                 const damage = damage_mechanism?.[id]
                 if(damage) return {...damage, piping_damage_mechanism}
@@ -99,6 +107,8 @@ export class ReportPipingAssets implements OnInit {
                 }
             })
 
+
+
         },
         () => this.toastr.danger('Please add asset data.', 'Data not found.')
         )
@@ -109,16 +119,49 @@ export class ReportPipingAssets implements OnInit {
     displayedColumns: string[] = ['piping_id'];
     resultsLength = 0;
     pipeData : any;
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
+    @ViewChild(DashboardThicknessChart) thicknessChart : DashboardThicknessChart
+    @ViewChild(DashboardRemainingChart) remainingChart : DashboardRemainingChart
+
     imageLink : any[] = []
     showData(element) {
-        this.getReportData(element?.id)
         this.pipeData = element;
-        this.imageLink = element?.images?.map(image => 
+        this.imageLink = typeof element.images == "object" 
+        ? element.images.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
-        );
+        )
+        : []
+
+        this.variables.removeChartData(this.thicknessChart)
+        this.variables.removeChartData(this.remainingChart)
+        this.thicknessChartData(this.thicknessChart, element)
+        this.remainingLifeChartData(this.remainingChart, element)
+    }
+
+    thicknessChartData(chart, {cml}) {
+        const {datasets, allYear} = this.variables.getCharCML(cml, "last_thickness_reading")
+        chart.data.labels = allYear
+        chart.chart.data.datasets = datasets
+        chart.chart.update();
+    } 
+
+    corrosionChartData(chart, asset) {
+        const cml = this.variables.getCMLCalc(asset)
+        const {datasets, allYear} = this.variables.getCharCML(cml, "lt_cr")
+        chart.data.labels = allYear
+        chart.chart.data.datasets = datasets
+        chart.chart.update();
+    }
+
+    remainingLifeChartData(chart, asset) {
+        const cml = this.variables.getCMLCalc(asset)
+        const {datasets, allYear} = this.variables.getCharCML(cml, "remaining_life")
+        chart.data.labels = allYear
+        chart.chart.data.datasets = datasets
+        chart.chart.update();
     }
 
     filterByClass(val) {

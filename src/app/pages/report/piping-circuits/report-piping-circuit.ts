@@ -46,15 +46,17 @@ export class ReportPipingCircuit implements OnInit {
         .subscribe(({data : {assets, circuit}} : any) => {
 
             this.pipingVisual = this.pipingVisual.map(({name, props}) => ({
-                name, props, 
+                name, props,
                 data : this.switchToLevel(Math.round(this.visualConditionAvg(assets, props) / assets.length))  
             }))
 
-            assets.forEach(({damage_mechanism, proposal}) => {
-                const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal.id)
+            assets.filter(x => x !=null).forEach(({damage_mechanism, proposal} : any) => {
+                const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal?.id)
                 if(!inspectionProposal) {
-                    const inspection_summary = proposal
-                    .inspection_method.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
+
+                    const inspection_summary = proposal 
+                    ? proposal.inspection_method?.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
+                    : []
 
                     this.inspectionHistoryData.push({...proposal, inspection_summary})
                 }
@@ -64,7 +66,7 @@ export class ReportPipingCircuit implements OnInit {
                     const damage = damage_mechanism?.[id]
                     if(damage) return {...damage, piping_damage_mechanism}
                     return null
-                }) 
+                })  
                 .filter(item => item!=null)
                 .map(({piping_damage_mechanism}) => piping_damage_mechanism)
 
@@ -75,14 +77,40 @@ export class ReportPipingCircuit implements OnInit {
 
             });
 
-            this.pipingThicknessData = assets.map(asset => asset.asset)
+            this.pipingThicknessData = assets.map(asset => {
+                const {
+                    min_required_thickness,
+                    reading,
+                    lt_cr,
+                    st_cr,
+                    remaining_life,
+                    half_life,
+                    retirement_date,
+                    next_tm_insp_date,
+                    next_ve_insp_date,
+                    mawp
+                } = this.variables.getThicknessCalculation({...asset.asset, cml : asset.cml})
 
-            console.log(this.inspectionHistoryData)
+                return {
+                    ...asset.asset,
+                    min_required_thickness : min_required_thickness.toFixed(2),
+                    reading : reading.toFixed(2),
+                    lt_cr : lt_cr.toFixed(2),
+                    st_cr : st_cr.toFixed(2),
+                    remaining_life : remaining_life.toFixed(2),
+                    half_life : half_life.toFixed(2),
+                    retirement_date,
+                    next_tm_insp_date,
+                    next_ve_insp_date,
+                    mawp : mawp.toFixed(2)
+                }
+            })
+
         })
     }
 
     visualConditionAvg(asset, props) {
-        return asset.map(x => this.switchToPoint(x.visual_condition[props]))
+        return asset?.map(x => this.switchToPoint(x?.visual_condition?.[props]))
         .reduce((x,y) =>  x + y , 0)
     }
 
@@ -137,11 +165,11 @@ export class ReportPipingCircuit implements OnInit {
         { type : 'text', prop : 'min_required_thickness', head : 'T min (mm)', width : '200px' },
         { type : 'text', prop : 'lt_cr', head : 'LT CR (mm/Year)', width : '200px' },
         { type : 'text', prop : 'st_cr', head : 'ST CR (mm/Year)', width : '200px' },
-        { type : 'text', prop : 'rl', head : 'RL (Years)', width : '200px' },
-        { type : 'text', prop : 'hl', head : 'HL (Years)', width : '200px' },
-        { type : 'text', prop : 'retriement_date', head : 'Retirement date', width : '200px' },
-        { type : 'text', prop : 'next_tm', head : 'Next TM', width : '200px' },
-        { type : 'text', prop : 'next_ve', head : 'Next VE', width : '200px' },
+        { type : 'text', prop : 'remaining_life', head : 'RL (Years)', width : '200px' },
+        { type : 'text', prop : 'half_life', head : 'HL (Years)', width : '200px' },
+        { type : 'text', prop : 'retirement_date', head : 'Retirement date', width : '200px' },
+        { type : 'text', prop : 'next_tm_insp_date', head : 'Next TM', width : '200px' },
+        { type : 'text', prop : 'next_ve_insp_date', head : 'Next VE', width : '200px' },
         { type : 'text', prop : 'mawp', head : 'MAWP', width : '200px' },
     ]
 

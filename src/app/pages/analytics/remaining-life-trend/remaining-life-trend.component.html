@@ -26,17 +26,17 @@
             <div class="col-3">
                 <table style="width: 100%; box-shadow: none;" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                     <!-- Position Column -->
-                    <ng-container matColumnDef="piping_id">
+                    <ng-container matColumnDef="piping_circuit_id">
                         <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} "> Piping Circuit ID </th>
                         <td mat-cell *matCellDef="let element" #nameCell
                             style="cursor : pointer"
-                            [ngStyle]="{'color' : selectionData.piping_id == element.piping_id ? '#0492c2' : 'black'}"
+                            [ngStyle]="{'color' : selectionData.piping_circuit_id == element.piping_circuit_id ? '#0492c2' : 'black'}"
                             (mouseover)="nameCell.style.color = '#0492c2'"
-                            (mouseout)="selectionData.piping_id == element.piping_id 
+                            (mouseout)="selectionData.piping_circuit_id == element.piping_circuit_id 
                             ? nameCell.style.color = '#0492c2' 
                             : nameCell.style.color = 'black'"
                             (click)="showData(element)"
-                        > {{element.piping_id}} </td>
+                        > {{element.piping_circuit_id}} </td>
                     </ng-container>
         
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
