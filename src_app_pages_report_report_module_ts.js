@@ -446,14 +446,13 @@ class ReportPipingAssets {
     getReportData(id) {
         this.reportService.getAssetsReport(id)
             .subscribe(({ data: { damage_mechanism, visual_condition, proposal, asset, cml } }) => {
-            var _a;
-            this.damageMechanismData = this.variables.damageMechanismName.map(({ id, piping_damage_mechanism }) => {
+            var _a, _b;
+            this.damageMechanismData = (_a = this.variables.damageMechanismName) === null || _a === void 0 ? void 0 : _a.map(({ id, piping_damage_mechanism }) => {
                 const damage = damage_mechanism === null || damage_mechanism === void 0 ? void 0 : damage_mechanism[id];
                 if (damage)
                     return Object.assign(Object.assign({}, damage), { piping_damage_mechanism });
                 return null;
-            })
-                .filter(item => item != null);
+            }).filter(item => item != null);
             this.viewTable.regenerateTable(this.damageMechanismData);
             this.pipingVisual = this.pipingVisual.map(({ name, props }) => {
                 var _a;
@@ -461,7 +460,7 @@ class ReportPipingAssets {
                     name, props, data: (_a = visual_condition[props]) !== null && _a !== void 0 ? _a : null
                 });
             });
-            this.inspectionHistoryData = [Object.assign(Object.assign({}, proposal), { inspection_summary: (_a = proposal === null || proposal === void 0 ? void 0 : proposal.inspection_method) === null || _a === void 0 ? void 0 : _a.map(({ type, method, technique }) => ` ${type} ${method} ${technique}`) })];
+            this.inspectionHistoryData = [Object.assign(Object.assign({}, proposal), { inspection_summary: (_b = proposal === null || proposal === void 0 ? void 0 : proposal.inspection_method) === null || _b === void 0 ? void 0 : _b.map(({ type, method, technique }) => ` ${type} ${method} ${technique}`) })];
             this.pipingThickness = this.pipingThickness.map(({ name, props }) => {
                 const { reading, min_required_thickness, lt_cr, st_cr, remaining_life, half_life, retirement_date, next_tm_insp_date, next_ve_insp_date, mawp } = this.variables.getThicknessCalculation(Object.assign(Object.assign({}, asset), { cml }));
                 const dataThickness = Object.assign(Object.assign({}, asset), { reading: reading.toFixed(4), t_min: min_required_thickness.toFixed(4), lt_cr: lt_cr.toFixed(4), st_cr: st_cr.toFixed(4), remaining_life: remaining_life.toFixed(4), half_life: half_life.toFixed(4), retirement_date,
@@ -476,10 +475,13 @@ class ReportPipingAssets {
         }, () => this.toastr.danger('Please add asset data.', 'Data not found.'));
     }
     showData(element) {
+        var _a;
         this.pipeData = element;
         this.imageLink = typeof element.images == "object"
-            ? element.images.map(image => ({ src: _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl + '/image/' + image, alt: 'Pipe Asssets' }))
+            ? (_a = element === null || element === void 0 ? void 0 : element.images) === null || _a === void 0 ? void 0 : _a.map(image => ({ src: _environments_environment__WEBPACK_IMPORTED_MODULE_0__.environment.apiUrl + '/image/' + image, alt: 'Pipe Asssets' }))
             : [];
+        if (!element)
+            return;
         this.variables.removeChartData(this.thicknessChart);
         this.variables.removeChartData(this.remainingChart);
         this.thicknessChartData(this.thicknessChart, element);
