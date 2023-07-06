@@ -12,6 +12,7 @@ import { PageMenuService } from '../../pages-service';
 import 'rxjs/add/observable/forkJoin';
 import { DatePipe } from '@angular/common';
 import { Variables } from '../../../component/common-variable';
+import { PDFAssetsDashboard } from './pdf-assets/pdf-assets-dashboard';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -34,6 +35,7 @@ export class PipingAssetsComponent implements OnInit {
   ) {}
   
   @ViewChild(MatTableComponent) viewTable : MatTableComponent;
+  @ViewChild(PDFAssetsDashboard) pdfAssets: PDFAssetsDashboard;
   private destroy$: Subject<void> = new Subject<void>();
  
   ngOnInit(): void {
@@ -96,7 +98,6 @@ export class PipingAssetsComponent implements OnInit {
   }
 
   private dataSubject = new AsyncSubject<any>();
-
   uploadImage(image) {
     const formData = new FormData(); 
     formData.append('image', image);

@@ -45,6 +45,16 @@ export class ThicknessComponent implements OnInit {
     })
   }
 
+  printThickness() {
+    
+  }
+
+  tableHeader = { 
+    title : 'Thickness', 
+    filter : [
+      { name : "MAWP", value : ["Normal", "Good", "Worst"], title : 'class-assets' } 
+    ]
+  }
   tableData:any[] = []
   columnDetails = [ 
     { type : 'navto', prop : 'piping_id', head : 'Piping ID', width : '200px', nav : '/pages/cml/' },

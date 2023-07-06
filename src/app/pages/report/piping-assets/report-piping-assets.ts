@@ -6,7 +6,6 @@ import {
     NgxQrcodeErrorCorrectionLevels 
 } from '@techiediaries/ngx-qrcode';
 import { MatPaginator } from "@angular/material/paginator";
-import { PipingAssetsService } from "../../dashboard/piping-assets/piping-assets.service";
 import { environment } from "../../../../environments/environment";
 import { ReportService } from "../report-service";
 import { MatTableComponent } from "../../../component/mat-table/mat-table.component";
@@ -24,14 +23,13 @@ export class ReportPipingAssets implements OnInit {
 
     elementType = NgxQrcodeElementTypes.URL;
     correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
-    value = 'https://www.google.com/';
+    reportURL 
 
     constructor(
-        private pipingAssetsService : PipingAssetsService,
         private reportService : ReportService,
         private variables : Variables,
         private toastr : NbToastrService,
-        private thicknesService : ThicknessService
+        private thicknesService : ThicknessService,
     ) {}    
 
     ngOnInit(): void {
@@ -67,12 +65,14 @@ export class ReportPipingAssets implements OnInit {
                 name, props, data : visual_condition[props] ?? null
             })) 
 
-            this.inspectionHistoryData = [{
+            this.inspectionHistoryData = proposal 
+            ? [{
                 ...proposal, 
                 inspection_summary : proposal
                 ?.inspection_method
                 ?.map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
             }]
+            : []
             
             this.pipingThickness = this.pipingThickness.map(({name, props}) => {
                 const { 
@@ -110,6 +110,16 @@ export class ReportPipingAssets implements OnInit {
         () => this.toastr.danger('Please add asset data.', 'Data not found.')
         )
     }
+
+    seeDocument() {
+        this.reportService.getAttachment(this.pipeData?.attachment)
+        .subscribe(data => {
+          this.toastr.info("Getting your document. Please Wait...", "Download PDF")
+          const file = new Blob([data], { type: 'application/pdf' });            
+          const fileURL = URL.createObjectURL(file);
+          window.open(fileURL);
+        })
+    }
   
     tablePosition:any[] = []
     dataSource
@@ -125,12 +135,17 @@ export class ReportPipingAssets implements OnInit {
 
     imageLink : any[] = []
     showData(element) {
+        const qrcode = element.qr_code;
+        if(qrcode) this.reportURL = environment.apiUrl + "/document/" + element.attachment
+
         this.pipeData = element;
         this.imageLink = typeof element.images == "object" 
         ? element?.images?.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
         )
         : []
+        console.log(this.imageLink)
+
         
         if(!element) return;
         this.variables.removeChartData(this.thicknessChart)

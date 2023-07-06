@@ -21,7 +21,9 @@ export class PageMenuService {
 
     addDocument(data) {
         const url = this.apiUrl + "/document";
-        return this.httpClient.post(url, data);
+        return this.httpClient.post(url, data, {
+            reportProgress : true, observe : 'events'
+        });
     }
 
     showDocument(id) {

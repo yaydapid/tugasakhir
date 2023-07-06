@@ -90,6 +90,14 @@ export class CmlComponent implements OnInit {
     }
   }
 
+  exportExcelFile() {
+    console.log("export")
+  }
+
+  printCML() {
+    console.log("print")
+  }
+
   addCML() {
     this.dialogService.open(AddCMLComponent, {
       context: {

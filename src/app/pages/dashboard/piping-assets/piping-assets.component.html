@@ -17,7 +17,7 @@
                     button.name == 'New'        ? addAssets()
                 :   button.name == 'Import'     ? importExcel.click()
                 :   button.name == 'Export'     ? exportExcelFile()
-                :   button.name == 'Print'      ? printAssets()
+                :   button.name == 'Print'      ? pdfAssets.generateData(this.tableData)
                 :   null
                     "
             >
@@ -34,3 +34,5 @@
     [tableData]="tableData"
     (onClickTable)="onClickTable($event.data, $event.title)"
 ></ngx-mat-table>
+
+<pdf-assets-dashboard></pdf-assets-dashboard>

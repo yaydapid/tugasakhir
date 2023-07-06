@@ -1,7 +1,12 @@
 <div class="w-100 d-flex justify-content-center mt-5">
-    <nb-card class="mt-5" style="max-height: 35rem; min-width: 90rem;">
+    <nb-card 
+    class="mt-5" 
+    style="max-height: 35rem; min-width: 90rem;" 
+    [nbSpinner]="loading" 
+    nbSpinnerStatus="success" 
+    [nbSpinnerMessage]="loading"
+    >
 
-    <!-- <nb-card class="mt-5"> -->
         <nb-card-header class="d-flex">
             <h5 class="w-100">{{ dialogData?.title }}</h5>
             <div class="flex-shrink-1">
@@ -96,7 +101,7 @@
                                     #addAttach 
                                     id="addAttachment"
                                     name="attachment"
-                                    ngModel
+                                    [ngModel]="dialogData?.data?.attachment"
                                     (change)="onUploadAttachment($event)"
                                     >
                             </div>
@@ -109,7 +114,7 @@
                 <textarea fullWidth nbInput name="recomendation" id="recomendation" rows="2" [ngModel]="dialogData?.data?.recomendation"></textarea>
 
                 <div class="d-flex justify-content-center"> 
-                    <button nbButton status="success" type="submit" class="m-1 w-100" [disabled]="!addAssetsForm.form.valid">Add Asset</button>
+                    <button nbButton status="success" type="submit" class="m-1 w-100" [disabled]="!addAssetsForm.form.valid">{{ dialogData?.title }}</button>
                 </div>
             </form>
         </nb-card-body>

@@ -83,14 +83,51 @@
 
                     <div class="col-4 d-flex justify-content-center align-self-center">
                       <div>
-                        <div class="border rounded">
+                        <div class="border rounded" *ngIf="reportURL">
                           <ngx-qrcode
                             [elementType]="elementType"
                             [errorCorrectionLevel]="correctionLevel"
-                            [value]="value"
+                            [value]="reportURL"
                           ></ngx-qrcode>
                         </div>
-                        <button nbButton status="primary" class="mt-2 w-100" size="small" outline>See Attachment</button>
+
+                        <button 
+                          *ngIf="!reportURL"
+                          nbButton 
+                          status="primary" 
+                          class="mt-2 me-2 w-100" 
+                          size="small" 
+                          outline
+                          (click)="publishReport()"
+                        >
+                        Publish Report
+                        </button>
+
+                        <div class="d-flex">
+                          <button 
+                            nbButton 
+                            status="primary" 
+                            class="mt-2 me-2 w-100" 
+                            size="small" 
+                            outline
+                            (click)="printReport()"
+                          >
+                          <nb-icon icon="printer-outline"></nb-icon>
+                          </button>
+  
+                          <button 
+                            nbButton 
+                            status="primary" 
+                            class="mt-2 ms-2 w-100" 
+                            size="small" 
+                            outline
+                            (click)="seeDocument()"
+                            [disabled]="!pipeData?.attachment"
+                          >
+                          <nb-icon icon="file-text-outline"></nb-icon>
+                          </button>
+                        </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -152,7 +189,7 @@
 
                 <section>
                   <h6 class="fw-bolder text-primary mb-2 d-block">Inspection History</h6>
-
+                  <span *ngIf="!inspectionHistoryData.length">Data Not Available</span>
                   <ngx-mat-table 
                     *ngIf="inspectionHistoryData.length"
                     [tableHeader]="{ show : false }"

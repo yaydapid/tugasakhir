@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { ThemeModule } from "../../@theme/theme.module";
-import { NbAccordionModule, NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbGlobalPhysicalPosition, NbInputModule, NbListModule, NbMenuModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
+import { NbAccordionModule, NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbGlobalPhysicalPosition, NbIconModule, NbInputModule, NbListModule, NbMenuModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
 import { NgModule } from "@angular/core";
 import { AssesmentRoutingModule } from "./assesment.routing";
 import { AssesmentComponent } from "./assesment.component";
@@ -36,6 +36,7 @@ import { MatSortModule } from "@angular/material/sort";
         NbInputModule,
         NbCheckboxModule,
         NbButtonModule,
+        NbIconModule,
         MatSlideToggleModule,
         MatTableModule, 
         MatCheckboxModule,

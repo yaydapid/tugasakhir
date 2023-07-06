@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NbDialogRef } from '@nebular/theme';
+import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { environment } from '../../../../../environments/environment';
 import { PageMenuService } from '../../../pages-service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-add-assets',
@@ -9,18 +10,17 @@ import { PageMenuService } from '../../../pages-service';
 })
 export class AddAssetsComponent implements OnInit {
 
-  private apiUrl = environment.apiUrl;
-
   constructor(
     private dialog: NbDialogRef<any>,
-    private pageMenuService : PageMenuService
+    private pageMenuService : PageMenuService,
+    private toastr : NbToastrService
   ) { }
 
   ngOnInit(): void { 
     const images = this.dialogData?.data?.images
     if(images)
-    this.imageLink = images.map(image => (
-      {src : this.apiUrl + "/image/" + image, alt : 'Piping Assets'}
+    this.imageLink = images?.map(image => (
+      {src : environment.apiUrl + "/image/" + image, alt : 'Piping Assets'}
     ))
   }
 
@@ -49,7 +49,6 @@ export class AddAssetsComponent implements OnInit {
   ];
 
   imageLink : any = []
-
   uploadImageFile : any
 
   parseToInt(num) {
@@ -70,13 +69,22 @@ export class AddAssetsComponent implements OnInit {
   } 
 
   attachment
+  loading : any = null
   onUploadAttachment(res) {
     const file = res.target.files[0]
     const formData = new FormData(); 
     formData.append('document', file);
     this.pageMenuService.addDocument(formData)
-    .subscribe(({data} : any) => {
-      this.attachment = data.id
+    .subscribe(res => {
+      if ( res.type === HttpEventType.UploadProgress ) {
+        this.loading = Math.round(res.loaded / res.total ) * 100;
+      } else if ( res.type === HttpEventType.Response ){
+        const upload : any = res;
+        const { id } = upload.body.data;
+        this.attachment = id;
+        this.loading = null;
+        this.toastr.success('Your File has been uploaded.', "Success upload file.")
+      }
     })
   }
 
@@ -88,6 +96,7 @@ export class AddAssetsComponent implements OnInit {
         image : this.uploadImageFile,
         attachment : this.attachment
       }
+      console.log(this.attachment)
       this.dialog.close(arr)
     }
   }

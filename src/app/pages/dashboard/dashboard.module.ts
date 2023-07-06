@@ -11,6 +11,7 @@ import { NbAccordionModule,
   NbMenuModule, 
   NbOptionModule, 
   NbSelectModule, 
+  NbSpinnerModule, 
   NbToastrModule 
 } from "@nebular/theme";
 import { NgModule } from "@angular/core";
@@ -34,6 +35,7 @@ import { FormsModule } from "@angular/forms";
 import { AddCircuitComponent } from "./piping-circuits/add-circuit/add-circuit.component";
 import { AddProposalComponent } from "./view-proposal/add-proposal/add-proposal.component";
 import { DeleteDialogModule } from "../../component/delete dialog/delete-dialog.module";
+import { PDFAssetsDashboard } from "./piping-assets/pdf-assets/pdf-assets-dashboard";
 
 @NgModule({
     imports: [
@@ -57,6 +59,7 @@ import { DeleteDialogModule } from "../../component/delete dialog/delete-dialog.
           preventDuplicates : true,
           limit : 3
         }),
+        NbSpinnerModule,
         NgxQRCodeModule,
         FormsModule,
         DashboardsRoutingModule,
@@ -78,7 +81,8 @@ import { DeleteDialogModule } from "../../component/delete dialog/delete-dialog.
       ViewProposalComponent,
       AddAssetsComponent,
       AddCircuitComponent,
-      AddProposalComponent
+      AddProposalComponent,
+      PDFAssetsDashboard
     ],
   })
 export class DashboardModule { }

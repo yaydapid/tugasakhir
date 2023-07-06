@@ -1,8 +1,9 @@
 import { Component, Input } from "@angular/core";
-import { NbDialogRef } from "@nebular/theme";
+import { NbDialogRef, NbToastrService } from "@nebular/theme";
 import { PipingAssetsService } from "../../piping-assets/piping-assets.service";
 import { PageMenuService } from "../../../pages-service";
 import { environment } from "../../../../../environments/environment";
+import { HttpEventType } from "@angular/common/http";
 
 @Component({
     selector: 'ngx-add-circuit',
@@ -13,7 +14,8 @@ export class AddCircuitComponent {
     constructor(
         private dialog: NbDialogRef<any>,
         private assetsService : PipingAssetsService,
-        private pageMenuService : PageMenuService
+        private pageMenuService : PageMenuService,
+        private toastr : NbToastrService
     ) { }
 
     private apiUrl = environment.apiUrl;
@@ -36,24 +38,7 @@ export class AddCircuitComponent {
     @Input() dialogData : any;
     piping
     
-    imageLink : any= [
-        // { src : "https://wallpapercave.com/wp/wp6954364.jpg", alt : "Pipe 1"},
-        // { src : "https://th.bing.com/th/id/OIP.AYvIW8-BF1Kfk1LvIq2WagAAAA?pid=ImgDet&w=400&h=400&rs=1", alt : "Pipe 2"},
-        // { src : "https://th.bing.com/th/id/OIP.buLgFymST5kZJoEQjTQVxQHaE7?pid=ImgDet&rs=1", alt : "Pipe 3"},
-    ]
-
-    
-    attachment
-    onUploadAttachment(res) {
-        const file = res.target.files[0]
-        const formData = new FormData(); 
-        formData.append('document', file);
-        this.pageMenuService.addDocument(formData)
-        .subscribe(({data} : any) => {
-        this.attachment = data.id
-        })
-    }
-
+    imageLink : any= [ ]
     uploadImageFile
     onFileChange(res) {
         const file = res.target.files
@@ -69,20 +54,39 @@ export class AddCircuitComponent {
     } 
 
     parseInt(num) {
-        if(!num) return null
-        return parseInt(num)
+      if(!num) return null
+      return parseInt(num)
+    }
+
+    attachment
+    loading : any = null
+    onUploadAttachment(res) {
+      const file = res.target.files[0]
+      const formData = new FormData(); 
+      formData.append('document', file);
+      this.pageMenuService.addDocument(formData)
+      .subscribe(res => {
+        if ( res.type === HttpEventType.UploadProgress ) {
+          this.loading = Math.round(res.loaded / res.total ) * 100;
+        } else if ( res.type === HttpEventType.Response ){
+          const upload : any = res;
+          const { id } = upload.body.data;
+          this.attachment = id;
+          this.loading = null;
+          this.toastr.success('Your File has been uploaded.', "Success upload file.")
+        }
+      })
     }
 
     closeDialog(arr = null) {
-      // return console.log(arr)
-        if(!arr) this.dialog.close()
-        if(arr) {
-          arr = {
-            ...arr,
-            image : this.uploadImageFile,
-            attachment : this.attachment
-          }
-          this.dialog.close(arr)
+      if(!arr) this.dialog.close()
+      if(arr) {
+        arr = {
+          ...arr,
+          image : this.uploadImageFile,
+          attachment : this.attachment
         }
+        this.dialog.close(arr)
+      }
     }
 }

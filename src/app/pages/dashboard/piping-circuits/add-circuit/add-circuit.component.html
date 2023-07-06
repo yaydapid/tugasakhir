@@ -1,7 +1,12 @@
 <div class="d-flex justify-content-center align-items-center mt-4">
-    <nb-card class="mt-5" style="max-height: 35rem; min-width: 90rem;">
+    <nb-card 
+    class="mt-5" 
+    style="max-height: 35rem; min-width: 90rem;"
+    [nbSpinner]="loading" 
+    nbSpinnerStatus="success" 
+    [nbSpinnerMessage]="loading"
+    >
 
-    <!-- <nb-card class="mt-5"> -->
         <nb-card-header class="d-flex">
             <h5 class="w-100">{{ dialogData?.title }}</h5>
             <div class="flex-shrink-1">
@@ -65,7 +70,8 @@
                             #addAttach 
                             id="addAttachment"
                             name='attachment'
-                            ngModel
+                            [ngModel]="dialogData?.data?.attachment"
+                            (change)="onUploadAttachment($event)"
                             >
                     </div>
                 

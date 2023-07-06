@@ -6,17 +6,18 @@
             size="small" 
             status="primary"
             class="m-2"
+            [disabled]="(button?.name == 'Export' || button?.name == 'Print') && !tableData?.length"
             *ngFor="let button of [
                 { name : 'New', icon : 'plus-outline' },
                 { name : 'Import', icon : 'download-outline' },
                 { name : 'Export', icon : 'upload-outline' },
+                { name : 'Print', icon : 'printer-outline' },
             ]"
             (click)="
                     button.name == 'New'        ? addCML()
                 :   button.name == 'Import'     ? importExcel.click()
                 :   button.name == 'Export'     ? exportExcelFile()
-                :   button.name == 'Print'      ? print()
-                :   button.name == 'QR Print'   ? qrPrint()
+                :   button.name == 'Print'      ? printCML()
                 :   null
                     "
             >

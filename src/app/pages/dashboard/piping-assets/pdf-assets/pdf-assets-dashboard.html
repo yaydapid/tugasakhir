@@ -1,0 +1,34 @@
+<div class="container" style="display: none;">
+    <div id="pdfTable" #pdfAssets>
+        <h5 style="width: 100%; margin: 0 0 1rem 0; color: #5588EE;">
+            Piping Assets
+        </h5>
+
+        <table 
+            data-pdfmake="{'widths':[ '*', '*', '*', 20, '*', '*' ], 'layout' : 'exampleLayout'}" 
+            [style]="{'font-size' : '10px'}"
+            >
+                <tr>
+                    <th *ngFor="let head of assetsHead"> <b style="font-weight: bold;">{{ head.name }}</b> </th>
+                </tr>
+                <div *ngFor="let data of tableData">
+                    <tr>
+                        <td> {{ data.piping_id }}  </td>
+                        <td> {{ data.piping_name }}  </td>
+                        <td> {{ data.date_in_service }}  </td>
+                        <td> {{ data.class }}  </td>
+                        <td> {{ data.tm_inspection_interval }}  </td>
+                        <td> {{ data.ve_inspection_interval }}  </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Notes</b>
+                        </td>
+                        <td colspan="4">
+                            {{ data.notes }}
+                        </td>
+                    </tr>
+                </div>
+        </table>
+    </div>
+</div>

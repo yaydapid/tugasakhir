@@ -1,7 +1,23 @@
+<nb-card>
+    <nb-card-body>
+        <button 
+            nbButton 
+            outline
+            size="small" 
+            status="primary"
+            [disabled]="!tableData?.length"
+            (click)="printThickness()"
+            >
+                <nb-icon icon="printer-outline" class="m-1"></nb-icon>
+                <span>Print</span>
+            </button>
+    </nb-card-body>
+</nb-card>
+
 <nb-alert status="danger" *ngIf="!tableData.length" >Data Not Available. Please add asset.</nb-alert>
 <ngx-mat-table 
     *ngIf="tableData.length"
-    [tableHeader]="{ title : 'Thickness' }"
+    [tableHeader]="tableHeader"
     [columnDetails]="columnDetails"
     [tableData]="tableData"
 ></ngx-mat-table>

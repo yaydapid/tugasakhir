@@ -18,4 +18,9 @@ export class ReportService {
         const url = this.apiUrl + '/circuit_report/' + id;
         return this.httpClient.get(url);
     }
+
+    getAttachment(id) {
+        const url = this.apiUrl + "/document/" + id;
+        return this.httpClient.get(url, {responseType : 'arraybuffer'});
+    }
 }
