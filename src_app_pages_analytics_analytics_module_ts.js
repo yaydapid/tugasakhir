@@ -404,6 +404,8 @@ class CorrosionRateTrendComponent {
         this.variables.removeChartData(this.thicknessChart);
         this.variables.removeChartData(this.corrosionChart);
         this.variables.removeChartData(this.remainingChart);
+        if (!element)
+            return;
         this.thicknessChartData(this.thicknessChart, element);
         this.corrosionChartData(this.corrosionChart, element);
         this.remainingLifeChartData(this.remainingChart, element);
@@ -415,7 +417,7 @@ class CorrosionRateTrendComponent {
         this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatTableDataSource(tableData);
     }
     thicknessChartData(chart, { cml }) {
-        const { datasets, allYear } = this.variables.getCharCML(cml, "last_thickness_reading");
+        const { datasets, allYear } = this.variables.getCharCML(cml !== null && cml !== void 0 ? cml : [], "last_thickness_reading");
         chart.data.labels = allYear;
         chart.chart.data.datasets = datasets;
         chart.chart.update();
@@ -682,6 +684,8 @@ class RemainingLifeTrendComponent {
     }
     showData(element) {
         this.selectionData = element;
+        if (!element)
+            return;
         this.circuitChartData(this.circuitChart, element);
     }
     circuitChartData(chart, circuit) {

@@ -55,12 +55,13 @@ class Variables {
         ];
     }
     getCMLCalc(asset) {
-        const { cml } = asset;
-        let allYear = asset.cml.map(c => c.year);
+        var _a;
+        const { cml } = asset !== null && asset !== void 0 ? asset : [];
+        let allYear = (_a = asset === null || asset === void 0 ? void 0 : asset.cml) === null || _a === void 0 ? void 0 : _a.map(c => c.year);
         allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a, b) => a - b);
         const stCrYear = allYear.at(-2);
         const { min_required_thickness } = this.getAssetsFormula(asset);
-        return cml.map(c => {
+        return cml === null || cml === void 0 ? void 0 : cml.map(c => {
             const lt_cr = this.getCalculatedLTCR(Object.assign(Object.assign({}, asset), c));
             const remaining_life = (c.last_thickness_reading - min_required_thickness) / lt_cr;
             return Object.assign(Object.assign({}, c), { lt_cr, remaining_life,
@@ -97,7 +98,9 @@ class Variables {
     addMonths(date, month) {
         return this.datePipe.transform(moment__WEBPACK_IMPORTED_MODULE_0___default()(date).add(month, 'M').toDate(), 'yyyy-MM-dd');
     }
-    getCharCML(cml, i) {
+    getCharCML(cml, identifier) {
+        if (!cml)
+            return;
         let cmlLabel = cml === null || cml === void 0 ? void 0 : cml.map(c => c.cml_id);
         cmlLabel = cmlLabel === null || cmlLabel === void 0 ? void 0 : cmlLabel.filter((c, i) => cmlLabel.indexOf(c) == i);
         let allYear = cml === null || cml === void 0 ? void 0 : cml.map(c => c.year);
@@ -109,7 +112,7 @@ class Variables {
                 yAxisID: 'A',
                 data: allYear === null || allYear === void 0 ? void 0 : allYear.map(y => {
                     const thick = cml.find(item => item.year == y && item.cml_id == c);
-                    return thick[i];
+                    return thick === null || thick === void 0 ? void 0 : thick[identifier];
                 }),
                 backgroundColor: 'transparent',
                 borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),

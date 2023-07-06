@@ -48,6 +48,10 @@ class PipingAssetsService {
             reportProgress: true, observe: 'events'
         });
     }
+    importAsset(postBody) {
+        const url = this.apiUrl + "/import_assets";
+        return this.httpClient.post(url, postBody);
+    }
 }
 PipingAssetsService.ɵfac = function PipingAssetsService_Factory(t) { return new (t || PipingAssetsService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpClient)); };
 PipingAssetsService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: PipingAssetsService, factory: PipingAssetsService.ɵfac, providedIn: 'root' });
@@ -430,7 +434,6 @@ class ReportPipingAssets {
             .subscribe(({ data }) => {
             this.tablePosition = data;
             const firsData = data[0];
-            console.log(firsData);
             if (!firsData)
                 return;
             this.showData(firsData);
@@ -633,38 +636,38 @@ class PipingCircuitChart extends _component_chart_charts_component__WEBPACK_IMPO
     constructor() {
         super();
         this.chartType = 'bar';
-        this.yLabels = ['Pipe 101A', 'Pipe 102A', 'Pipe 103A', 'Pipe 104A', 'Pipe 105A'];
+        this.yLabels = [];
         this.legendPosition = 'bottom';
         this.showRightSclae = true;
         this.datasets = [
-            {
-                label: "Reading (mm)",
-                yAxisID: 'A',
-                data: ['467', '576', '572', '79', '92'],
-                backgroundColor: 'rgba(255,0,0,.5)',
-                borderColor: 'rgba(255,0,0,.5)',
-            },
-            {
-                label: "T minimum (mm)",
-                yAxisID: 'A',
-                data: ['542', '542', '536', '327', '17'],
-                backgroundColor: 'rgba(100,100,0,.5)',
-                borderColor: 'rgba(100,100,0,.5)',
-            },
-            {
-                label: "Nominal Thickness (mm)",
-                yAxisID: 'A',
-                data: ['504', '142', '336', '317', '100'],
-                backgroundColor: 'rgba(10,50,100,.5)',
-                borderColor: 'rgba(10,50,100,.5)',
-            },
-            {
-                label: "Corrosion Rate (mm/Year)",
-                yAxisID: 'B',
-                data: ['0.052', '0.042', '0.336', '0.527', '0.517'],
-                backgroundColor: 'rgba(90,190,90,.5)',
-                borderColor: 'rgba(90,190,90,.5)',
-            },
+        // {
+        //     label: "Reading (mm)",
+        //     yAxisID: 'A',
+        //     data: ['467', '576', '572', '79', '92'],
+        //     backgroundColor: 'rgba(255,0,0,.5)',
+        //     borderColor: 'rgba(255,0,0,.5)',
+        // },
+        // {
+        //     label: "T minimum (mm)",
+        //     yAxisID: 'A',
+        //     data: ['542', '542', '536', '327', '17'],
+        //     backgroundColor: 'rgba(100,100,0,.5)',
+        //     borderColor: 'rgba(100,100,0,.5)',
+        // },
+        // {
+        //     label: "Nominal Thickness (mm)",
+        //     yAxisID: 'A',
+        //     data: ['504', '142', '336', '317', '100'],
+        //     backgroundColor: 'rgba(10,50,100,.5)',
+        //     borderColor: 'rgba(10,50,100,.5)',
+        // },
+        // {
+        //     label: "Corrosion Rate (mm/Year)",
+        //     yAxisID: 'B',
+        //     data: ['0.052', '0.042', '0.336', '0.527', '0.517'],
+        //     backgroundColor: 'rgba(90,190,90,.5)',
+        //     borderColor: 'rgba(90,190,90,.5)',
+        // },
         ];
         this.defineOptions({
             chartTitle: "Chart Piping Circuit",
@@ -697,16 +700,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _techiediaries_ngx_qrcode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @techiediaries/ngx-qrcode */ 33244);
 /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/paginator */ 9861);
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../environments/environment */ 92340);
+/* harmony import */ var _chart_piping_circuit_trend_chart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chart/piping-circuit-trend-chart */ 80962);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _dashboard_piping_circuits_piping_circuits_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../dashboard/piping-circuits/piping-circuits.service */ 52787);
-/* harmony import */ var _report_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../report-service */ 51683);
-/* harmony import */ var _component_common_variable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../component/common-variable */ 47024);
+/* harmony import */ var _dashboard_piping_circuits_piping_circuits_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../dashboard/piping-circuits/piping-circuits.service */ 52787);
+/* harmony import */ var _report_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../report-service */ 51683);
+/* harmony import */ var _component_common_variable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../component/common-variable */ 47024);
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @nebular/theme */ 68253);
 /* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/form-field */ 44770);
 /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/input */ 43365);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common */ 36362);
-/* harmony import */ var _component_mat_table_mat_table_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../component/mat-table/mat-table.component */ 53858);
-/* harmony import */ var _chart_piping_circuit_trend_chart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./chart/piping-circuit-trend-chart */ 80962);
+/* harmony import */ var _component_mat_table_mat_table_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../component/mat-table/mat-table.component */ 53858);
+
 
 
 
@@ -937,6 +941,28 @@ class ReportPipingCircuit {
         this.elementType = _techiediaries_ngx_qrcode__WEBPACK_IMPORTED_MODULE_7__.NgxQrcodeElementTypes.URL;
         this.correctionLevel = _techiediaries_ngx_qrcode__WEBPACK_IMPORTED_MODULE_7__.NgxQrcodeErrorCorrectionLevels.HIGH;
         this.value = 'https://www.google.com/';
+        this.datasets = [
+            {
+                label: "Reading (mm)",
+                yAxisID: 'A',
+                prop: 'reading'
+            },
+            {
+                label: "T minimum (mm)",
+                yAxisID: 'A',
+                prop: 'min_required_thickness'
+            },
+            {
+                label: "Nominal Thickness (mm)",
+                yAxisID: 'A',
+                prop: 'nominal_thickness'
+            },
+            {
+                label: "Corrosion Rate (mm/Year)",
+                yAxisID: 'B',
+                prop: 'lt_cr'
+            },
+        ];
         this.tablePosition = [];
         this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatTableDataSource(this.tablePosition);
         this.displayedColumns = ['piping_circuit_name'];
@@ -988,7 +1014,9 @@ class ReportPipingCircuit {
     }
     getCircuitReport(id) {
         this.reportService.getCircuitReport(id)
-            .subscribe(({ data: { assets, circuit } }) => {
+            .subscribe(({ data: { assets } }) => {
+            const chartData = assets.map(({ asset, cml }) => (Object.assign(Object.assign({}, asset), { cml })));
+            this.circuitChartData(this.circuitChart, { piping: chartData });
             this.pipingVisual = this.pipingVisual.map(({ name, props }) => ({
                 name, props,
                 data: this.switchToLevel(Math.round(this.visualConditionAvg(assets, props) / assets.length))
@@ -1023,6 +1051,21 @@ class ReportPipingCircuit {
                     next_ve_insp_date, mawp: mawp.toFixed(2) });
             });
         });
+    }
+    circuitChartData(chart, circuit) {
+        const { piping } = circuit;
+        const allPipe = piping === null || piping === void 0 ? void 0 : piping.map(c => c.piping_id);
+        this.variables.removeChartData(this.circuitChart);
+        const pipingCalc = piping.map(p => this.variables.getThicknessCalculation(p));
+        chart.data.labels = allPipe;
+        const dataSet = this.datasets
+            .map(item => {
+            const color = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
+            const data = allPipe.map(pipe => pipingCalc.find(p => p.piping_id == pipe)[item.prop]);
+            return Object.assign(Object.assign({}, item), { borderColor: color, backgroundColor: color, data });
+        });
+        chart.chart.data.datasets = dataSet;
+        chart.chart.update();
     }
     visualConditionAvg(asset, props) {
         return asset === null || asset === void 0 ? void 0 : asset.map(x => { var _a; return this.switchToPoint((_a = x === null || x === void 0 ? void 0 : x.visual_condition) === null || _a === void 0 ? void 0 : _a[props]); }).reduce((x, y) => x + y, 0);
@@ -1073,12 +1116,14 @@ class ReportPipingCircuit {
         }
     }
 }
-ReportPipingCircuit.ɵfac = function ReportPipingCircuit_Factory(t) { return new (t || ReportPipingCircuit)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_dashboard_piping_circuits_piping_circuits_service__WEBPACK_IMPORTED_MODULE_1__.PipingCircuitService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_report_service__WEBPACK_IMPORTED_MODULE_2__.ReportService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_component_common_variable__WEBPACK_IMPORTED_MODULE_3__.Variables)); };
+ReportPipingCircuit.ɵfac = function ReportPipingCircuit_Factory(t) { return new (t || ReportPipingCircuit)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_dashboard_piping_circuits_piping_circuits_service__WEBPACK_IMPORTED_MODULE_2__.PipingCircuitService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_report_service__WEBPACK_IMPORTED_MODULE_3__.ReportService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_component_common_variable__WEBPACK_IMPORTED_MODULE_4__.Variables)); };
 ReportPipingCircuit.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineComponent"]({ type: ReportPipingCircuit, selectors: [["ngx-report-piping-circuit"]], viewQuery: function ReportPipingCircuit_Query(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵviewQuery"](_chart_piping_circuit_trend_chart__WEBPACK_IMPORTED_MODULE_1__.PipingCircuitChart, 5);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵviewQuery"](_angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__.MatPaginator, 5);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵviewQuery"](_angular_material_sort__WEBPACK_IMPORTED_MODULE_10__.MatSort, 5);
     } if (rf & 2) {
         let _t;
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵloadQuery"]()) && (ctx.circuitChart = _t.first);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵloadQuery"]()) && (ctx.paginator = _t.first);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵloadQuery"]()) && (ctx.sort = _t.first);
     } }, decls: 28, vars: 10, consts: [[1, "d-flex", "justify-content-between"], ["matInput", "", "placeholder", "Ex. Mia", 3, "keyup"], ["input", ""], [1, "row"], [1, "col"], ["placeholder", "Class", "status", "primary", "size", "small", 1, "mx-5"], [3, "value", "click", 4, "ngFor", "ngForOf"], [1, "col-3"], ["mat-table", "", 1, "mat-elevation-z8", 2, "width", "100%", "box-shadow", "none", 3, "dataSource"], ["matColumnDef", "piping_circuit_name"], ["mat-header-cell", "", 3, "ngStyle", 4, "matHeaderCellDef"], ["mat-cell", "", "style", "cursor : pointer", 3, "ngStyle", "mouseover", "mouseout", "click", 4, "matCellDef"], ["mat-header-row", "", 4, "matHeaderRowDef", "matHeaderRowDefSticky"], ["mat-row", "", 4, "matRowDef", "matRowDefColumns"], ["aria-label", "Select page of GitHub search results", 3, "length", "pageSize"], [1, "col-9"], [4, "ngIf"], [3, "value", "click"], ["mat-header-cell", "", 3, "ngStyle"], ["mat-cell", "", 2, "cursor", "pointer", 3, "ngStyle", "mouseover", "mouseout", "click"], ["nameCell", ""], ["mat-header-row", ""], ["mat-row", ""], [1, "fw-bolder", "text-primary", "mb-2", "d-block"], [1, "col-8"], ["id", "carouselExampleInterval", "data-bs-ride", "carousel", 1, "carousel", "slide"], [1, "carousel-inner"], ["class", "carousel-item", "data-bs-interval", "10000", 3, "ngClass", 4, "ngFor", "ngForOf"], ["type", "button", "data-bs-target", "#carouselExampleInterval", "data-bs-slide", "prev", 1, "carousel-control-prev"], ["aria-hidden", "true", 1, "carousel-control-prev-icon"], [1, "visually-hidden"], ["type", "button", "data-bs-target", "#carouselExampleInterval", "data-bs-slide", "next", 1, "carousel-control-next"], ["aria-hidden", "true", 1, "carousel-control-next-icon"], [1, "col-4", "d-flex", "justify-content-center", "align-self-center"], [1, "border", "rounded"], [3, "elementType", "errorCorrectionLevel", "value"], ["nbButton", "", "status", "primary", "size", "small", "outline", "", 1, "mt-2", "w-100"], [1, "row", "mt-3"], [1, "text-secondary", "col-4"], [1, "text-secondary"], [1, "row", "row-cols-3"], ["class", "row", 4, "ngFor", "ngForOf"], [1, "mt-3"], [3, "tableHeader", "tableFooter", "columnDetails", "tableData", 4, "ngIf"], ["style", "height: 1rem;", 4, "ngFor", "ngForOf"], ["data-bs-interval", "10000", 1, "carousel-item", 3, "ngClass"], [1, "overflow-hidden", "d-flex", "align-justify-center", 2, "height", "15rem"], [1, "w-100", "img-fluid", 3, "src", "alt"], [1, "col", "text-secondary"], [3, "tableHeader", "tableFooter", "columnDetails", "tableData"], [2, "height", "1rem"]], template: function ReportPipingCircuit_Template(rf, ctx) { if (rf & 1) {
@@ -1126,7 +1171,7 @@ ReportPipingCircuit.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngIf", !ctx.selectionData);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngIf", ctx.selectionData);
-    } }, directives: [_nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbCardComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbCardHeaderComponent, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatFormField, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatLabel, _angular_material_input__WEBPACK_IMPORTED_MODULE_13__.MatInput, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbSelectComponent, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgForOf, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbOptionComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbCardBodyComponent, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatTable, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatColumnDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderCell, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgStyle, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatCell, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderRow, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatRow, _angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__.MatPaginator, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgIf, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgClass, _techiediaries_ngx_qrcode__WEBPACK_IMPORTED_MODULE_7__.QrcodeComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbButtonComponent, _component_mat_table_mat_table_component__WEBPACK_IMPORTED_MODULE_4__.MatTableComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbListComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbListItemComponent, _chart_piping_circuit_trend_chart__WEBPACK_IMPORTED_MODULE_5__.PipingCircuitChart], encapsulation: 2 });
+    } }, directives: [_nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbCardComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbCardHeaderComponent, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatFormField, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_12__.MatLabel, _angular_material_input__WEBPACK_IMPORTED_MODULE_13__.MatInput, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbSelectComponent, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgForOf, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbOptionComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbCardBodyComponent, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatTable, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatColumnDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderCell, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgStyle, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatCell, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatHeaderRow, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_8__.MatRow, _angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__.MatPaginator, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgIf, _angular_common__WEBPACK_IMPORTED_MODULE_14__.NgClass, _techiediaries_ngx_qrcode__WEBPACK_IMPORTED_MODULE_7__.QrcodeComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbButtonComponent, _component_mat_table_mat_table_component__WEBPACK_IMPORTED_MODULE_5__.MatTableComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbListComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_11__.NbListItemComponent, _chart_piping_circuit_trend_chart__WEBPACK_IMPORTED_MODULE_1__.PipingCircuitChart], encapsulation: 2 });
 
 
 /***/ }),
