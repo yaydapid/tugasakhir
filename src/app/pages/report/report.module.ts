@@ -18,6 +18,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 import { ReportPipingCircuit } from "./piping-circuits/report-piping-circuit";
 import { PipingCircuitChart } from "./piping-circuits/chart/piping-circuit-trend-chart";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
     imports: [
@@ -38,6 +39,7 @@ import { PipingCircuitChart } from "./piping-circuits/chart/piping-circuit-trend
         MatFormFieldModule, 
         MatInputModule,
         MatSelectModule,
+        MatSortModule,
         NgxQRCodeModule,
         NbToastrModule.forRoot({
             destroyByClick	: true,

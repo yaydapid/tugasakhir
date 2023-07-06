@@ -23,6 +23,7 @@ import {
 } from "@nebular/theme";
 import { FormsModule } from "@angular/forms";
 import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
     imports: [
@@ -34,6 +35,7 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
         MatPaginatorModule,
         MatFormFieldModule, 
         MatInputModule,
+        MatSortModule,
         MatSelectModule,
         NbOptionModule,
         NbSelectModule,

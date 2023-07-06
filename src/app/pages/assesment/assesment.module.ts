@@ -19,6 +19,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { FormsModule } from "@angular/forms";
 import { Variables } from "../../component/common-variable";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
     imports: [
@@ -42,6 +43,7 @@ import { Variables } from "../../component/common-variable";
         MatInputModule,
         MatSelectModule,
         MatPaginatorModule,
+        MatSortModule,
         FormsModule,
         NbAlertModule,
         NbToastrModule.forRoot({

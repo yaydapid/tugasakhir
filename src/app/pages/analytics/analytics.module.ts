@@ -19,6 +19,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { PipingCircuitsComponent } from "../dashboard/piping-circuits/piping-circuits.component";
 import { PipingCircuitChartComponent } from "./remaining-life-trend/chart/piping-circuit-chart.component";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import { PipingCircuitChartComponent } from "./remaining-life-trend/chart/piping
         MatFormFieldModule, 
         MatInputModule,
         MatSelectModule,
+        MatSortModule
     ],
     declarations: [
         AnalyticsComponent,

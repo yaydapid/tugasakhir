@@ -23,10 +23,10 @@
     <nb-card-body class="row">
       
         <div class="col-3">
-            <table style="width: 100%; box-shadow: none;" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <table style="width: 100%; box-shadow: none;" mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
                 <!-- Position Column -->
                 <ng-container matColumnDef="piping_circuit_name">
-                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} "> Circuit Id </th>
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} " mat-sort-header> Circuit Id </th>
                     <td mat-cell *matCellDef="let element" #nameCell
                       style="cursor : pointer"
                       [ngStyle]="{'color' : selectionData.piping_circuit_name == element.piping_circuit_name ? '#0492c2' : 'black'}"

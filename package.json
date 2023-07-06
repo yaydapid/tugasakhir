@@ -30,8 +30,7 @@
     "release:changelog": "npm run conventional-changelog -- -p angular -i CHANGELOG.md -s",
     "postinstall": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points --tsconfig \"./src/tsconfig.app.json\"",
     "deploy": "ng build --base-href https://Dimasariza.github.io/pipe_monitoring/",
-    "build_david": "ng build --base-href https://yaydapid.github.io/tugasakhir/ -sm -ec -bh tugasakhir & ngh --silent=false",
-    "deploy_david": "ng build --base-href https://yaydapid.github.io/tugasakhir/",
+    "deploy_david": "ng build --prod --base-href https://yaydapid.github.io/tugasakhir/",
     "gh-pages": "ngh --dir=/public"
   },
   "dependencies": {

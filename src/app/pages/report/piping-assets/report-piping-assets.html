@@ -23,10 +23,10 @@
     <nb-card-body class="row">
       
         <div class="col-3">
-            <table style="width: 100%; box-shadow: none;" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <table style="width: 100%; box-shadow: none;" mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
                 <!-- Position Column -->
                 <ng-container matColumnDef="piping_id">
-                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} "> Piping ID </th>
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '40px'} " mat-sort-header> Piping ID </th>
                     <td mat-cell *matCellDef="let element" #nameCell
                       style="cursor : pointer"
                       [ngStyle]="{'color' : pipeData == element ? '#0492c2' : 'black'}"
