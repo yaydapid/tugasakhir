@@ -39,7 +39,6 @@ export class ReportPipingAssets implements OnInit {
         .subscribe(({data} : any) => {
             this.tablePosition = data
             const firsData = data[0]
-            console.log(firsData)
             if(!firsData) return
             this.showData(firsData)
             this.getReportData(firsData?.id)
@@ -106,8 +105,6 @@ export class ReportPipingAssets implements OnInit {
                     data : dataThickness[props]
                 }
             })
-
-
 
         },
         () => this.toastr.danger('Please add asset data.', 'Data not found.')

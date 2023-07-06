@@ -5,15 +5,15 @@
             outline
             size="small" 
             status="primary"
-            [disabled]="button?.name == 'Export' && !tableData?.length"
+            [disabled]="(button?.name == 'Export' || button?.name == 'Print') && !tableData?.length"
             class="m-2"
             *ngFor="let button of [
                 { name : 'New', icon : 'plus-outline' },
-                { name : 'Export', icon : 'upload-outline' },
+                { name : 'Print', icon : 'printer-outline' },
             ]"
             (click)="
                     button.name == 'New'        ? addProposal()
-                :   button.name == 'Export'     ? export()
+                :   button.name == 'Print'      ? printProposal()
                 :   null
                     "
             >

@@ -43,14 +43,14 @@ export class Variables {
     ]
 
     getCMLCalc(asset) {
-        const { cml } = asset;
+        const { cml } = asset ?? [];
 
-        let allYear = asset.cml.map(c => c.year)
+        let allYear = asset?.cml?.map(c => c.year)
         allYear = allYear.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
         const stCrYear = allYear.at(-2)
         const { min_required_thickness } = this.getAssetsFormula(asset)
 
-        return cml.map(c => {
+        return cml?.map(c => {
             const lt_cr : any = this.getCalculatedLTCR({...asset, ...c})
             const remaining_life = (c.last_thickness_reading - min_required_thickness) / lt_cr
             return {
@@ -105,7 +105,8 @@ export class Variables {
         return this.datePipe.transform(moment(date).add(month, 'M').toDate(), 'yyyy-MM-dd')
     }
 
-    getCharCML(cml, i) {
+    getCharCML(cml, identifier) {
+        if(!cml) return;
         let cmlLabel = cml?.map(c=>c.cml_id)
         cmlLabel = cmlLabel?.filter((c, i) => cmlLabel.indexOf(c) == i)
     
@@ -119,7 +120,7 @@ export class Variables {
             yAxisID: 'A',
             data: allYear?.map(y => {
               const thick = cml.find(item => item.year == y && item.cml_id == c) 
-              return thick[i]
+              return thick?.[identifier]
             }),
             backgroundColor: 'transparent',
             borderColor: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0"),

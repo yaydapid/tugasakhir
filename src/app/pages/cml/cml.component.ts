@@ -7,6 +7,7 @@ import { MatTableComponent } from '../../component/mat-table/mat-table.component
 import { DatePipe } from '@angular/common';
 import { DeleteDialogComponent } from '../../component/delete dialog/delete-dialog.component';
 import { Variables } from '../../component/common-variable';
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 @Injectable({
   providedIn : 'root'
@@ -27,9 +28,10 @@ export class CmlComponent implements OnInit {
     private variables : Variables
   ) { }
 
+  pipingId
   ngOnInit(): void {
-    const paramId = this.activatedroute.snapshot.paramMap.get('id')
-    this.cmlService.getCML(paramId)
+    this.pipingId = this.activatedroute.snapshot.paramMap.get('id')
+    this.cmlService.getCML(this.pipingId)
     .subscribe(({data, piping} : any) => {
       this.piping = piping;
 
@@ -172,4 +174,63 @@ export class CmlComponent implements OnInit {
       }
     });
   }
+  
+  importExcelFile(event) {
+    const fileName = event.target.files[0];
+    if(!fileName) return;
+    const fileReader = new FileReader();
+    fileReader.readAsBinaryString(fileName);
+    fileReader.onload = (e : any) => { 
+      const binaryData = e.target.result;
+      const workbook = XLSX.read(binaryData, {type : 'binary'});
+      console.log(workbook)
+      const sheet = workbook.Sheets[workbook.SheetNames[0]]
+      let index = 0;
+      let looping = true;
+      while(looping) {
+        const obj = "A" + index;
+        if(index > 100) looping = false;
+        if(sheet[obj]) {
+            looping = false;
+            break;
+        }
+        index++;
+      }
+      const data = XLSX.utils.sheet_to_json(sheet, {range: index - 1, defval: ""});
+      this.reconstructDataExcel(data);
+    }
+  }
+
+  reconstructDataExcel(data) {
+    const resultData =data.map(({
+      ['CML ID'] : cml_id,
+      ['Gauge Point'] : gauge_point, 
+      ['Point Location'] : point_location,
+      ['Last Thickness'] : last_thickness_reading,
+      ['Last Thickness Reading Date'] : last_thickness_reading_date,
+    }) => {
+      last_thickness_reading_date = this.transformExcelDate(last_thickness_reading_date)
+      const year = new Date(last_thickness_reading_date).getFullYear()
+      last_thickness_reading_date = this.datePipe.transform(last_thickness_reading_date, 'yyyy-MM-dd')
+      return {
+        cml_id,
+        gauge_point,
+        point_location,
+        last_thickness_reading,
+        last_thickness_reading_date,
+        year,
+        piping_id : this.pipingId
+      }
+    })
+
+    this.cmlService.importCML(resultData)
+    .subscribe(
+      () => {},
+      () => this.toastrService.danger('Please check your connection and try again.', 'Your request failed.'),
+      () => this.toastrService.success('Data has been added.', 'Your request success.')
+    )
+  }
+
+  transformExcelDate = (date) => date == undefined ? '' :new Date(Math.round((date - 25569) * 86400 * 1000))
+
 }

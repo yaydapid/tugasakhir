@@ -67,6 +67,7 @@ export class RemainingLifeTrendComponent implements OnInit {
 
   showData(element) {
       this.selectionData = element;
+      if(!element) return;
       this.circuitChartData(this.circuitChart, element)
   }
 

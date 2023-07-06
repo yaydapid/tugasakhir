@@ -39,4 +39,9 @@ export class PipingAssetsService {
           reportProgress : true, observe : 'events'
         })
     }
+
+    importAsset(postBody) {
+        const url = this.apiUrl + "/import_assets";
+        return this.httpClient.post(url, postBody);
+    }
 }

@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
-import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } 
-        from '@techiediaries/ngx-qrcode';
+import { 
+    NgxQrcodeElementTypes, 
+    NgxQrcodeErrorCorrectionLevels 
+} from '@techiediaries/ngx-qrcode';
 import { MatPaginator } from "@angular/material/paginator";
 import { PipingCircuitService } from "../../dashboard/piping-circuits/piping-circuits.service";
 import { environment } from "../../../../environments/environment";
 import { ReportService } from "../report-service";
 import { Variables } from "../../../component/common-variable";
+import { PipingCircuitChart } from "./chart/piping-circuit-trend-chart";
 
 @Component({
     selector: 'ngx-report-piping-circuit',
@@ -24,6 +27,32 @@ export class ReportPipingCircuit implements OnInit {
         private reportService : ReportService,
         private variables : Variables
     ) {}
+
+    public datasets: any = [
+        {
+            label: "Reading (mm)",
+            yAxisID: 'A',
+            prop : 'reading'
+        },
+        {
+            label: "T minimum (mm)",
+            yAxisID: 'A',
+            prop : 'min_required_thickness'
+        },
+        {
+            label: "Nominal Thickness (mm)",
+            yAxisID: 'A',
+            prop : 'nominal_thickness'
+        },
+        {
+            label: "Corrosion Rate (mm/Year)",
+            yAxisID: 'B',
+            prop : 'lt_cr'
+        },
+    ]
+
+    @ViewChild(PipingCircuitChart) circuitChart : PipingCircuitChart
+
 
     ngOnInit(): void {
         this.pipingCircuitService.getPipingCircuits()
@@ -43,14 +72,17 @@ export class ReportPipingCircuit implements OnInit {
     getCircuitReport(id) {
 
         this.reportService.getCircuitReport(id)
-        .subscribe(({data : {assets, circuit}} : any) => {
+        .subscribe(({data : { assets }} : any) => {
+
+            const chartData = assets.map(({asset, cml} : any) => ({...asset, cml}))
+            this.circuitChartData(this.circuitChart, {piping : chartData})
 
             this.pipingVisual = this.pipingVisual.map(({name, props}) => ({
                 name, props,
                 data : this.switchToLevel(Math.round(this.visualConditionAvg(assets, props) / assets.length))  
             }))
 
-            assets.filter(x => x !=null).forEach(({damage_mechanism, proposal} : any) => {
+            assets.filter(x => x !=null).forEach(({damage_mechanism, proposal } : any) => {
                 const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal?.id)
                 if(!inspectionProposal) {
 
@@ -108,6 +140,30 @@ export class ReportPipingCircuit implements OnInit {
 
         })
     }
+
+    circuitChartData(chart, circuit) {
+        const { piping } = circuit
+        const allPipe = piping?.map(c=>c.piping_id)
+        this.variables.removeChartData(this.circuitChart)
+    
+        const pipingCalc = piping.map(p => this.variables.getThicknessCalculation(p)) 
+    
+        chart.data.labels = allPipe
+        const dataSet =
+        this.datasets
+        .map(item => {
+          const color = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")
+          const data = allPipe.map(pipe=>pipingCalc.find(p=>p.piping_id == pipe)[item.prop])
+          return {
+            ...item,
+            borderColor : color,
+            backgroundColor : color,
+            data
+          }
+        })
+        chart.chart.data.datasets = dataSet
+        chart.chart.update();
+    } 
 
     visualConditionAvg(asset, props) {
         return asset?.map(x => this.switchToPoint(x?.visual_condition?.[props]))

@@ -54,6 +54,8 @@ export class CorrosionRateTrendComponent implements OnInit {
       this.variables.removeChartData(this.thicknessChart)
       this.variables.removeChartData(this.corrosionChart)
       this.variables.removeChartData(this.remainingChart)
+
+      if(!element) return;
       this.thicknessChartData(this.thicknessChart, element)
       this.corrosionChartData(this.corrosionChart, element)
       this.remainingLifeChartData(this.remainingChart, element)
@@ -66,7 +68,7 @@ export class CorrosionRateTrendComponent implements OnInit {
   }
 
   thicknessChartData(chart, {cml}) {
-    const {datasets, allYear} = this.variables.getCharCML(cml, "last_thickness_reading")
+    const {datasets, allYear} = this.variables.getCharCML(cml ?? [], "last_thickness_reading")
     chart.data.labels = allYear
     chart.chart.data.datasets = datasets
     chart.chart.update();

@@ -38,6 +38,10 @@ export class ViewProposalComponent implements OnInit {
     { type : 'text', prop : 'remarks', head : 'Remarks', width : '200px' },
   ]
 
+  printProposal() {
+    console.log('print')
+  }
+
   addProposal() {
     this.dialogService.open(AddProposalComponent, {
       context: {

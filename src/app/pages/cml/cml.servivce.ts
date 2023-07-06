@@ -33,4 +33,9 @@ export class CMLService {
         const url = this.apiUrl + "/cml/" + data.id;
         return this.httpClient.put(url, data);
     }
+
+    importCML(postBody) {
+        const url = this.apiUrl + "/import_cmls";
+        return this.httpClient.post(url, postBody);
+    }
 }

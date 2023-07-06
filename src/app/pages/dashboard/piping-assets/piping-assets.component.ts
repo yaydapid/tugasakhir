@@ -11,7 +11,6 @@ import * as FileSaver from 'file-saver';
 import { PageMenuService } from '../../pages-service';
 import 'rxjs/add/observable/forkJoin';
 import { DatePipe } from '@angular/common';
-import { CMLService } from '../../cml/cml.servivce';
 import { Variables } from '../../../component/common-variable';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -31,7 +30,6 @@ export class PipingAssetsComponent implements OnInit {
     private toastrService: NbToastrService,
     private pageMenuService : PageMenuService,
     private datePipe : DatePipe,
-    private getCML : CMLService,
     private variables : Variables
   ) {}
   
@@ -308,9 +306,12 @@ export class PipingAssetsComponent implements OnInit {
       }
     })
 
-    datas.forEach(data => {
-      this.reconstructAssetsData(data, 'add')
-    });
+    this.assetsService.importAsset(datas)
+    .subscribe(
+      () => this.ngOnInit(),
+      () => this.toastrService.danger('Please check your connection and try again.', 'Your request failed.'),
+      () => this.toastrService.success('Data has been delete.', 'Your request success.')
+    )
   }
 
   transformExcelDate = (date) => date == undefined ? '' :new Date(Math.round((date - 25569) * 86400 * 1000))

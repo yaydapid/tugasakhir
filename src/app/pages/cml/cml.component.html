@@ -20,7 +20,7 @@
                 :   null
                     "
             >
-            <input type="file" style="display: none;" #importExcel accept="application/vnd.ms-excel" (change)="importExcelFile($event)">
+            <input type="file" style="display: none;" #importExcel accept=".xls,.xlsx" (change)="importExcelFile($event)">
                 <nb-icon [icon]="button.icon" [pack]="button.pack ?? 'eva' " class="m-1"></nb-icon>
                 <span>{{ button.name }}</span>
             </button>
