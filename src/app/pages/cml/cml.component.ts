@@ -225,7 +225,7 @@ export class CmlComponent implements OnInit {
 
     this.cmlService.importCML(resultData)
     .subscribe(
-      () => {},
+      () => this.ngOnInit(),
       () => this.toastrService.danger('Please check your connection and try again.', 'Your request failed.'),
       () => this.toastrService.success('Data has been added.', 'Your request success.')
     )
