@@ -279,6 +279,8 @@ export class PipingAssetsComponent implements OnInit {
           Class
       } = details;
 
+      date_in_service = this.datePipe.transform(this.transformExcelDate(date_in_service), 'yyyy-MM-dd') 
+
       return {
         piping_id,
         piping_name,
@@ -299,7 +301,7 @@ export class PipingAssetsComponent implements OnInit {
         min_structural_thickness,
         min_alert_thickness,
         nominal_thickness,
-        date_in_service : this.transformExcelDate(date_in_service),
+        date_in_service,
         notes,
         recomendation,
         class : Class
