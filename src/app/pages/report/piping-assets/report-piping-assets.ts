@@ -55,7 +55,7 @@ export class ReportPipingAssets implements OnInit {
         this.reportService.getAssetsReport(id)
         .subscribe(({data : {damage_mechanism, visual_condition, proposal, asset, cml}} : any) => {
 
-            this.damageMechanismData = this.variables.damageMechanismName.map(({id ,piping_damage_mechanism} : any) => {
+            this.damageMechanismData = this.variables.damageMechanismName?.map(({id ,piping_damage_mechanism} : any) => {
                 const damage = damage_mechanism?.[id]
                 if(damage) return {...damage, piping_damage_mechanism}
                 return null
@@ -127,11 +127,12 @@ export class ReportPipingAssets implements OnInit {
     showData(element) {
         this.pipeData = element;
         this.imageLink = typeof element.images == "object" 
-        ? element.images.map(image => 
+        ? element?.images?.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
         )
         : []
-
+        
+        if(!element) return;
         this.variables.removeChartData(this.thicknessChart)
         this.variables.removeChartData(this.remainingChart)
         this.thicknessChartData(this.thicknessChart, element)
