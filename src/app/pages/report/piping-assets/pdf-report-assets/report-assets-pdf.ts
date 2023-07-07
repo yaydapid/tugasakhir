@@ -3,12 +3,14 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
+import { PageMenuService } from "../../../pages-service";
 
 @Component({
-    selector : 'thickness-pdf',
-    templateUrl : './thickness-pdf.html'
+    selector : 'report-assets-pdf',
+    templateUrl : './report-assets-pdf.html'
 })
-export class ThicknessPDF implements OnInit {
+export class PDFReportAssets implements OnInit {
+  constructor( private pageMenuService : PageMenuService ) {}
     @ViewChild('pdfThickness') pdfThickness: ElementRef;
     ngOnInit(): void {
         pdfMake.tableLayouts = {
@@ -39,17 +41,14 @@ export class ThicknessPDF implements OnInit {
     tableStyle = {'font-size' : '12px'}
 
     pdfHead = [
-        { name : "Id", props : 'piping_id', width : "*" },
-        { name : "Reading", props : 'reading', width : "auto" },
-        { name : "T min", props : 't_min', width : "auto" },
-        { name : "LT CR", props : 'lt_cr', width : "auto" },
-        { name : "ST CR", props : 'st_cr', width : "auto" },
-        { name : "Remaining", props : 'remaining_life', width : "auto" },
-        { name : "Half", props : 'half_life', width : "auto" },
-        { name : "Retirement", props : 'retirement_date', width : "*" },
-        { name : "Next TM", props : 'next_tm_insp_date', width : "*" },
-        { name : "Next VE", props : 'next_ve_insp_date', width : "*" },
-        { name : "MAWP", props : 'mawp', width : "auto" },
+        { name : "Id", props : 'cml_id', width : "*" },
+        { name : "Gauge Point", props : 'gauge_point', width : "auto" },
+        { name : "Location", props : 'point_location', width : "auto" },
+        { name : "Nom Thickness", props : 'nominal_thickness', width : "auto" },
+        { name : "Min Req Thickness", props : 'min_required_thickness', width : "auto" },
+        { name : "Last Thick Read", props : 'last_thickness_reading', width : "auto" },
+        { name : "Last Thick Date", props : 'last_thickness_reading_date', width : "auto" },
+        { name : "Calc CR", props : 'calculated_cr', width : "*" },
     ]
 
     public generateData(data) {
@@ -62,7 +61,6 @@ export class ThicknessPDF implements OnInit {
     public downloadAsPDF() {   
         const pdfTable = this.pdfThickness.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
-    
         const documentDefinition = { 
           content: [
             html,
@@ -72,6 +70,20 @@ export class ThicknessPDF implements OnInit {
           }
         };
     
-        pdfMake.createPdf(documentDefinition).print();
+        const pdf = pdfMake.createPdf(documentDefinition)
+        pdf.getBlob(blobfile => {
+
+          const fileName = this.tableData?.piping_name
+          const file = new File([blobfile], fileName + '.pdf')
+          const formData = new FormData()
+          formData.append('document', file)
+          
+          this.pageMenuService.addDocument(formData)
+          .subscribe(res => console.log(res))
+
+
+        })
+
+        pdf.open();
     }
 }

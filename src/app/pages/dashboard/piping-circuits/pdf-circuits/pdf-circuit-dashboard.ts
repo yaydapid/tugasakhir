@@ -70,6 +70,6 @@ export class PDFCircuitDashboard {
           }
         };
     
-        pdfMake.createPdf(documentDefinition).open();
+        pdfMake.createPdf(documentDefinition).print();
     }
 }

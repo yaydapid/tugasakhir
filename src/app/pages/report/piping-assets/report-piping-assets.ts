@@ -14,6 +14,7 @@ import { NbToastrService } from "@nebular/theme";
 import { DashboardThicknessChart } from "./chart/thickness-chart.component";
 import { DashboardRemainingChart } from "./chart/remaining-chart.component";
 import { ThicknessService } from "../../assesment/thickness/thickness-service";
+import { PDFReportAssets } from "./pdf-report-assets/report-assets-pdf";
 
 @Component({
     selector: 'ngx-report-piping-assets',
@@ -133,6 +134,8 @@ export class ReportPipingAssets implements OnInit {
     @ViewChild(DashboardThicknessChart) thicknessChart : DashboardThicknessChart
     @ViewChild(DashboardRemainingChart) remainingChart : DashboardRemainingChart
 
+    @ViewChild(PDFReportAssets) pdfReportAssets : PDFReportAssets
+
     imageLink : any[] = []
     showData(element) {
         const qrcode = element.qr_code;
@@ -144,14 +147,20 @@ export class ReportPipingAssets implements OnInit {
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
         )
         : []
-        console.log(this.imageLink)
-
         
         if(!element) return;
         this.variables.removeChartData(this.thicknessChart)
         this.variables.removeChartData(this.remainingChart)
         this.thicknessChartData(this.thicknessChart, element)
         this.remainingLifeChartData(this.remainingChart, element)
+    }
+
+    printReport() {
+        this.pdfReportAssets.generateData(this.pipeData)
+    }
+
+    publishReport() {
+        console.log('publish report')
     }
 
     thicknessChartData(chart, {cml}) {

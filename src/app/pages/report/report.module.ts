@@ -19,6 +19,8 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 import { ReportPipingCircuit } from "./piping-circuits/report-piping-circuit";
 import { PipingCircuitChart } from "./piping-circuits/chart/piping-circuit-trend-chart";
 import { MatSortModule } from "@angular/material/sort";
+import { PDFReportAssets } from "./piping-assets/pdf-report-assets/report-assets-pdf";
+import { PDFReportCML } from "./piping-circuits/pdf-report-cml/report-cml-pdf";
 
 @NgModule({
     imports: [
@@ -56,7 +58,9 @@ import { MatSortModule } from "@angular/material/sort";
         DashboardRemainingChart,
         ReportPipingAssets,
         ReportPipingCircuit,
-        PipingCircuitChart
+        PipingCircuitChart,
+        PDFReportAssets,
+        PDFReportCML
     ],
   })
 export class ReportModule { }

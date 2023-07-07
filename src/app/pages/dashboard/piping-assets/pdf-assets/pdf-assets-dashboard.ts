@@ -71,6 +71,6 @@ export class PDFAssetsDashboard {
           }
         };
     
-        pdfMake.createPdf(documentDefinition).open();
+        pdfMake.createPdf(documentDefinition).print();
     }
 }

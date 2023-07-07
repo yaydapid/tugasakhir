@@ -69,6 +69,6 @@ export class PDFProposalDashboard {
           }
         };
     
-        pdfMake.createPdf(documentDefinition).open();
+        pdfMake.createPdf(documentDefinition).print();
     }
 }
