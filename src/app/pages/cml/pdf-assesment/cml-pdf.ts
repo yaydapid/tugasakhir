@@ -1,34 +1,16 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
 
 @Component({
-    selector : 'pdf-assets-dashboard',
-    templateUrl : './pdf-assets-dashboard.html'
+    selector : 'cml-pdf',
+    templateUrl : './cml-pdf.html'
 })
-export class PDFAssetsDashboard {
-    @ViewChild('pdfAssets') pdfAssets: ElementRef;
-    tableData
-
-    assetsHead = [
-        { name : "Id" },
-        { name : "Name" },
-        { name : "Date In Service" },
-        { name : "Class" },
-        { name : "TM" },
-        { name : "VE" },
-    ]
-
-    public generateData(data) {
-        this.tableData = data
-        setTimeout(() => {
-            this.downloadAsPDF()
-        }, 500);
-    }
-
-    public downloadAsPDF() {   
+export class CMLPDF implements OnInit {
+    @ViewChild('pdfThickness') pdfThickness: ElementRef;
+    ngOnInit(): void {
         pdfMake.tableLayouts = {
             exampleLayout: {
               hLineWidth: function (i, node) {
@@ -51,21 +33,39 @@ export class PDFAssetsDashboard {
               }
             }
         };
-        
-        const pdfTable = this.pdfAssets.nativeElement;
+    }
+
+    tableData : any
+    tableStyle = {'font-size' : '12px'}
+
+    pdfHead = [
+        { name : "Id", props : 'cml_id', width : "*" },
+        { name : "Gauge Point", props : 'gauge_point', width : "auto" },
+        { name : "Location", props : 'point_location', width : "auto" },
+        { name : "Nom Thickness", props : 'nominal_thickness', width : "auto" },
+        { name : "Min Req Thickness", props : 'min_required_thickness', width : "auto" },
+        { name : "Last Thick Read", props : 'last_thickness_reading', width : "auto" },
+        { name : "Last Thick Date", props : 'last_thickness_reading_date', width : "auto" },
+        { name : "Calc CR", props : 'calculated_cr', width : "*" },
+    ]
+
+    public generateData(data) {
+        this.tableData = data
+        console.log(data)
+        setTimeout(() => {
+            this.downloadAsPDF()
+        }, 500);
+    }
+
+    public downloadAsPDF() {   
+        const pdfTable = this.pdfThickness.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
+        console.log(html)
     
         const documentDefinition = { 
           content: [
             html,
-            {
-                pageBreak: 'before', 
-                text: 'Attachment\n', 
-                style: {bold: true, fontSize: 16, color : '#5588EE'}, 
-                pageOrientation: 'landscape'
-            },
           ],
-        //   images,
           pageBreakBefore: function(currentNode) {
             return currentNode.style && currentNode.style.indexOf('pdf-pagebreak-before') > -1;
           }

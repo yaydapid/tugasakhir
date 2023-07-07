@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ThicknessService } from './thickness-service';
 import { Variables } from '../../../component/common-variable';
+import { ThicknessPDF } from '../pdf-assesment/thickness-pdf';
 
 @Component({
   selector: 'ngx-thickness',
@@ -45,8 +46,9 @@ export class ThicknessComponent implements OnInit {
     })
   }
 
+  @ViewChild(ThicknessPDF) pdfThickness: ThicknessPDF;
   printThickness() {
-    
+    this.pdfThickness.generateData(this.tableData)
   }
 
   tableHeader = { 

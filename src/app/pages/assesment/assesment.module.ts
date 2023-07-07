@@ -1,6 +1,20 @@
 import { CommonModule } from "@angular/common";
 import { ThemeModule } from "../../@theme/theme.module";
-import { NbAccordionModule, NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbGlobalPhysicalPosition, NbIconModule, NbInputModule, NbListModule, NbMenuModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
+import { 
+    NbAccordionModule, 
+    NbAlertModule, 
+    NbButtonModule, 
+    NbCardModule, 
+    NbCheckboxModule, 
+    NbGlobalPhysicalPosition, 
+    NbIconModule, 
+    NbInputModule, 
+    NbLayoutModule, 
+    NbListModule, 
+    NbMenuModule, 
+    NbSelectModule, 
+    NbToastrModule 
+} from "@nebular/theme";
 import { NgModule } from "@angular/core";
 import { AssesmentRoutingModule } from "./assesment.routing";
 import { AssesmentComponent } from "./assesment.component";
@@ -18,8 +32,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { FormsModule } from "@angular/forms";
-import { Variables } from "../../component/common-variable";
 import { MatSortModule } from "@angular/material/sort";
+import { ThicknessPDF } from "./pdf-assesment/thickness-pdf";
 
 @NgModule({
     imports: [
@@ -36,6 +50,7 @@ import { MatSortModule } from "@angular/material/sort";
         NbInputModule,
         NbCheckboxModule,
         NbButtonModule,
+        NbLayoutModule,
         NbIconModule,
         MatSlideToggleModule,
         MatTableModule, 
@@ -60,6 +75,7 @@ import { MatSortModule } from "@angular/material/sort";
         DemageMechanismComponent,
         ThicknessComponent,
         VisualConditionComponent,
+        ThicknessPDF
     ],
   })
 export class AssesmentModule { }

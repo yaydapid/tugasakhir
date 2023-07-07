@@ -8,6 +8,7 @@ import { MaterialTableModule } from "../../component/mat-table/mat-table.module"
 import { AddCMLComponent } from "./add-cml/add-cml.component";
 import { NbButtonModule, NbGlobalPhysicalPosition,  NbCardModule, NbDatepickerModule, NbIconModule, NbInputModule, NbToastrModule } from "@nebular/theme";
 import { FormsModule } from "@angular/forms";
+import { CMLPDF } from "./pdf-assesment/cml-pdf";
 
 @NgModule({
     imports: [
@@ -32,7 +33,8 @@ import { FormsModule } from "@angular/forms";
     ],
     declarations: [
         CmlComponent,
-        AddCMLComponent
+        AddCMLComponent,
+        CMLPDF
     ],
   })
 export class CMLModule { }

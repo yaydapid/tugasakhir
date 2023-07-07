@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { DeleteDialogComponent } from '../../component/delete dialog/delete-dialog.component';
 import { Variables } from '../../component/common-variable';
 import * as XLSX from 'xlsx/xlsx.mjs';
+import { CMLPDF } from './pdf-assesment/cml-pdf';
 
 @Injectable({
   providedIn : 'root'
@@ -94,8 +95,9 @@ export class CmlComponent implements OnInit {
     console.log("export")
   }
 
+  @ViewChild(CMLPDF) CMLPDF: CMLPDF;
   printCML() {
-    console.log("print")
+    this.CMLPDF.generateData(this.tableData)
   }
 
   addCML() {
