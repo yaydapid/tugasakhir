@@ -17,7 +17,7 @@
                     button.name == 'New'        ? addCircuit()
                 :   button.name == 'Import'     ? importExcel.click()
                 :   button.name == 'Export'     ? export()
-                :   button.name == 'Print'      ? printCircuit()
+                :   button.name == 'Print'      ? pdfCircuit.generateData(this.tableData)
                 :   null
                     "
             >
@@ -34,3 +34,5 @@
     [tableData]="tableData"
     (onClickTable)="onClickTable($event.data, $event.title)"
 ></ngx-mat-table>
+
+<pdf-circuit-dashboard></pdf-circuit-dashboard>

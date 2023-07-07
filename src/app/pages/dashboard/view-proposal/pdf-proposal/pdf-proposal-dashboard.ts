@@ -1,16 +1,32 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
 
 @Component({
-    selector : 'thickness-pdf',
-    templateUrl : './thickness-pdf.html'
+    selector : 'pdf-proposal-dashboard',
+    templateUrl : './pdf-proposal-dashboard.html'
 })
-export class ThicknessPDF implements OnInit {
-    @ViewChild('pdfThickness') pdfThickness: ElementRef;
-    ngOnInit(): void {
+export class PDFProposalDashboard {
+    @ViewChild('pdfCircuit') pdfCircuit: ElementRef;
+    tableData
+
+    assetsHead = [
+        { name : "Id", props : 'proposal_id' },
+        { name : "Insp Plan Date", props : 'inspection_planned_date' },
+        { name : "Piping Circuit", props : 'piping_circuit' },
+    ]
+
+    public generateData(data) {
+      // return console.log (data)
+        this.tableData = data
+        setTimeout(() => {
+            this.downloadAsPDF()
+        }, 500);
+    }
+
+    public downloadAsPDF() {   
         pdfMake.tableLayouts = {
             exampleLayout: {
               hLineWidth: function (i, node) {
@@ -33,40 +49,21 @@ export class ThicknessPDF implements OnInit {
               }
             }
         };
-    }
-
-    tableData : any
-    tableStyle = {'font-size' : '12px'}
-
-    pdfHead = [
-        { name : "Id", props : 'piping_id', width : "*" },
-        { name : "Reading", props : 'reading', width : "auto" },
-        { name : "T min", props : 't_min', width : "auto" },
-        { name : "LT CR", props : 'lt_cr', width : "auto" },
-        { name : "ST CR", props : 'st_cr', width : "auto" },
-        { name : "Remaining", props : 'remaining_life', width : "auto" },
-        { name : "Half", props : 'half_life', width : "auto" },
-        { name : "Retirement", props : 'retirement_date', width : "*" },
-        { name : "Next TM", props : 'next_tm_insp_date', width : "*" },
-        { name : "Next VE", props : 'next_ve_insp_date', width : "*" },
-        { name : "MAWP", props : 'mawp', width : "auto" },
-    ]
-
-    public generateData(data) {
-        this.tableData = data
-        setTimeout(() => {
-            this.downloadAsPDF()
-        }, 500);
-    }
-
-    public downloadAsPDF() {   
-        const pdfTable = this.pdfThickness.nativeElement;
+        
+        const pdfTable = this.pdfCircuit.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
     
         const documentDefinition = { 
           content: [
             html,
+            {
+                pageBreak: 'before', 
+                text: 'Attachment\n', 
+                style: {bold: true, fontSize: 16, color : '#5588EE'}, 
+                pageOrientation: 'landscape'
+            },
           ],
+        //   images,
           pageBreakBefore: function(currentNode) {
             return currentNode.style && currentNode.style.indexOf('pdf-pagebreak-before') > -1;
           }

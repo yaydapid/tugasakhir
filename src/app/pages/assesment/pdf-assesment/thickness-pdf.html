@@ -4,7 +4,7 @@
         <table 
         *ngIf="tableData"
         [style]="tableStyle"
-        data-pdfmake='{"widths":["auto", "auto", "auto", "auto", "auto", "auto", "auto", "auto", "auto", "auto", "auto"], "layout" : "exampleLayout"}'
+        data-pdfmake='{"widths":["*", "auto", "auto", "auto", "auto", "auto", "auto", "*", "*", "*", "auto"], "layout" : "exampleLayout"}'
         >
             <tr>
                 <th *ngFor="let head of pdfHead"> 

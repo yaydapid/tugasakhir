@@ -51,7 +51,6 @@ export class CMLPDF implements OnInit {
 
     public generateData(data) {
         this.tableData = data
-        console.log(data)
         setTimeout(() => {
             this.downloadAsPDF()
         }, 500);

@@ -17,7 +17,7 @@
                     button.name == 'New'        ? addCML()
                 :   button.name == 'Import'     ? importExcel.click()
                 :   button.name == 'Export'     ? exportExcelFile()
-                :   button.name == 'Print'      ? printCML()
+                :   button.name == 'Print'      ? this.CMLPDF.generateData(this.tableData)
                 :   null
                     "
             >

@@ -96,10 +96,7 @@ export class CmlComponent implements OnInit {
   }
 
   @ViewChild(CMLPDF) CMLPDF: CMLPDF;
-  printCML() {
-    this.CMLPDF.generateData(this.tableData)
-  }
-
+  
   addCML() {
     this.dialogService.open(AddCMLComponent, {
       context: {

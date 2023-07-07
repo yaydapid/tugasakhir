@@ -6,7 +6,7 @@
             size="small" 
             status="primary"
             [disabled]="!tableData?.length"
-            (click)="printThickness()"
+            (click)="pdfThickness.generateData(this.tableData)"
             >
                 <nb-icon icon="printer-outline" class="m-1"></nb-icon>
                 <span>Print</span>

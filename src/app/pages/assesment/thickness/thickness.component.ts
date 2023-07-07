@@ -47,9 +47,6 @@ export class ThicknessComponent implements OnInit {
   }
 
   @ViewChild(ThicknessPDF) pdfThickness: ThicknessPDF;
-  printThickness() {
-    this.pdfThickness.generateData(this.tableData)
-  }
 
   tableHeader = { 
     title : 'Thickness', 

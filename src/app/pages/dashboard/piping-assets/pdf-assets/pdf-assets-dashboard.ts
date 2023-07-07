@@ -13,12 +13,12 @@ export class PDFAssetsDashboard {
     tableData
 
     assetsHead = [
-        { name : "Id" },
-        { name : "Name" },
-        { name : "Date In Service" },
-        { name : "Class" },
-        { name : "TM" },
-        { name : "VE" },
+        { name : "Id", props : 'piping_id' },
+        { name : "Name", props : 'piping_name' },
+        { name : "Date In Service", props : 'date_in_service' },
+        { name : "Class", props : 'class' },
+        { name : "TM", props : 'tm_inspection_interval' },
+        { name : "VE", props : 've_inspection_interval' },
     ]
 
     public generateData(data) {

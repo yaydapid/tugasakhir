@@ -1,10 +1,10 @@
 <div class="container" style="display: none;">
-    <div id="pdfTable" #pdfAssets>
+    <div id="pdfTable" #pdfCircuit>
         <h5 style="width: 100%; margin: 0 0 1rem 0; color: #5588EE;">
-            Piping Assets
+            Piping Circuits
         </h5>
         <table 
-            data-pdfmake="{'widths':[ 'auto', '*', '*', 20, '*', '*' ], 'layout' : 'exampleLayout'}" 
+            data-pdfmake="{'widths':[ '*', '*', '*', '*' ], 'layout' : 'exampleLayout'}" 
             [style]="{'font-size' : '10px'}"
             >
                 <tr>
@@ -18,7 +18,7 @@
                         <td colspan="1">
                             <b style="color: darkcyan;">Notes</b>
                         </td>
-                        <td colspan="5">
+                        <td colspan="3">
                             {{ data.notes }}
                         </td>
                     </tr>

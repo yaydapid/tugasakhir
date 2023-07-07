@@ -36,6 +36,8 @@ import { AddCircuitComponent } from "./piping-circuits/add-circuit/add-circuit.c
 import { AddProposalComponent } from "./view-proposal/add-proposal/add-proposal.component";
 import { DeleteDialogModule } from "../../component/delete dialog/delete-dialog.module";
 import { PDFAssetsDashboard } from "./piping-assets/pdf-assets/pdf-assets-dashboard";
+import { PDFCircuitDashboard } from "./piping-circuits/pdf-circuits/pdf-circuit-dashboard";
+import { PDFProposalDashboard } from "./view-proposal/pdf-proposal/pdf-proposal-dashboard";
 
 @NgModule({
     imports: [
@@ -82,7 +84,9 @@ import { PDFAssetsDashboard } from "./piping-assets/pdf-assets/pdf-assets-dashbo
       AddAssetsComponent,
       AddCircuitComponent,
       AddProposalComponent,
-      PDFAssetsDashboard
+      PDFAssetsDashboard,
+      PDFCircuitDashboard,
+      PDFProposalDashboard
     ],
   })
 export class DashboardModule { }

@@ -7,6 +7,7 @@ import { MatTableComponent } from '../../../component/mat-table/mat-table.compon
 import { DeleteDialogComponent } from '../../../component/delete dialog/delete-dialog.component';
 import { AsyncSubject } from 'rxjs';
 import { PageMenuService } from '../../pages-service';
+import { PDFCircuitDashboard } from './pdf-circuits/pdf-circuit-dashboard';
 
 @Injectable({
   providedIn : 'root'
@@ -26,6 +27,7 @@ export class PipingCircuitsComponent implements OnInit {
   ) {}
 
   @ViewChild(MatTableComponent) viewTable : MatTableComponent;
+  @ViewChild(PDFCircuitDashboard) pdfCircuit : PDFCircuitDashboard
 
   ngOnInit(): void {
     this.circuitService.getPipingCircuits()

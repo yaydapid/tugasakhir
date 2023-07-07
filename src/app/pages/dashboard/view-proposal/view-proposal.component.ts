@@ -4,6 +4,7 @@ import { AddProposalComponent } from './add-proposal/add-proposal.component';
 import { DatePipe } from '@angular/common';
 import { ProposalService } from './view-proposal.service';
 import { MatTableComponent } from '../../../component/mat-table/mat-table.component';
+import { PDFProposalDashboard } from './pdf-proposal/pdf-proposal-dashboard';
 
 @Injectable({
   providedIn : 'root'
@@ -21,6 +22,7 @@ export class ViewProposalComponent implements OnInit {
   ) {}
 
   @ViewChild(MatTableComponent) viewTable : MatTableComponent;
+  @ViewChild(PDFProposalDashboard) pdfProposals : PDFProposalDashboard
   ngOnInit(): void {
     this.proposalService.getProposals()
     .subscribe(({data} : any) => {
@@ -37,10 +39,6 @@ export class ViewProposalComponent implements OnInit {
     { type : 'text', prop : 'piping_circuit', head : 'Piping Circuit', width : '200px' },
     { type : 'text', prop : 'remarks', head : 'Remarks', width : '200px' },
   ]
-
-  printProposal() {
-    console.log('print')
-  }
 
   addProposal() {
     this.dialogService.open(AddProposalComponent, {

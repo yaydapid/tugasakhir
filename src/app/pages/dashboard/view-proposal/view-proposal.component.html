@@ -13,7 +13,7 @@
             ]"
             (click)="
                     button.name == 'New'        ? addProposal()
-                :   button.name == 'Print'      ? printProposal()
+                :   button.name == 'Print'      ? pdfProposals.generateData(tableData)
                 :   null
                     "
             >
@@ -29,3 +29,4 @@
     [tableData]="tableData"
 ></ngx-mat-table>
 
+<pdf-proposal-dashboard></pdf-proposal-dashboard>
