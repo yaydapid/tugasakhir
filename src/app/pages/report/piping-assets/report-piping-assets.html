@@ -98,7 +98,7 @@
                           class="mt-2 me-2 w-100" 
                           size="small" 
                           outline
-                          (click)="publishReport()"
+                          (click)="pdfReportAssets.publishReport(this.pipeData)"
                         >
                         Publish Report
                         </button>
@@ -110,7 +110,9 @@
                             class="mt-2 me-2 w-100" 
                             size="small" 
                             outline
-                            (click)="printReport()"
+                            (click)="pdfReportAssets.printAsPDF(this.pipeData)"
+                            nbPopover="Print Report"
+                            nbPopoverTrigger="hint"
                           >
                           <nb-icon icon="printer-outline"></nb-icon>
                           </button>
@@ -123,6 +125,8 @@
                             outline
                             (click)="seeDocument()"
                             [disabled]="!pipeData?.attachment"
+                            nbPopover="See Attachment"
+                            nbPopoverTrigger="hint"
                           >
                           <nb-icon icon="file-text-outline"></nb-icon>
                           </button>
@@ -213,4 +217,6 @@
     </nb-card-body>
 </nb-card>
 
-<report-assets-pdf></report-assets-pdf>
+<report-assets-pdf
+  (refresh)="ngOnInit()"
+></report-assets-pdf>

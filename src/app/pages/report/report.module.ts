@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { ThemeModule } from "../../@theme/theme.module";
 import { ReportComponent } from "./report.component";
 import { ReportRoutingModule } from "./repot.routing";
-import { NbButtonModule, NbCardModule, NbGlobalPhysicalPosition, NbIconModule, NbInputModule, NbListModule, NbOptionModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
+import { NbButtonModule, NbCardModule, NbGlobalPhysicalPosition, NbIconModule, NbInputModule, NbListModule, NbOptionModule, NbPopoverModule, NbSelectModule, NbToastrModule } from "@nebular/theme";
 import { DashboardThicknessChart } from "./piping-assets/chart/thickness-chart.component";
 import { DashboardRemainingChart } from "./piping-assets/chart/remaining-chart.component";
 import { ReportPipingAssets } from "./piping-assets/report-piping-assets";
@@ -51,6 +51,7 @@ import { PDFReportCML } from "./piping-circuits/pdf-report-cml/report-cml-pdf";
             preventDuplicates : true,
             limit : 3
         }),
+        NbPopoverModule
     ],
     declarations: [
         ReportComponent,

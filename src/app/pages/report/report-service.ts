@@ -23,4 +23,25 @@ export class ReportService {
         const url = this.apiUrl + "/document/" + id;
         return this.httpClient.get(url, {responseType : 'arraybuffer'});
     }
+
+    publishReportAsett(data, id) {
+        const url = this.apiUrl + "/publish_asset/" + id;
+        return this.httpClient.put(url, data);
+    }
+
+    publishReportCircuit(data, id) {
+        const url = this.apiUrl + "/publish_circuit/" + id;
+        return this.httpClient.put(url, data);
+    }
+
+    addQRCode(data) {
+        const url = this.apiUrl + "/qr_code";
+        return this.httpClient.put(url, data);
+    }
+
+    getQRCode(title) {
+        const url = this.apiUrl + "/qr_code/" + title;
+        return this.httpClient.get(url, {responseType : 'arraybuffer'});
+    }
+
 }

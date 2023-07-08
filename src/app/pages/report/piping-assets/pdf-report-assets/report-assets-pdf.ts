@@ -1,16 +1,24 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
 import { PageMenuService } from "../../../pages-service";
+import { HttpEventType } from "@angular/common/http";
+import { NbToastrService } from "@nebular/theme";
+import { ReportService } from "../../report-service";
+import { environment } from "../../../../../environments/environment";
 
 @Component({
     selector : 'report-assets-pdf',
     templateUrl : './report-assets-pdf.html'
 })
 export class PDFReportAssets implements OnInit {
-  constructor( private pageMenuService : PageMenuService ) {}
+  constructor( 
+    private pageMenuService : PageMenuService,
+    private toastr : NbToastrService,
+    private reportService : ReportService
+  ) {}
     @ViewChild('pdfThickness') pdfThickness: ElementRef;
     ngOnInit(): void {
         pdfMake.tableLayouts = {
@@ -51,16 +59,52 @@ export class PDFReportAssets implements OnInit {
         { name : "Calc CR", props : 'calculated_cr', width : "*" },
     ]
 
-    public generateData(data) {
+    public printAsPDF(data) {
+      console.log(data)
         this.tableData = data
         setTimeout(() => {
-            this.downloadAsPDF()
+            const pdf = this.downloadAsPDF()
+            pdf.print();
         }, 500);
+    }
+
+    @Output("refresh") refreshPage : EventEmitter<any> = new EventEmitter();
+    public publishReport(data) {
+      this.tableData = data
+      setTimeout(() => {
+          const pdf = this.downloadAsPDF()
+          pdf.getBlob(blobfile => {
+            const fileName = this.tableData?.piping_name
+            const file = new File([blobfile], fileName + '.pdf')
+            const formData = new FormData()
+            formData.append('document', file)
+
+            this.pageMenuService.addDocument(formData)
+            .subscribe(res => {
+              if ( res.type === HttpEventType.Response ) {
+                const upload : any = res;
+                const { id } = upload.body.data;
+                this.reportService.publishReportAsett({qr_code : id}, this.tableData.id)
+                .subscribe(
+                  () => this.toastr.success('Your Report has been published.', "Success Publish Report."),
+                  () => this.toastr.danger('Your Report failed to published.', "Failed Publish Report."),
+                  () => this.refreshPage.emit(true)
+                )
+              }
+            })
+
+          })
+
+          pdf.download();
+      }, 500);
     }
 
     public downloadAsPDF() {   
         const pdfTable = this.pdfThickness.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
+        console.log(html)
+        if(this.tableData?.qr_code)
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/document/" + this.tableData.qr_code }
         const documentDefinition = { 
           content: [
             html,
@@ -69,21 +113,6 @@ export class PDFReportAssets implements OnInit {
             return currentNode.style && currentNode.style.indexOf('pdf-pagebreak-before') > -1;
           }
         };
-    
-        const pdf = pdfMake.createPdf(documentDefinition)
-        pdf.getBlob(blobfile => {
-
-          const fileName = this.tableData?.piping_name
-          const file = new File([blobfile], fileName + '.pdf')
-          const formData = new FormData()
-          formData.append('document', file)
-          
-          this.pageMenuService.addDocument(formData)
-          .subscribe(res => console.log(res))
-
-
-        })
-
-        pdf.open();
+        return pdfMake.createPdf(documentDefinition)
     }
 }

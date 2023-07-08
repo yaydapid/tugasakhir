@@ -139,7 +139,8 @@ export class ReportPipingAssets implements OnInit {
     imageLink : any[] = []
     showData(element) {
         const qrcode = element.qr_code;
-        if(qrcode) this.reportURL = environment.apiUrl + "/document/" + element.attachment
+        if(qrcode) this.reportURL = environment.apiUrl + "/document/" + element.qr_code
+        if(!qrcode) this.reportURL = null
 
         this.pipeData = element;
         this.imageLink = typeof element.images == "object" 
@@ -153,14 +154,6 @@ export class ReportPipingAssets implements OnInit {
         this.variables.removeChartData(this.remainingChart)
         this.thicknessChartData(this.thicknessChart, element)
         this.remainingLifeChartData(this.remainingChart, element)
-    }
-
-    printReport() {
-        this.pdfReportAssets.generateData(this.pipeData)
-    }
-
-    publishReport() {
-        console.log('publish report')
     }
 
     thicknessChartData(chart, {cml}) {
