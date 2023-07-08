@@ -139,7 +139,7 @@ export class ReportPipingAssets implements OnInit {
     imageLink : any[] = []
     showData(element) {
         const qrcode = element.qr_code;
-        if(qrcode) this.reportURL = environment.apiUrl + "/document/" + element.qr_code
+        if(qrcode) this.reportURL = environment.apiUrl + "/qr_code/" + element.qr_code
         if(!qrcode) this.reportURL = null
 
         this.pipeData = element;

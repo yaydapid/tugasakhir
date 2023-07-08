@@ -19,30 +19,33 @@ export class PDFReportAssets implements OnInit {
     private toastr : NbToastrService,
     private reportService : ReportService
   ) {}
+
+    randomString : any;
     @ViewChild('pdfThickness') pdfThickness: ElementRef;
     ngOnInit(): void {
-        pdfMake.tableLayouts = {
-            exampleLayout: {
-              hLineWidth: function (i, node) {
-                if (i === 0 || i === node.table.body.length) {
-                  return 0;
-                }
-                return (i === node.table.headerRows) ? 2 : 1;
-              },
-              vLineWidth: function (i) {
+      this.randomString = (Math.random() + 1).toString(36).substring(7);
+      pdfMake.tableLayouts = {
+          exampleLayout: {
+            hLineWidth: function (i, node) {
+              if (i === 0 || i === node.table.body.length) {
                 return 0;
-              },
-              hLineColor: function (i) {
-                return i === 1 ? 'black' : '#aaa';
-              },
-              paddingLeft: function (i) {
-                return i === 0 ? 0 : 8;
-              },
-              paddingRight: function (i, node) {
-                return (i === node.table.widths.length - 1) ? 0 : 8;
               }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 0;
+            },
+            hLineColor: function (i) {
+              return i === 1 ? 'black' : '#aaa';
+            },
+            paddingLeft: function (i) {
+              return i === 0 ? 0 : 8;
+            },
+            paddingRight: function (i, node) {
+              return (i === node.table.widths.length - 1) ? 0 : 8;
             }
-        };
+          }
+      };
     }
 
     tableData : any
@@ -77,22 +80,21 @@ export class PDFReportAssets implements OnInit {
             const fileName = this.tableData?.piping_name
             const file = new File([blobfile], fileName + '.pdf')
             const formData = new FormData()
-            formData.append('document', file)
+            formData.append('qr_code', file)
+            formData.append('title', this.randomString)
 
-            this.pageMenuService.addDocument(formData)
-            .subscribe(res => {
-              if ( res.type === HttpEventType.Response ) {
-                const upload : any = res;
-                const { id } = upload.body.data;
-                this.reportService.publishReportAsett({qr_code : id}, this.tableData.id)
-                .subscribe(
-                  () => this.toastr.success('Your Report has been published.', "Success Publish Report."),
-                  () => this.toastr.danger('Your Report failed to published.', "Failed Publish Report."),
-                  () => this.refreshPage.emit(true)
-                )
-              }
-            })
+            this.reportService.addQRCode(formData)
+            .subscribe(
+              () => this.toastr.success('Your Report has been published.', "QR Code has been added."),
+              () => this.toastr.danger('Your Report failed to published.', "Failed to generate qr code."),
+            )
 
+            this.reportService.publishReportAsett({qr_code : this.randomString}, this.tableData.id)
+            .subscribe(
+              () => this.toastr.success('Your Report has been published.', "Success Publish Report."),
+              () => this.toastr.danger('Your Report failed to published.', "Failed Publish Report."),
+              () => this.refreshPage.emit(true)
+            )
           })
 
           pdf.download();
@@ -102,9 +104,12 @@ export class PDFReportAssets implements OnInit {
     public downloadAsPDF() {   
         const pdfTable = this.pdfThickness.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
-        console.log(html)
+        
         if(this.tableData?.qr_code)
-        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/document/" + this.tableData.qr_code }
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.tableData.qr_code }
+        if(!this.tableData.qr_code)
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.randomString }
+
         const documentDefinition = { 
           content: [
             html,

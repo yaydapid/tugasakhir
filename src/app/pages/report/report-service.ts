@@ -36,7 +36,7 @@ export class ReportService {
 
     addQRCode(data) {
         const url = this.apiUrl + "/qr_code";
-        return this.httpClient.put(url, data);
+        return this.httpClient.post(url, data);
     }
 
     getQRCode(title) {
