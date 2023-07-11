@@ -62,24 +62,45 @@ export class Variables {
     }
 
     getAverageCML(asset, year) {
-        const { cml } = asset;
+        let { cml } = asset;
 
-        let allYear = asset?.cml?.map(c => c.year)
-        allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const stCrYear = allYear?.at(-2)
+        let allCML : any = []
+        cml?.forEach(({cml_id, year}) => {
+            const uniqucml = allCML.find(({cml_id : allid, year : allyear}) => allid == cml_id && allyear == year)
+            if(!uniqucml) allCML.push({cml_id, year})
+        })
 
-        const cmls = cml?.filter(c => c.year == year)
-        ?.map(c => {
+        allCML = allCML
+        .map(({cml_id : allid, year : allyear}) => {
+
+            let avgCML = cml.map(c => {
+                if(c.cml_id == allid && c.year == allyear) 
+                return c.last_thickness_reading
+                return null;
+            })
+            .filter(c => c != null)
+            avgCML = avgCML.reduce((x,y) => x + y, 0) / avgCML?.length;
+
             return {
-                ...c,
-                calculated_cr : this.getCalculatedLTCR({...asset, ...c}),
-                calculated_st : this.getCalculatedSTCR({...asset, ...c, stCrYear})
+                ...cml.find(c => c.cml_id == allid && c.year == allyear),
+                last_thickness_reading : avgCML
             }
         })
 
+        let allYear = allCML.map(c => c.year)
+        allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+        const stCrYear = allYear.at(-2)
+
+        const cmls = allCML.filter(c => c.year == year)
+        .map(c => ({
+            ...c,   
+            calculated_cr : this.getCalculatedLTCR({...asset, ...c}),
+            calculated_st : this.getCalculatedSTCR({...asset, ...c, stCrYear})
+        }))
+
         const last_cml_reading_date = cmls
-        ?.map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date) )
-        ?.sort((a,b) => a-b)
+        .map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date))
+        .sort((a,b) => a-b)
 
         function getAvg(i) {
             const avg = cmls?.map(c => c[i])
@@ -93,7 +114,7 @@ export class Variables {
         const st_cr = getAvg("calculated_st");
 
         return { 
-            cml_details : cmls?.find(c=> c.year = year),
+            cml_details : cmls?.find(c => c.year = year),
             reading, 
             lt_cr, 
             st_cr,

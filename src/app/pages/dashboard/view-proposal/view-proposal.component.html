@@ -27,6 +27,7 @@
     [tableHeader]="{ title : 'Proposal' }"
     [columnDetails]="columnDetails"
     [tableData]="tableData"
+    (onClickTable)="onClickTable($event.data, $event.title)"
 ></ngx-mat-table>
 
 <pdf-proposal-dashboard></pdf-proposal-dashboard>

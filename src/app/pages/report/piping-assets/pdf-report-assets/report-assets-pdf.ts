@@ -3,8 +3,6 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
-import { PageMenuService } from "../../../pages-service";
-import { HttpEventType } from "@angular/common/http";
 import { NbToastrService } from "@nebular/theme";
 import { ReportService } from "../../report-service";
 import { environment } from "../../../../../environments/environment";
@@ -15,7 +13,6 @@ import { environment } from "../../../../../environments/environment";
 })
 export class PDFReportAssets implements OnInit {
   constructor( 
-    private pageMenuService : PageMenuService,
     private toastr : NbToastrService,
     private reportService : ReportService
   ) {}

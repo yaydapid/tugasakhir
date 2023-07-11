@@ -9,6 +9,20 @@
                     placeholder="Ex. Mia" #input>
             </mat-form-field>
         </div>
+
+        <div class="row">
+            <div class="col">Conditions</div>
+            <div class="col">
+              <nb-select placeholder="Class" class="" status="primary" size="small">
+                <nb-option 
+                (click)="filterByClass(option)"
+                [value]="option"
+                *ngFor="let option of ['Normal','Asc','Desc']"
+                >{{ option }}</nb-option>
+              </nb-select>
+            </div>
+  
+          </div>
     </nb-card-header>
     <nb-card-body class="row" > 
 

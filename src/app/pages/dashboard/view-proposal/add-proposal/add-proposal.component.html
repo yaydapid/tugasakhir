@@ -83,7 +83,7 @@
                                 nbInput 
                                 fieldSize="small" 
                                 name="proposal_id"
-                                ngModel
+                                [ngModel]="dialogData?.data?.proposal_id"
                                 > 
                             </div>
 
@@ -95,7 +95,7 @@
                                 fieldSize="small" 
                                 [nbDatepicker]="inspection_planned_date"
                                 name="inspection_planned_date"
-                                ngModel
+                                [ngModel]="dialogData?.data?.inspection_planned_date"
                                 > 
                                 <nb-datepicker #inspection_planned_date></nb-datepicker>
                             </div>
@@ -120,7 +120,7 @@
                             <label for="remarks" class="d-block">Remarks</label>
                             <textarea 
                             nbInput 
-                            ngModel
+                            [ngModel]="dialogData?.data?.remarks"
                             name="remarks" 
                             id="remarks" 
                             rows="2" 

@@ -18,4 +18,14 @@ export class ProposalService {
         const url = this.apiUrl + "/proposal";
         return this.httpClient.post(url, data);
     }
+
+    updateProposal(data, id) {
+        const url = this.apiUrl + "/proposal/" + id;
+        return this.httpClient.put(url, data);
+    }
+
+    deleteProposal(id) {
+        const url = this.apiUrl + "/proposal/" + id;
+        return this.httpClient.delete(url);
+    }
 }
