@@ -21,7 +21,7 @@ export class ReportPipingCircuit implements OnInit {
     
     elementType = NgxQrcodeElementTypes.URL;
     correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
-    value = 'https://www.google.com/';
+    reportURL;
 
     constructor (
         private pipingCircuitService : PipingCircuitService,
@@ -255,6 +255,10 @@ export class ReportPipingCircuit implements OnInit {
         this.imageLink = element?.images?.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
         );  
+
+        const qrcode = element.qr_code;
+        if(qrcode) this.reportURL = environment.apiUrl + "/qr_code/" + element.qr_code
+        if(!qrcode) this.reportURL = null
     }
   
     applyFilter(event: Event) {

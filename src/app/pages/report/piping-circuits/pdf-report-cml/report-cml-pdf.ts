@@ -98,7 +98,7 @@ export class PDFReportCML implements OnInit {
               () => this.toastr.danger('Your Report failed to published.', "Failed to generate qr code."),
             )
 
-            this.reportService.publishReportAsett({qr_code : this.randomString}, this.tableData.id)
+            this.reportService.publishReportCircuit({qr_code : this.randomString}, this.tableData.id)
             .subscribe(
               () => this.toastr.success('Your Report has been published.', "Success Publish Report."),
               () => this.toastr.danger('Your Report failed to published.', "Failed Publish Report."),

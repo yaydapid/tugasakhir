@@ -53,8 +53,10 @@ export class VisualConditionsPDF implements OnInit {
         { name : "MAWP", props : 'mawp', width : "auto" },
     ]
 
+    tableHead
     public generateData(data) {
         this.tableData = data.visual_condition
+        this.tableHead = data
         setTimeout(() => {
             this.downloadAsPDF()
         }, 500);
