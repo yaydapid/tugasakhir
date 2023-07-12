@@ -73,7 +73,6 @@ export class ViewProposalComponent implements OnInit {
   }
 
   onClickTable(data, title) {
-    console.log(title)
     if(title == 'update-proposal') this.updateProposal(data)
     if(title == 'delete-proposal') this.deleteProposal(data)
   }

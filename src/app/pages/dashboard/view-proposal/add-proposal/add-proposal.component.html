@@ -234,7 +234,7 @@
                                             + {{ method?.technique }}
                                         </span>
 
-                                        <input type="number" nbInput min="0" max="100" fieldSize="tiny" class="col-2">
+                                        <input type="number" nbInput min="0" max="100" [(ngModel)]="method.coverage" name="coverage" fieldSize="tiny" class="col-2">
 
                                         <div class="col-1 d-flex justify-content-center align-items-center">
                                             <button nbButton status="danger" size="tiny" (click)="deleteMethod(index)">

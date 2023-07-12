@@ -66,7 +66,7 @@ export class AddProposalComponent implements OnInit {
 
   selectInspectionType(value) {
     this.inspectionMethodList = this.inspectionMethodList.map(item => ({...item, active : false}))
-    this.inspectionMethodList.push({type : value, active : true})
+    this.inspectionMethodList.push({type : value, active : true, coverage : 1})
     this.activeMethod = this.inspectionMethodList.length - 1
   }
 
@@ -77,15 +77,11 @@ export class AddProposalComponent implements OnInit {
   }
 
   deleteMethod(index) {
-    console.log(index)
     this.inspectionMethodList[index] = null;
     this.inspectionMethodList = this.inspectionMethodList.filter(method => method != null)
     
     if(index == this.inspectionMethodList.length)
     this.activationMethod(index - 1)
-
-
-    console.log(this.inspectionMethodList)
   }
 
   inspectionMethod = [
