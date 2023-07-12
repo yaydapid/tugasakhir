@@ -66,7 +66,7 @@ export class AddProposalComponent implements OnInit {
 
   selectInspectionType(value) {
     this.inspectionMethodList = this.inspectionMethodList.map(item => ({...item, active : false}))
-    this.inspectionMethodList.push({type : value, active : true, coverage : 1})
+    this.inspectionMethodList.push({type : value, active : true, coverage : 0})
     this.activeMethod = this.inspectionMethodList.length - 1
   }
 

@@ -27,8 +27,21 @@ export class ViewProposalComponent implements OnInit {
   ngOnInit(): void {
     this.proposalService.getProposals()
     .subscribe(({data} : any) => {
-      this.tableData = data;
-      this.viewTable.regenerateTable(data)
+      this.tableData = data.map(item => {
+        const list_circuit = item.circuit.map(circuit => {
+          return [
+            circuit.piping_circuit_id,
+            ...circuit.piping.map(({piping_id}) => " " + piping_id)
+          ]
+        })
+
+        return {
+          ...item,
+          list_circuit : [...list_circuit]
+        }
+      })
+
+      this.viewTable.regenerateTable(this.tableData)
     })
   }
 
@@ -37,7 +50,7 @@ export class ViewProposalComponent implements OnInit {
     { type : 'select', prop : 'select', head : '', width : '20px' },
     { type : 'text', prop : 'proposal_id', head : 'Proposal ID', width : '100px' },
     { type : 'text', prop : 'inspection_planned_date', head : 'Inspection Plan Date', width : '200px' },
-    { type : 'text', prop : 'piping_circuit', head : 'Piping Circuit', width : '200px' },
+    { type : 'text', prop : 'list_circuit', head : 'Piping Circuit / Assets', width : '200px' },
     { type : 'text', prop : 'remarks', head : 'Remarks', width : '400px' },
     { type : 'button', prop : 'edit', width : '40px', button : [
       { icon : 'edit-outline', status : 'info', title : "update-proposal" },

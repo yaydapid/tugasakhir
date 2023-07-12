@@ -15,7 +15,7 @@ export class PDFProposalDashboard {
     assetsHead = [
         { name : "Id", props : 'proposal_id' },
         { name : "Insp Plan Date", props : 'inspection_planned_date' },
-        { name : "Piping Circuit", props : 'piping_circuit' },
+        { name : "Piping Circuit / Assets", props : 'list_circuit' },
     ]
 
     public generateData(data) {

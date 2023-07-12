@@ -27,7 +27,7 @@
             <ng-container *ngFor="let column of columnDetails" [matColumnDef]="column.prop">
                 <!-- Checkbox Column -->
                 <div *ngIf="column.type == 'select'">
-                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '60px'} " mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : '60px'} " >
                         <mat-checkbox (change)="$event ? toggleAllRows() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"

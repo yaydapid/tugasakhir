@@ -76,7 +76,7 @@ export class ReportPipingAssets implements OnInit {
                 ?.map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
             }]
             : []
-            
+
             this.pipingThickness = this.pipingThickness.map(({name, props}) => {
                 const { 
                     reading, 
