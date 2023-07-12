@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -10,6 +10,7 @@ import htmlToPdfmake from 'html-to-pdfmake';
 })
 export class VisualConditionsPDF implements OnInit {
     @ViewChild('pdfThickness') pdfThickness: ElementRef;
+    @Input() externalCheckList; 
     ngOnInit(): void {
         pdfMake.tableLayouts = {
             exampleLayout: {
@@ -53,7 +54,7 @@ export class VisualConditionsPDF implements OnInit {
     ]
 
     public generateData(data) {
-        this.tableData = data
+        this.tableData = data.visual_condition
         setTimeout(() => {
             this.downloadAsPDF()
         }, 500);

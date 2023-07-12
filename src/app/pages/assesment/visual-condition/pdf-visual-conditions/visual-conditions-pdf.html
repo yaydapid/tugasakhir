@@ -1,20 +1,69 @@
 <div class="container" style="display: none;">
     <div id="Thickness" #pdfThickness>
-        <h5 style="width: 100%; margin: 0 0 1rem 0; color: #5588EE;">Visual Conditions</h5>
-        <span>{{ tableData?.piping_id }}</span>
-        <table 
-        *ngIf="tableData"
-        [style]="tableStyle"
-        data-pdfmake='{"widths":["*", "auto", "auto", "auto", "auto", "auto", "auto", "*", "*", "*", "auto"], "layout" : "exampleLayout"}'
-        >
-            <tr>
-                <th *ngFor="let head of pdfHead"> 
-                    <b style="font-weight: bold;">{{ head.name }}</b> 
-                </th>
-            </tr>
-            <tr *ngFor="let data of tableData">
-                <td *ngFor="let head of pdfHead"> {{ data?.[head.props] }} </td>
-            </tr>
-    </table>
+        <h5 style="width: 100%;  color: #5588EE;">Visual Conditions</h5>
+        <span style="color: #5588EE;"> <b>{{ tableData?.piping_id }}</b> </span>
+        
+        <span style="color: gray; margin: 1rem 0 0.5rem 0;">General</span>
+        <div style="font-size: 12px;">
+            <span>Condition</span>
+            <span> : </span>
+            <span>{{ tableData?.general_condition }}</span>
+        </div>
+
+        <div>
+            <table 
+                [style]="tableStyle"
+                data-pdfmake='{"widths":["*", "*"], "layout" : "noBorders"}'
+                >
+                    <tr>
+                        <td> Finding </td>
+                        <td> Recomendation </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ tableData?.general_finding }}
+                        </td>
+                        <td>
+                            {{ tableData?.general_recomendation }}
+                        </td>
+                    </tr>
+            </table>
+        </div>
+
+        <span style="color: gray; margin: 1rem 0 0.5rem 0;">External Checklist</span>
+        <div>
+            <table 
+            [style]="tableStyle"
+            data-pdfmake='{"widths":["*", "*"], "layout" : "noBorders"}'
+            >
+                <div *ngFor="let rows of [0,2,4]">
+                    <tr>
+                        <td style="color: #5588EE; margin: 0.5rem 0 0 0;" *ngFor="let cols of [0,1]"> 
+                            {{ externalCheckList[rows + cols].title }} 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td *ngFor="let cols of [0,1]"> Condition : 
+                            {{ tableData?.[externalCheckList[rows + cols].conditions.props] }} 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td *ngFor="let cols of [0,1]">
+                            {{ tableData?.[externalCheckList[rows + cols].comment.props] }} 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td *ngFor="let cols of [0,1]">Source :</td>
+                    </tr>
+                    <tr>
+                        <td *ngFor="let cols of [0,1]">
+                            <div *ngFor="let source of externalCheckList[rows + cols].source; let index = index;"> 
+                                <span *ngIf="tableData?.[source?.props]"> &nbsp; - {{ source.title }}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </div>
+            </table>
+        </div>
     </div>
 </div>
