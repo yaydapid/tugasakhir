@@ -15,6 +15,7 @@ import { DashboardThicknessChart } from "./chart/thickness-chart.component";
 import { DashboardRemainingChart } from "./chart/remaining-chart.component";
 import { ThicknessService } from "../../assesment/thickness/thickness-service";
 import { PDFReportAssets } from "./pdf-report-assets/report-assets-pdf";
+import { DashboardCorrosionRChart } from "./chart/corrosionR-chart.component";
 
 @Component({
     selector: 'ngx-report-piping-assets',
@@ -119,7 +120,8 @@ export class ReportPipingAssets implements OnInit {
                 inspection : this.inspectionHistoryData,
                 piping_thickness : this.pipingThickness,
                 thickness_chart : this.thicknessChart.chart.toBase64Image(),
-                remaining_chart : this.remainingChart.chart.toBase64Image()
+                remaining_chart : this.remainingChart.chart.toBase64Image(),
+                corrosion_chart : this.corrosionChart.chart.toBase64Image()
             }
         },
         () => this.toastr.danger('Please add asset data.', 'Data not found.')
@@ -147,6 +149,7 @@ export class ReportPipingAssets implements OnInit {
 
     @ViewChild(DashboardThicknessChart) thicknessChart : DashboardThicknessChart
     @ViewChild(DashboardRemainingChart) remainingChart : DashboardRemainingChart
+    @ViewChild(DashboardCorrosionRChart) corrosionChart : DashboardCorrosionRChart
 
     @ViewChild(PDFReportAssets) pdfReportAssets : PDFReportAssets
 
@@ -168,8 +171,10 @@ export class ReportPipingAssets implements OnInit {
         if(!element) return;
         this.variables.removeChartData(this.thicknessChart)
         this.variables.removeChartData(this.remainingChart)
+        this.variables.removeChartData(this.corrosionChart)
         this.thicknessChartData(this.thicknessChart, element)
         this.remainingLifeChartData(this.remainingChart, element)
+        this.remainingLifeChartData(this.corrosionChart, element)
     }
 
     thicknessChartData(chart, {cml}) {

@@ -21,6 +21,7 @@ import { PipingCircuitChart } from "./piping-circuits/chart/piping-circuit-trend
 import { MatSortModule } from "@angular/material/sort";
 import { PDFReportAssets } from "./piping-assets/pdf-report-assets/report-assets-pdf";
 import { PDFReportCML } from "./piping-circuits/pdf-report-cml/report-cml-pdf";
+import { DashboardCorrosionRChart } from "./piping-assets/chart/corrosionR-chart.component";
 
 @NgModule({
     imports: [
@@ -57,6 +58,7 @@ import { PDFReportCML } from "./piping-circuits/pdf-report-cml/report-cml-pdf";
         ReportComponent,
         DashboardThicknessChart,
         DashboardRemainingChart,
+        DashboardCorrosionRChart,
         ReportPipingAssets,
         ReportPipingCircuit,
         PipingCircuitChart,

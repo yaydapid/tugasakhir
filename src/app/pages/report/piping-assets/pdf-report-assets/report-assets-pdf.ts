@@ -149,6 +149,10 @@ export class PDFReportAssets implements OnInit {
               image: this.tableData.remaining_chart,
               fit : [500, 500],
             },
+            {
+              image: this.tableData.corrosion_chart,
+              fit : [500, 500],
+            },
           ],
           pageBreakBefore: function(currentNode) {
             return currentNode.style && currentNode.style.indexOf('pdf-pagebreak-before') > -1;
