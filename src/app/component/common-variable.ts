@@ -9,37 +9,38 @@ export class Variables {
     constructor(
         private datePipe : DatePipe
     ) {}
+
     damageMechanismName:any[] = [
-        { id : "01", piping_damage_mechanism : "General and localized metal loss" },
-        { id : "02", piping_damage_mechanism : "Sulfidation and High Temp. H2S/H2 Corrosion" },
-        { id : "03", piping_damage_mechanism : "Oxidation" },
-        { id : "04", piping_damage_mechanism : "Microbiologically Induced Corrosion (MIC)" },
-        { id : "05", piping_damage_mechanism : "Naphthenic Acid Corrosion" },
-        { id : "06", piping_damage_mechanism : "Erosion/Erosison-Corrosion" },
-        { id : "07", piping_damage_mechanism : "Galvanic Corrosion" },
-        { id : "08", piping_damage_mechanism : "Atmospheric Corrosion" },
-        { id : "09", piping_damage_mechanism : "Corrosion Under Insulation (CUI)" },
-        { id : "10", piping_damage_mechanism : "Cooling Water Corrosion" },
-        { id : "11", piping_damage_mechanism : "Boiler Water Condensate Corrosion" },
-        { id : "12", piping_damage_mechanism : "Soil Corrosion" },
-        { id : "13", piping_damage_mechanism : "Ammonium Bisulfide and Chloride Corrosion" },
-        { id : "14", piping_damage_mechanism : "Carbon Dioxide Corrosion" },
-        { id : "15", piping_damage_mechanism : "Surface Connected Cracking" },
-        { id : "16", piping_damage_mechanism : "Mechanical Fatigue Cracking" },
-        { id : "17", piping_damage_mechanism : "Caustic Stress Corrosion Cracking" },
-        { id : "18", piping_damage_mechanism : "Polythionic Stress Corrosion Cracking" },
-        { id : "19", piping_damage_mechanism : "Sulfide Stress Cracking" },
-        { id : "20", piping_damage_mechanism : "Chloride Stress Corrosion Cracking" },
-        { id : "21", piping_damage_mechanism : "Subsurface Cracking" },
-        { id : "22", piping_damage_mechanism : "Hydrogen Induced Cracking" },
-        { id : "23", piping_damage_mechanism : "Wet Hydrogen Sulfide Cracking" },
-        { id : "24", piping_damage_mechanism : "High-Temperature Micro-fissuring/Micro-void Fromation and Eventual Macro Cracking" },
-        { id : "25", piping_damage_mechanism : "High-temperature Hydrogen Attack" },
-        { id : "26", piping_damage_mechanism : "Creep/Stress Rupture" },
-        { id : "27", piping_damage_mechanism : "Metallurgical Changes" },
-        { id : "28", piping_damage_mechanism : "Graphitization" },
-        { id : "29", piping_damage_mechanism : "Temper Embrittlement" },
-        { id : "30", piping_damage_mechanism : "Hydrogen Embrittlement" },
+        { piping_damage_mechanism : "General and localized metal loss", colspan : 6, show : false, bold : true},
+        { id : "01", piping_damage_mechanism : "Sulfidation and High Temp. H2S/H2 Corrosion" },
+        { id : "02", piping_damage_mechanism : "Oxidation" },
+        { id : "03", piping_damage_mechanism : "Microbiologically Induced Corrosion (MIC)" },
+        { id : "04", piping_damage_mechanism : "Naphthenic Acid Corrosion" },
+        { id : "05", piping_damage_mechanism : "Erosion/Erosison-Corrosion" },
+        { id : "06", piping_damage_mechanism : "Galvanic Corrosion" },
+        { id : "07", piping_damage_mechanism : "Atmospheric Corrosion" },
+        { id : "08", piping_damage_mechanism : "Corrosion Under Insulation (CUI)" },
+        { id : "09", piping_damage_mechanism : "Cooling Water Corrosion" },
+        { id : "10", piping_damage_mechanism : "Boiler Water Condensate Corrosion" },
+        { id : "11", piping_damage_mechanism : "Soil Corrosion" },
+        { id : "12", piping_damage_mechanism : "Ammonium Bisulfide and Chloride Corrosion" },
+        { id : "13", piping_damage_mechanism : "Carbon Dioxide Corrosion" },
+        { piping_damage_mechanism : "Surface Connected Cracking", colspan : 6, show : false, bold : true },
+        { id : "14", piping_damage_mechanism : "Mechanical Fatigue Cracking" },
+        { id : "15", piping_damage_mechanism : "Caustic Stress Corrosion Cracking" },
+        { id : "16", piping_damage_mechanism : "Polythionic Stress Corrosion Cracking" },
+        { id : "17", piping_damage_mechanism : "Sulfide Stress Cracking" },
+        { id : "18", piping_damage_mechanism : "Chloride Stress Corrosion Cracking" },
+        { piping_damage_mechanism : "Subsurface Cracking", colspan : 6, show : false, bold : true },
+        { id : "19", piping_damage_mechanism : "Hydrogen Induced Cracking" },
+        { id : "20", piping_damage_mechanism : "Wet Hydrogen Sulfide Cracking" },
+        { piping_damage_mechanism : "High-Temperature Micro-fissuring/Micro-void Fromation and Eventual Macro Cracking", colspan : 6, show : false, bold : true },
+        { id : "21", piping_damage_mechanism : "High-temperature Hydrogen Attack" },
+        { id : "22", piping_damage_mechanism : "Creep/Stress Rupture" },
+        { piping_damage_mechanism : "Metallurgical Changes", colspan : 6, show : false, bold : true },
+        { id : "23", piping_damage_mechanism : "Graphitization" },
+        { id : "24", piping_damage_mechanism : "Temper Embrittlement" },
+        { id : "25", piping_damage_mechanism : "Hydrogen Embrittlement" },
     ]
 
     getCMLCalc(asset) {
@@ -62,45 +63,22 @@ export class Variables {
     }
 
     getAverageCML(asset, year) {
-        let { cml } = asset;
+        const { cml } = asset;
 
-        let allCML : any = []
-        cml?.forEach(({cml_id, year}) => {
-            const uniqucml = allCML.find(({cml_id : allid, year : allyear}) => allid == cml_id && allyear == year)
-            if(!uniqucml) allCML.push({cml_id, year})
-        })
-
-        allCML = allCML
-        .map(({cml_id : allid, year : allyear}) => {
-
-            let avgCML = cml.map(c => {
-                if(c.cml_id == allid && c.year == allyear) 
-                return c.last_thickness_reading
-                return null;
-            })
-            .filter(c => c != null)
-            avgCML = avgCML.reduce((x,y) => x + y, 0) / avgCML?.length;
-
-            return {
-                ...cml.find(c => c.cml_id == allid && c.year == allyear),
-                last_thickness_reading : avgCML
-            }
-        })
-
-        let allYear = allCML.map(c => c.year)
+        let allYear = cml?.map(c => c.year)
         allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
-        const stCrYear = allYear.at(-2)
+        const stCrYear = allYear?.at(-2)
 
-        const cmls = allCML.filter(c => c.year == year)
-        .map(c => ({
+        const cmls = cml?.filter(c => c.year == year)
+        ?.map(c => ({
             ...c,   
             calculated_cr : this.getCalculatedLTCR({...asset, ...c}),
             calculated_st : this.getCalculatedSTCR({...asset, ...c, stCrYear})
         }))
 
         const last_cml_reading_date = cmls
-        .map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date))
-        .sort((a,b) => a-b)
+        ?.map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date))
+        ?.sort((a,b) => a-b)
 
         function getAvg(i) {
             const avg = cmls?.map(c => c[i])
@@ -133,6 +111,29 @@ export class Variables {
     
         let allYear = cml?.map(c => c.year)
         allYear = allYear?.filter((c, i) => allYear.indexOf(c) == i).sort((a,b) => a-b)
+
+        let allCML : any = []
+        cml?.forEach(({cml_id, year}) => {
+            const uniqucml = allCML.find(({cml_id : allid, year : allyear}) => allid == cml_id && allyear == year)
+            if(!uniqucml) allCML.push({cml_id, year})
+        })
+
+        allCML = allCML
+        .map(({cml_id : allid, year : allyear}) => {
+
+            let avgCML = cml.map(c => {
+                if(c.cml_id == allid && c.year == allyear) 
+                return c.last_thickness_reading
+                return null;
+            })
+            .filter(c => c != null)
+            avgCML = avgCML.reduce((x,y) => x + y, 0) / avgCML?.length;
+
+            return {
+                ...cml.find(c => c.cml_id == allid && c.year == allyear),
+                last_thickness_reading : avgCML
+            }
+        })
     
         return {
           allYear,
@@ -140,7 +141,7 @@ export class Variables {
             label: c,
             yAxisID: 'A',
             data: allYear?.map(y => {
-              const thick = cml.find(item => item.year == y && item.cml_id == c) 
+              const thick = allCML.find(item => item.year == y && item.cml_id == c) 
               return thick?.[identifier]
             }),
             backgroundColor: 'transparent',
@@ -264,4 +265,27 @@ export class Variables {
           mawp
         }
     }
+
+    sortByMawp(tableData, sort) {
+        tableData = tableData.map(i => {
+            const {mawp, max_design_pressure} = this.getThicknessCalculation(i)
+            return {
+              ...i,
+              sortByMawp : max_design_pressure - mawp
+            }
+        })
+    
+        if(sort == "Normal")
+        tableData = tableData
+        .sort((a, b) => b.sortByMawp - a.sortByMawp)
+
+        if(sort == "Abnormal")
+        tableData = tableData
+        .sort((a, b) => a.sortByMawp - b.sortByMawp)
+
+        return tableData
+    }
+
+    transformExcelDate = (date) => date == undefined ? '' :new Date(Math.round((date - 25569) * 86400 * 1000))
+
 }

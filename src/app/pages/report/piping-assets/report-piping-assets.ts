@@ -25,6 +25,7 @@ export class ReportPipingAssets implements OnInit {
     elementType = NgxQrcodeElementTypes.URL;
     correctionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
     reportURL 
+    reportData
 
     constructor(
         private reportService : ReportService,
@@ -100,13 +101,26 @@ export class ReportPipingAssets implements OnInit {
                     next_ve_insp_date,
                     mawp : mawp.toFixed(4)
                 }
+
                 return {
                     name,
                     props,
-                    data : dataThickness[props]
+                    data : dataThickness[props],
                 }
             })
 
+            this.reportData = {
+                ...asset, 
+                corrosion_allowance : asset.corrosion_allowance.toFixed(3),
+                mechanical_allowance : asset.mechanical_allowance.toFixed(3),
+                nominal_thickness : asset.nominal_thickness.toFixed(3),
+                damage_mechanism : this.damageMechanismData,
+                piping_visual : this.pipingVisual,
+                inspection : this.inspectionHistoryData,
+                piping_thickness : this.pipingThickness,
+                thickness_chart : this.thicknessChart.chart.toBase64Image(),
+                remaining_chart : this.remainingChart.chart.toBase64Image()
+            }
         },
         () => this.toastr.danger('Please add asset data.', 'Data not found.')
         )
@@ -139,10 +153,12 @@ export class ReportPipingAssets implements OnInit {
     imageLink : any[] = []
     showData(element) {
         const qrcode = element.qr_code;
+        this.getReportData(element.id)
         if(qrcode) this.reportURL = environment.apiUrl + "/qr_code/" + element.qr_code
         if(!qrcode) this.reportURL = null
 
-        this.pipeData = element;
+        this.pipeData = element
+        
         this.imageLink = typeof element.images == "object" 
         ? element?.images?.map(image => 
             ({src : environment.apiUrl + '/image/' + image, alt : 'Pipe Asssets' })
@@ -182,6 +198,14 @@ export class ReportPipingAssets implements OnInit {
     filterByClass(val) {
         let tableData = this.tablePosition.filter(item => item.class == val)
         if(val == "All") tableData = this.tablePosition
+        this.dataSource = new MatTableDataSource(tableData)
+    }
+
+    filterByMawp(sort) {
+        if(sort == "No Filter") 
+        return this.dataSource = new MatTableDataSource(this.tablePosition)
+        
+        const tableData = this.variables.sortByMawp(this.tablePosition, sort)
         this.dataSource = new MatTableDataSource(tableData)
     }
 

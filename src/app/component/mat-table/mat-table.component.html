@@ -55,7 +55,7 @@
                 <!-- Column type text -->
                 <div *ngIf="column.type == 'text'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} " mat-sort-header> {{ column.head }} </th>
-                    <td mat-cell *matCellDef="let element"> 
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="element?.colspan" [ngStyle]="{ 'font-weight' : element?.bold ?  'bold' : '' }"> 
                         {{element[column.prop] || '-'}}
                     </td>
                 </div>
@@ -76,7 +76,7 @@
                 <div *ngIf="column.type == 'check'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
-                        <div class="d-flex justify-content-center w-50">
+                        <div class="d-flex justify-content-center w-50 m-2" *ngIf="element.show ?? true">
                             <nb-checkbox 
                             (checkedChange)="toggle($event)" 
                             [checked]="element[column.prop]" 
@@ -97,7 +97,7 @@
                 <div *ngIf="column.type == 'drop-down'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element"> 
-                        <mat-form-field class="my-2">
+                        <mat-form-field class="my-2" *ngIf="element.show ?? true">
                             <mat-label>{{ column.head }}</mat-label>
                             <mat-select [(ngModel)]="element[column.prop]">
                             <mat-option [value]="item" *ngFor="let item of column.value">{{ item }}</mat-option>
@@ -109,14 +109,14 @@
                 <div *ngIf="column.type == 'editable text'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element" (dblclick)="onClickTable.emit({data : element, title : 'edit row'})"> 
-                        <input type="text" nbInput fieldSize="small" class="m-1" [(ngModel)]="element[column.prop]" >
+                        <input type="text" nbInput fieldSize="small" class="m-1" [(ngModel)]="element[column.prop]" *ngIf="element.show ?? true">
                     </td>
                 </div>
 
                 <div *ngIf="column.type == 'editable date'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element" (dblclick)="onClickTable.emit({data : element, title : 'edit row'})"> 
-                        <input type="text" nbInput fieldSize="small" [nbDatepicker]="datepicker" class="m-1" value="" [(ngModel)]="element[column?.prop]" >
+                        <input type="text" nbInput fieldSize="small" [nbDatepicker]="datepicker" class="m-1" value="" [(ngModel)]="element[column?.prop]" *ngIf="element.show ?? true">
                         <nb-datepicker #datepicker></nb-datepicker>
                     </td>
                 </div>

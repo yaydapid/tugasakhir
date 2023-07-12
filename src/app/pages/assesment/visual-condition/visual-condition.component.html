@@ -1,4 +1,20 @@
 <nb-card>
+    <nb-card-body>
+        <button 
+            nbButton 
+            outline
+            size="small" 
+            status="primary"
+            [disabled]="!tableData?.length"
+            (click)="pdfThickness.generateData(this.tableData)"
+            >
+                <nb-icon icon="printer-outline" class="m-1"></nb-icon>
+                <span>Print</span>
+            </button>
+    </nb-card-body>
+</nb-card>
+
+<nb-card>
     <nb-card-header class="d-flex justify-content-between">
         <div>
             <h5>Visual Condition</h5>
@@ -13,11 +29,11 @@
         <div class="row">
             <div class="col">Conditions</div>
             <div class="col">
-              <nb-select placeholder="Class" class="" status="primary" size="small">
+              <nb-select placeholder="Conditions" class="" status="primary" size="small">
                 <nb-option 
                 (click)="filterByClass(option)"
                 [value]="option"
-                *ngFor="let option of ['Normal','Asc','Desc']"
+                *ngFor="let option of ['No Filter','Excellent','Good', 'Average', 'Below Average', 'Poor']"
                 >{{ option }}</nb-option>
               </nb-select>
             </div>

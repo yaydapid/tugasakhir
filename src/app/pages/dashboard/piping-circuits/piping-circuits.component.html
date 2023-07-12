@@ -16,7 +16,7 @@
             (click)="
                     button.name == 'New'        ? addCircuit()
                 :   button.name == 'Import'     ? importExcel.click()
-                :   button.name == 'Export'     ? export()
+                :   button.name == 'Export'     ? exportExcelFile()
                 :   button.name == 'Print'      ? pdfCircuit.generateData(this.tableData)
                 :   null
                     "

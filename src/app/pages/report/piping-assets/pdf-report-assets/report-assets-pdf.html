@@ -1,14 +1,14 @@
 <div class="container" style="display: none;">
     <div id="Thickness" #pdfThickness>
         <h5 style="width: 100%; margin: 0 0 1rem 0; color: #5588EE;">Report {{ tableData?.piping_id }}</h5>
-        <span><b>Pipe Details</b></span>
-        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['auto', 'auto', '25%']}">
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Details</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['20%', '55%', '*']}">
             <tr>
                 <td style="color: darkgray;"> 
                     Date in Service
                 </td>
                 <td>
-                    2027-05-20
+                    {{ tableData?.date_in_service }}
                 </td>
                 <td rowspan="4" class="qr_code">
                     <div style="color: darkgray; font-size: 8px;">QR Code Not Available</div>
@@ -19,7 +19,7 @@
                     Class
                 </td>
                 <td>
-                    1
+                    {{ tableData?.class }}
                 </td>
             </tr>
             <tr>
@@ -27,7 +27,7 @@
                     Notes
                 </td>
                 <td>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic ratione quia sint excepturi molestias a magnam officiis, voluptatum porro ducimus recusandae explicabo dignissimos cum doloribus voluptates in saepe, eligendi aut.
+                    {{ tableData?.notes }}
                 </td>
             </tr>
 
@@ -36,35 +36,76 @@
                     Recomendation
                 </td>
                 <td>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic ratione quia sint excepturi molestias a magnam officiis, voluptatum porro ducimus recusandae explicabo dignissimos cum doloribus voluptates in saepe, eligendi aut.
+                    {{ tableData?.recomendation || '-' }}
                 </td>
             </tr>
         </table>
 
-        <!-- <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['auto', 'auto']}">
-            <tr>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['35%', '15%', '35%', '15%']}">
+            <tr *ngFor="let spec of spesificationItem[0]; let index = index;">
                 <td style="color: darkgray;"> 
-                    Class
+                    {{ spec?.name }}
                 </td>
                 <td>
-                    1
+                    {{ tableData?.[spec.props] || '-' }} {{ spec.unit }}
+                </td>
+                <td style="color: darkgray;"> 
+                    {{ spesificationItem[1][index]?.name }}
+                </td>
+                <td>
+                    {{ tableData?.[spesificationItem[1][index]?.props] }} {{ spesificationItem[1][index]?.unit }}
                 </td>
             </tr>
-        </table> -->
+        </table>
 
-        <!-- <table 
-        *ngIf="tableData"
-        [style]="tableStyle"
-        data-pdfmake='{"widths":["auto", "auto", "auto", "auto", "auto", "auto", "auto", "auto"], "layout" : "exampleLayout"}'
-        >
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Visual</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['*', '*', '*', '*', '*', '*']}">
+            <tr *ngFor="let rows of [0,3];">
+                <div *ngFor="let cols of [0,1,2];">
+                    <td style="color: darkgray;"> 
+                        {{ tableData?.piping_visual[rows + cols]?.name }}
+                    </td>
+                    <td>
+                        {{ tableData?.piping_visual[rows + cols]?.data }}
+                    </td>
+                </div>
+            </tr>
+        </table>
+
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Calculation</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['*', '*', '*', '*']}">
+            <tr *ngFor="let rows of [0,2,4,6];">
+                <div *ngFor="let cols of [0,1];">
+                    <td style="color: darkgray;"> 
+                        {{ tableData?.piping_thickness[rows + cols]?.name }}
+                    </td>
+                    <td>
+                        {{ tableData?.piping_thickness[rows + cols]?.data }}
+                    </td>
+                </div>
+            </tr>
+        </table>
+
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Damage Mechanism</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['*', '*', '*', '*', '*']}">
             <tr>
-                <th *ngFor="let head of pdfHead"> 
-                    <b style="font-weight: bold;">{{ head.name }}</b> 
-                </th>
+                <th *ngFor="let damage of damageMechanismDetails">{{ damage?.head }}</th>
             </tr>
-            <tr *ngFor="let data of tableData">
-                <td *ngFor="let head of pdfHead"> {{ data?.[head.props] }} </td>
+            <tr *ngFor="let rows of tableData?.damage_mechanism;">
+                <td *ngFor="let damage of damageMechanismDetails">{{ rows[damage?.prop] }}</td>
             </tr>
-    </table> -->
+        </table>
+
+        <span style="margin: 1rem 0 0 0;" class="pdf-pagebreak-before"><b>Inspection History</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['*', '*', '*', '10%']}">
+            <tr>
+                <th *ngFor="let insp of ['Insp Id', 'Insp Date', 'Insp Summary', 'Caried Out']">{{ insp }}</th>
+            </tr>
+            <tr *ngFor="let inspection of tableData?.inspection">
+                <td *ngFor="let rows of ['proposal_id', 'inspection_date', 'inspection_summary', 'carried_out'];">{{ inspection[rows] }}</td>
+            </tr>
+        </table>
+
+        <span style="margin: 1rem 0 0 0;"><b>Trend</b></span>
     </div>
 </div>

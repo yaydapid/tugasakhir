@@ -72,7 +72,7 @@ export class PipingAssetsComponent implements OnInit {
     { type : 'text', prop : 'piping_id', head : 'Piping Id', width : '100px' },
     { type : 'text', prop : 'piping_name', head : 'Piping Name', width : '200px' },
     { type : 'text', prop : 'date_in_service', head : 'Date In Service', width : '200px' },
-    { type : 'text', prop : 'class', head : 'Class', width : '200px' },
+    { type : 'text', prop : 'class', head : 'Class', width : '50px' },
     { type : 'text', prop : 'tm_inspection_interval', head : 'TM Inspection Interval', width : '200px' },
     { type : 'text', prop : 've_inspection_interval', head : 'VE Inspection Interval', width : '200px' },
     { type : 'text', prop : 'notes', head : 'Notes', width : '200px' },

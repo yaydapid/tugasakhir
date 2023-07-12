@@ -28,4 +28,9 @@ export class PipingCircuitService {
         const url = this.apiUrl + "/circuit/" + id;
         return this.httpClient.delete(url);
     }
+
+    importCircuits(postBody) {
+        const url = this.apiUrl + "/import_circuits";
+        return this.httpClient.post(url, postBody);
+    }
 }

@@ -7,6 +7,19 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
             </mat-form-field>
         </div>
+
+        <div class="row ">
+            <div class="col">Susceptibility</div>
+            <div class="col">
+              <nb-select placeholder="Susceptibility" class="" status="primary" size="small">
+                <nb-option 
+                (click)="filterByClass(option)"
+                [value]="option"
+                *ngFor="let option of ['No Filter','Low','Medium', 'High']"
+                >{{ option }}</nb-option>
+              </nb-select>
+            </div>
+        </div>
     </nb-card-header>
     <nb-card-body>
         <div class="row">

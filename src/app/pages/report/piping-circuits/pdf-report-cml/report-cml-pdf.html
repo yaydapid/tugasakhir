@@ -1,6 +1,50 @@
 <div class="container" style="display: none;">
     <div id="Thickness" #pdfThickness>
-        <h5 style="width: 100%; margin: 0 0 1rem 0; color: #5588EE;">CML</h5>
+        <h5 style="width: 100%; margin: 0 0 1rem 0; color: #5588EE;">Circuit {{ tableData?.piping_circuit_id }}</h5>
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Details</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['20%', '55%', '*']}">
+            <tr>
+                <td style="color: darkgray;"> 
+                    Date in Service
+                </td>
+                <td>
+                    {{ tableData?.date_in_service }}
+                </td>
+                <td rowspan="4" class="qr_code">
+                    <div style="color: darkgray; font-size: 8px;">QR Code Not Available</div>
+                </td>
+            </tr>
+            <tr>
+                <td style="color: darkgray;"> 
+                    Class
+                </td>
+                <td>
+                    {{ tableData?.class }}
+                </td>
+            </tr>
+            <tr>
+                <td style="color: darkgray;"> 
+                    Notes
+                </td>
+                <td>
+                    {{ tableData?.notes }}
+                </td>
+            </tr>
+
+            <tr>
+                <td style="color: darkgray;"> 
+                    Recomendation
+                </td>
+                <td>
+                    {{ tableData?.recomendation || '-' }}
+                </td>
+            </tr>
+        </table>
+
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Visual</b></span>
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Thickness</b></span>
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Circuit Damage Mechanism</b></span>
+        <span style="margin: 1rem 0 0 0;"><b>Inspection History</b></span>
         <table 
         *ngIf="tableData"
         [style]="tableStyle"
@@ -11,9 +55,12 @@
                     <b style="font-weight: bold;">{{ head.name }}</b> 
                 </th>
             </tr>
-            <tr *ngFor="let data of tableData">
+            <!-- <tr *ngFor="let data of tableData">
                 <td *ngFor="let head of pdfHead"> {{ data?.[head.props] }} </td>
-            </tr>
-    </table>
+            </tr> -->
+        </table>
+
+        <span style="margin: 1rem 0 0 0;"><b>Trend</b></span>
+
     </div>
 </div>

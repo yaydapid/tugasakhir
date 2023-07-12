@@ -11,6 +11,7 @@ import { environment } from "../../../../environments/environment";
 import { ReportService } from "../report-service";
 import { Variables } from "../../../component/common-variable";
 import { PipingCircuitChart } from "./chart/piping-circuit-trend-chart";
+import { PDFReportCML } from "./pdf-report-cml/report-cml-pdf";
 
 @Component({
     selector: 'ngx-report-piping-circuit',
@@ -52,7 +53,7 @@ export class ReportPipingCircuit implements OnInit {
     ]
 
     @ViewChild(PipingCircuitChart) circuitChart : PipingCircuitChart
-
+    @ViewChild(PDFReportCML) pdfReportCML : PDFReportCML
 
     ngOnInit(): void {
         this.pipingCircuitService.getPipingCircuits()
@@ -67,11 +68,9 @@ export class ReportPipingCircuit implements OnInit {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
         })
-
-        let r = (Math.random() + 1).toString(36).substring(7);
-        console.log("random", r);
     }
 
+    reportData;
     getCircuitReport(id) {
 
         this.reportService.getCircuitReport(id)
@@ -88,11 +87,12 @@ export class ReportPipingCircuit implements OnInit {
             assets.filter(x => x !=null).forEach(({damage_mechanism, proposal } : any) => {
                 const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal?.id)
                 if(!inspectionProposal) {
-
                     const inspection_summary = proposal 
-                    ? proposal.inspection_method?.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
+                    ? proposal.inspection_method
+                    ?.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
                     : []
 
+                    if(inspection_summary.length)
                     this.inspectionHistoryData.push({...proposal, inspection_summary})
                 }
 
@@ -141,6 +141,15 @@ export class ReportPipingCircuit implements OnInit {
                 }
             })
 
+            this.reportData = {
+                ...this.selectionData,
+                visual : this.pipingVisual,
+                thickness : this.pipingThicknessData,
+                damage_mechanism : this.activeDamageMechaninsm,
+                inspection_history : this.inspectionHistoryData,
+                trend_chart : this.circuitChart.chart.toBase64Image()
+            }
+
         })
     }
 
@@ -150,7 +159,6 @@ export class ReportPipingCircuit implements OnInit {
         this.variables.removeChartData(this.circuitChart)
     
         const pipingCalc = piping.map(p => this.variables.getThicknessCalculation(p)) 
-    
         chart.data.labels = allPipe
         const dataSet =
         this.datasets
@@ -199,14 +207,13 @@ export class ReportPipingCircuit implements OnInit {
   
     tablePosition:any[] = []
     dataSource = new MatTableDataSource(this.tablePosition);
-    displayedColumns: string[] = ['piping_circuit_name' ];
+    displayedColumns: string[] = ['piping_circuit_id' ];
     resultsLength = 0;
     selectionData;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
     imageLink : any[] = []
-
     pipingVisual = [
         { name : 'Leaks', props : 'leaks_condition', data : null },
         { name : 'Misalignment', props : 'misalignment_condition', data : null },

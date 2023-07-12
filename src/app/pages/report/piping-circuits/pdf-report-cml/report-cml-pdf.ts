@@ -1,16 +1,28 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
+import { NbToastrService } from "@nebular/theme";
+import { ReportService } from "../../report-service";
+import { environment } from "../../../../../environments/environment";
 
 @Component({
     selector : 'report-cml-pdf',
     templateUrl : './report-cml-pdf.html'
 })
 export class PDFReportCML implements OnInit {
+    constructor(
+      private toastr : NbToastrService,
+      private reportService : ReportService 
+    ) {}
+  
     @ViewChild('pdfThickness') pdfThickness: ElementRef;
+    randomString;
+
     ngOnInit(): void {
+        this.randomString = (Math.random() + 1).toString(36).substring(7);
+
         pdfMake.tableLayouts = {
             exampleLayout: {
               hLineWidth: function (i, node) {
@@ -49,6 +61,45 @@ export class PDFReportCML implements OnInit {
         { name : "Calc CR", props : 'calculated_cr', width : "*" },
     ]
 
+    public printAsPDF(data) {
+      this.tableData = data
+      console.log(data)
+      setTimeout(() => {
+          const pdf = this.downloadAsPDF()
+          pdf.print();
+      }, 500);
+    }
+
+    @Output("refresh") refreshPage : EventEmitter<any> = new EventEmitter();
+    public publishReport(data) {
+      this.tableData = data
+      setTimeout(() => {
+          const pdf = this.downloadAsPDF()
+          pdf.getBlob(blobfile => {
+            const fileName = this.tableData?.piping_name
+            const file = new File([blobfile], fileName + '.pdf')
+            const formData = new FormData()
+            formData.append('qr_code', file)
+            formData.append('title', this.randomString)
+
+            this.reportService.addQRCode(formData)
+            .subscribe(
+              () => this.toastr.success('Your Report has been published.', "QR Code has been added."),
+              () => this.toastr.danger('Your Report failed to published.', "Failed to generate qr code."),
+            )
+
+            this.reportService.publishReportAsett({qr_code : this.randomString}, this.tableData.id)
+            .subscribe(
+              () => this.toastr.success('Your Report has been published.', "Success Publish Report."),
+              () => this.toastr.danger('Your Report failed to published.', "Failed Publish Report."),
+              () => this.refreshPage.emit(true)
+            )
+          })
+
+          pdf.download();
+      }, 500);
+    }
+
     public generateData(data) {
         this.tableData = data
         setTimeout(() => {
@@ -59,17 +110,25 @@ export class PDFReportCML implements OnInit {
     public downloadAsPDF() {   
         const pdfTable = this.pdfThickness.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
-        console.log(html)
+
+        if(this.tableData?.qr_code)
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.tableData.qr_code, fit: '135' }
+        if(!this.tableData.qr_code)
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.randomString, fit: '135' }
     
         const documentDefinition = { 
           content: [
             html,
+            {
+              image: this.tableData.trend_chart,
+              fit : [500, 500],
+            },
           ],
           pageBreakBefore: function(currentNode) {
             return currentNode.style && currentNode.style.indexOf('pdf-pagebreak-before') > -1;
           }
         };
     
-        pdfMake.createPdf(documentDefinition).open();
+        return pdfMake.createPdf(documentDefinition)
     }
 }

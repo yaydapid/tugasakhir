@@ -8,6 +8,13 @@ import { DeleteDialogComponent } from '../../../component/delete dialog/delete-d
 import { AsyncSubject } from 'rxjs';
 import { PageMenuService } from '../../pages-service';
 import { PDFCircuitDashboard } from './pdf-circuits/pdf-circuit-dashboard';
+import * as XLSX from 'xlsx/xlsx.mjs';
+import { Variables } from '../../../component/common-variable';
+import * as FileSaver from 'file-saver';
+
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
+
 
 @Injectable({
   providedIn : 'root'
@@ -23,7 +30,8 @@ export class PipingCircuitsComponent implements OnInit {
     private dialogService : NbDialogService,
     private toastrService: NbToastrService,
     private datePipe : DatePipe,
-    private pageMenuService : PageMenuService
+    private pageMenuService : PageMenuService,
+    private variables : Variables
   ) {}
 
   @ViewChild(MatTableComponent) viewTable : MatTableComponent;
@@ -50,8 +58,8 @@ export class PipingCircuitsComponent implements OnInit {
     { type : 'text', prop : 'piping_circuit_id', head : 'Piping Circuit Id', width : '100px' },
     { type : 'text', prop : 'piping_circuit_name', head : 'Piping Circuit Name', width : '200px' },
     { type : 'text', prop : 'date_in_service', head : 'Date In Service', width : '200px' },
-    { type : 'text', prop : 'class', head : 'Class', width : '200px' },
-    { type : 'text', prop : 'notes', head : 'Notes', width : '200px' },
+    { type : 'text', prop : 'class', head : 'Class', width : '50px' },
+    { type : 'text', prop : 'notes', head : 'Notes', width : '400px' },
     { type : 'button', prop : 'edit', width : '80px', button : [
       { icon : 'edit-outline', status : 'info', title : "update-circuits" },
       { icon : 'trash-2-outline', status : 'danger', title : "delete-circuits" },
@@ -86,6 +94,74 @@ export class PipingCircuitsComponent implements OnInit {
     )
   }
 
+
+  importExcelFile(event) {
+    const fileName = event.target.files[0];
+    if(!fileName) return;
+    const fileReader = new FileReader();
+    fileReader.readAsBinaryString(fileName);
+    fileReader.onload = (e : any) => { 
+      const binaryData = e.target.result;
+      const workbook = XLSX.read(binaryData, {type : 'binary'});
+      const sheet = workbook.Sheets[workbook.SheetNames[0]]
+      let index = 0;
+      let looping = true;
+      while(looping) {
+        const obj = "A" + index;
+        if(index > 100) looping = false;
+        if(sheet[obj]) {
+            looping = false;
+            break;
+        }
+        index++;
+      }
+      const data = XLSX.utils.sheet_to_json(sheet, {range: index - 1, defval: ""});
+      this.reconstructDataExcel(data);
+    }
+  }
+
+  reconstructDataExcel(data) {
+    const resultData = data.map(({
+      ['Piping Circuit Id'] : piping_circuit_id,
+      ['Piping Circuit Name'] : piping_circuit_name, 
+      ['Notes'] : notes,
+      ['Class'] : classes,
+      ['Date In Service'] : date_in_service,
+      ['Recommendation'] : recomendation,
+    }) => {
+      date_in_service = this.variables.transformExcelDate(date_in_service)
+      date_in_service = this.datePipe.transform(date_in_service, 'yyyy-MM-dd')
+      return {
+        piping_circuit_id,
+        piping_circuit_name,
+        notes,
+        class : classes,
+        date_in_service,
+        recomendation
+      }
+    })
+
+    console.log(resultData)
+    this.circuitService.importCircuits(resultData)
+    .subscribe(
+      () => this.ngOnInit(),
+      () => this.toastrService.danger('Please check your connection and try again.', 'Your request failed.'),
+      () => this.toastrService.success('Data has been imported.', 'Your request success.')
+    )
+  }
+
+  exportExcelFile() {
+    const data = this.viewTable.selectTableRow()
+    const worksheet : XLSX.WorkSheet = XLSX.utils.json_to_sheet(data)
+    const woorkbook : XLSX.WoorkBook = {Sheets : {'Piping Circuit' : worksheet}, SheetNames : ['Piping Circuit']}
+    const excelBuffer : any = XLSX.write(woorkbook, {bookType : 'xlsx', type : 'array' });
+    this.saveAsExcelFile(excelBuffer, 'Circuit')
+  }
+
+  saveAsExcelFile(buffer : any, excelFileName : string) : void {
+    const data : Blob = new Blob([buffer], {type : EXCEL_TYPE});
+    FileSaver.saveAs(data, excelFileName + '_PIPING_MONITORING_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
 
   addCircuit() {
     this.dialogService.open(AddCircuitComponent, {

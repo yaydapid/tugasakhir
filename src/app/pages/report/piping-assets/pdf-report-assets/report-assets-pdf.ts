@@ -59,8 +59,39 @@ export class PDFReportAssets implements OnInit {
         { name : "Calc CR", props : 'calculated_cr', width : "*" },
     ]
 
+    damageMechanismDetails = [ 
+      { type : 'text', prop : 'piping_damage_mechanism', head : 'Piping Damage Mechanism', width : '200px' },
+      { type : 'text', prop : 'notes', head : 'Notes', width : '200px' },
+      { type : 'text', prop : 'type_location', head : 'Expected Type/Location', width : '200px' },
+      { type : 'text', prop : 'last_insp_date', head : 'Last Insp.Date', width : '200px' },
+      { type : 'text', prop : 'insp_due_date', head : 'Insp. Due Date', width : '200px' },
+    ]
+
+    spesificationItem = [
+      [
+        { props : 'nominal_pipe_size', name : "Nominal Pipe Size", unit : 'mm' },
+        { props : 'pipe_design_code', name : "Pipe Design Code" },
+        { props : 'schedule', name : "Schedule", unit : 'mm' },
+        { props : 'outside_diameter', name : "Outside Diameter" },
+        { props : 'longtd_quality_factor', name : "Longtd. Quality Factor (E)" },
+        { props : 'weld_joint_factor', name : "Weld Joint Factor (W)" },
+        { props : 'allowable_unit_stress', name : "Allowable Unit Stress (S)", unit : 'psi' },
+        { props : 'coefficient', name : "Coefficient (Y)" },
+        { props : 'min_design_pressure', name : "Min. Design Pressure (P min)", unit : 'psig' },
+      ],
+      [
+        { props : 'max_design_pressure', name : "Max. Design Pressure (P max)", unit : 'psig' },
+        { props : 'min_design_temperature', name : "Min. Design Temp (T min)", unit : 'F' },
+        { props : 'max_design_temperature', name : "Max Design Temp (T max)", unit : 'F' },
+        { props : 'corrosion_allowance', name : "Corrosion Allowance", unit : 'mm' },
+        { props : 'mechanical_allowance', name : "Mechanical Allowances", unit : 'mm' },
+        { props : 'min_structural_thickness', name : "Min. Structural Thickness", unit : 'mm' },
+        { props : 'min_alert_thickness', name : "Min. Alert Thickness", unit : 'mm' },
+        { props : 'nominal_thickness', name : "Nominal Thickness", unit : 'mm' },
+      ]
+    ];
+
     public printAsPDF(data) {
-      console.log(data)
         this.tableData = data
         setTimeout(() => {
             const pdf = this.downloadAsPDF()
@@ -103,13 +134,21 @@ export class PDFReportAssets implements OnInit {
         let html = htmlToPdfmake(pdfTable.innerHTML);
         
         if(this.tableData?.qr_code)
-        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.tableData.qr_code }
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.tableData.qr_code, fit: '135' }
         if(!this.tableData.qr_code)
-        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.randomString }
+        html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.randomString, fit: '135' }
 
         const documentDefinition = { 
           content: [
             html,
+            {
+              image: this.tableData.thickness_chart,
+              fit : [500, 500],
+            },
+            {
+              image: this.tableData.remaining_chart,
+              fit : [500, 500],
+            },
           ],
           pageBreakBefore: function(currentNode) {
             return currentNode.style && currentNode.style.indexOf('pdf-pagebreak-before') > -1;

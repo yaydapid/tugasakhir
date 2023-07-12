@@ -20,6 +20,7 @@
     [tableHeader]="tableHeader"
     [columnDetails]="columnDetails"
     [tableData]="tableData"
+    (onClickTable)="onClickTable($event.data, $event.title)"
 ></ngx-mat-table>
 
 <thickness-pdf></thickness-pdf>

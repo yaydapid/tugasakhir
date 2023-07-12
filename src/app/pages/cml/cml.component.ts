@@ -190,7 +190,6 @@ export class CmlComponent implements OnInit {
     fileReader.onload = (e : any) => { 
       const binaryData = e.target.result;
       const workbook = XLSX.read(binaryData, {type : 'binary'});
-      console.log(workbook)
       const sheet = workbook.Sheets[workbook.SheetNames[0]]
       let index = 0;
       let looping = true;
@@ -216,7 +215,7 @@ export class CmlComponent implements OnInit {
       ['Last Thickness'] : last_thickness_reading,
       ['Last Thickness Reading Date'] : last_thickness_reading_date,
     }) => {
-      last_thickness_reading_date = this.transformExcelDate(last_thickness_reading_date)
+      last_thickness_reading_date = this.variables.transformExcelDate(last_thickness_reading_date)
       const year = new Date(last_thickness_reading_date).getFullYear()
       last_thickness_reading_date = this.datePipe.transform(last_thickness_reading_date, 'yyyy-MM-dd')
       return {
@@ -237,6 +236,4 @@ export class CmlComponent implements OnInit {
       () => this.toastrService.success('Data has been added.', 'Your request success.')
     )
   }
-
-  transformExcelDate = (date) => date == undefined ? '' :new Date(Math.round((date - 25569) * 86400 * 1000))
 }

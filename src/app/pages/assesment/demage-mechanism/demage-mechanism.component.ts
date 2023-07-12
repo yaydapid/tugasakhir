@@ -55,12 +55,12 @@ export class DemageMechanismComponent implements OnInit {
 
   tableData
   columnDetails = [ 
-    { type : 'text', prop : 'piping_damage_mechanism', head : 'Piping Damage Mechanism', width : '200px' },
-    { type : 'check', prop : 'active', head : 'Active', width : '100px' },
-    { type : 'drop-down', prop : 'susceptibility', head : 'Susceptibility', width : '50px', value : [
+    { type : 'text', prop : 'piping_damage_mechanism', head : 'Piping Damage Mechanism', width : '800px' },
+    { type : 'check', prop : 'active', head : 'Active', width : '200px' },
+    { type : 'drop-down', prop : 'susceptibility', head : 'Susceptibility', width : '200px', value : [
       "Low", "Medium", "High"
     ]},
-    { type : 'editable text', prop : 'notes', head : 'Notes', width : '800px' },
+    { type : 'editable text', prop : 'notes', head : 'Notes', width : '200px' },
     { type : 'editable text', prop : 'type_location', head : 'Expected Type/Location', width : '200px' },
     { type : 'editable date', prop : 'last_insp_date', head : 'Last Insp.Date', width : '200px' },
     { type : 'editable date', prop : 'insp_due_date', head : 'Insp. Due Date', width : '200px' },

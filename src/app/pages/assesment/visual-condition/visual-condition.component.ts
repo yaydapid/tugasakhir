@@ -4,6 +4,8 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from '@angular/material/paginator';
 import { VisualConditionService } from "./visual-condition.service";
 import { NbToastrService } from "@nebular/theme";
+import { ThicknessPDF } from '../thickness/pdf-thickness/thickness-pdf';
+
 
 @Component({
   selector: 'ngx-visual-condition',
@@ -14,6 +16,8 @@ export class VisualConditionComponent implements OnInit {
     private visualConditionService : VisualConditionService,
     private toastrService : NbToastrService
   ) {}
+
+  @ViewChild(ThicknessPDF) pdfThickness: ThicknessPDF;
   
   ngOnInit(): void {
     this.visualConditionService.getVisualConditions()

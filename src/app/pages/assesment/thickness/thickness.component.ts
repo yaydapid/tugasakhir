@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ThicknessService } from './thickness-service';
 import { Variables } from '../../../component/common-variable';
-import { ThicknessPDF } from '../pdf-assesment/thickness-pdf';
+import { ThicknessPDF } from './pdf-thickness/thickness-pdf';
+import { MatTableComponent } from '../../../component/mat-table/mat-table.component';
 
 @Component({
   selector: 'ngx-thickness',
@@ -46,14 +47,16 @@ export class ThicknessComponent implements OnInit {
     })
   }
 
+  @ViewChild(MatTableComponent) viewTable : MatTableComponent;
   @ViewChild(ThicknessPDF) pdfThickness: ThicknessPDF;
 
   tableHeader = { 
     title : 'Thickness', 
     filter : [
-      { name : "MAWP", value : ["Normal", "Good", "Worst"], title : 'class-assets' } 
+      { name : "MAWP", value : ["No Filter", "Normal", "Abnormal"], title : 'sort-mawp' } 
     ]
   }
+
   tableData:any[] = []
   columnDetails = [ 
     { type : 'navto', prop : 'piping_id', head : 'Piping ID', width : '200px', nav : '/pages/cml/' },
@@ -68,4 +71,14 @@ export class ThicknessComponent implements OnInit {
     { type : 'text', prop : 'next_ve_insp_date', head : 'Next VE Insp Date', width : '200px' },
     { type : 'text', prop : 'mawp', head : 'MAWP (psi)', width : '200px' },
   ]
+
+  onClickTable(data, title) {
+    if(title == "sort-mawp") {
+      if(data == "No Filter") 
+      return this.viewTable.regenerateTable(this.tableData)
+      
+      const tableData = this.variables.sortByMawp(this.tableData, data)
+      this.viewTable.regenerateTable(tableData)
+    }
+  }
 }
