@@ -116,7 +116,7 @@
                 <div *ngIf="column.type == 'editable date'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} "> {{ column.head }} </th>
                     <td mat-cell *matCellDef="let element" (dblclick)="onClickTable.emit({data : element, title : 'edit row'})"> 
-                        <input type="text" nbInput fieldSize="small" [nbDatepicker]="datepicker" class="m-1" value="" [(ngModel)]="element[column?.prop]" *ngIf="element.show ?? true">
+                        <input type="text" nbInput fieldSize="small" autocomplete="off" [nbDatepicker]="datepicker" class="m-1" [(ngModel)]="element[column?.prop] " *ngIf="element.show ?? true">
                         <nb-datepicker #datepicker></nb-datepicker>
                     </td>
                 </div>

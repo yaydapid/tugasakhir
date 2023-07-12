@@ -42,25 +42,57 @@
         </table>
 
         <span style="margin: 1rem 0 0 0;"><b>Pipe Visual</b></span>
+        <table data-pdfmake="{'layout' : 'noBorders', 'widths' : ['*', '*', '*', '*', '*', '*']}">
+            <tr *ngFor="let rows of [0,3];">
+                <div *ngFor="let cols of [0,1,2];">
+                    <td style="color: darkgray;"> 
+                        {{ tableData?.piping_visual[rows + cols]?.name }}
+                    </td>
+                    <td>
+                        {{ tableData?.piping_visual[rows + cols]?.data }}
+                    </td>
+                </div>
+            </tr>
+        </table>
+        
         <span style="margin: 1rem 0 0 0;"><b>Pipe Thickness</b></span>
-        <span style="margin: 1rem 0 0 0;"><b>Pipe Circuit Damage Mechanism</b></span>
-        <span style="margin: 1rem 0 0 0;"><b>Inspection History</b></span>
         <table 
         *ngIf="tableData"
         [style]="tableStyle"
-        data-pdfmake='{"widths":["auto", "auto", "auto", "auto", "auto", "auto", "auto", "auto"], "layout" : "exampleLayout"}'
+        data-pdfmake='{"widths":["*", "auto", "auto", "auto", "auto", "auto", "auto", "*", "*", "*", "*"], "layout" : "exampleLayout"}'
         >
             <tr>
-                <th *ngFor="let head of pdfHead"> 
+                <th *ngFor="let head of thickness"> 
                     <b style="font-weight: bold;">{{ head.name }}</b> 
                 </th>
             </tr>
-            <!-- <tr *ngFor="let data of tableData">
-                <td *ngFor="let head of pdfHead"> {{ data?.[head.props] }} </td>
-            </tr> -->
+            <tr *ngFor="let data of tableData.thickness">
+                <td *ngFor="let props of thickness"> {{ data?.[props.props] }} </td>
+            </tr>
         </table>
 
-        <span style="margin: 1rem 0 0 0;"><b>Trend</b></span>
+        <span style="margin: 1rem 0 0 0;"><b>Pipe Circuit Damage Mechanism</b></span>
+        <span style="font-weight: bold; color: darkgray;">Active Damage Mechanism</span> 
+        <div *ngFor="let damage of tableData?.damage_mechanism; let index = index" style="margin: 0 0 0 0.5rem;">
+            {{ index + 1 }}. {{ damage }}
+        </div>
+
+        <span style="margin: 1rem 0 0 0;"><b>Inspection History</b></span>
+        <table 
+        [style]="tableStyle"
+        data-pdfmake='{"widths":["*", "*", "*", "*"], "layout" : "exampleLayout"}'
+        >
+            <tr>
+                <th *ngFor="let head of inspectionHistory"> 
+                    <b style="font-weight: bold;">{{ head.name }}</b> 
+                </th>
+            </tr>
+            <tr *ngFor="let data of tableData?.inspection_history">
+                <td *ngFor="let props of inspectionHistory"> {{ data[props.props] }} </td>
+            </tr>
+        </table>
+
+        <span style="margin: 1rem 0 0 0;" class="pdf-pagebreak-before"><b>Trend</b></span>
 
     </div>
 </div>

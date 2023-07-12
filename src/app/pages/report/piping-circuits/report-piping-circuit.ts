@@ -143,12 +143,14 @@ export class ReportPipingCircuit implements OnInit {
 
             this.reportData = {
                 ...this.selectionData,
-                visual : this.pipingVisual,
+                piping_visual : this.pipingVisual,
                 thickness : this.pipingThicknessData,
                 damage_mechanism : this.activeDamageMechaninsm,
                 inspection_history : this.inspectionHistoryData,
                 trend_chart : this.circuitChart.chart.toBase64Image()
             }
+
+            console.log(this.pipingThicknessData)
 
         })
     }

@@ -6,7 +6,7 @@
             size="small" 
             status="primary"
             [disabled]="!tableData?.length"
-            (click)="pdfThickness.generateData(this.tableData)"
+            (click)="visualPDF.generateData(selectionData)"
             >
                 <nb-icon icon="printer-outline" class="m-1"></nb-icon>
                 <span>Print</span>
@@ -189,3 +189,5 @@
         </form>
     </nb-card-body>
 </nb-card>
+
+<visual-conditions-pdf></visual-conditions-pdf>

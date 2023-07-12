@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { VisualConditionService } from "./visual-condition.service";
 import { NbToastrService } from "@nebular/theme";
 import { ThicknessPDF } from '../thickness/pdf-thickness/thickness-pdf';
+import { VisualConditionsPDF } from "./pdf-visual-conditions/visual-conditions-pdf";
 
 
 @Component({
@@ -42,6 +43,7 @@ export class VisualConditionComponent implements OnInit {
   selectionData : any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(VisualConditionsPDF) visualPDF: VisualConditionsPDF;
 
   showData(element) {
       this.selectionData = element

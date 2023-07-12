@@ -4,10 +4,8 @@ import { NbAuthResult, NbLoginComponent,} from '@nebular/auth';
 @Component({
   selector: 'ngx-login',
   templateUrl: './login.component.html',
-  // template : '<button (click)="login()">Login</button>'
 })
 export class NgxLoginComponent extends NbLoginComponent {
-  // constructor(private loginService : LoginBateraService) {}
   showPassword = false;
   // getInputType() {
   //   if (this.showPassword) {
@@ -20,12 +18,6 @@ export class NgxLoginComponent extends NbLoginComponent {
   //   this.showPassword = !this.showPassword
   // }
 
-  // errors = []
-  // messages = []
-  // submitted = []
-  // user
-  // showMessages
-  
   login(): void {
     const data = {
       name : "Roganda",
@@ -33,9 +25,6 @@ export class NgxLoginComponent extends NbLoginComponent {
       email : 'roganda@gmail.com',
       password : 12345
     }
-    // this.loginService.getVerifyLogin(data)
-    // .subscribe(res => console.log(res))
-    // this.router.navigateByUrl('/pages/dashboards/piping-assets')
     this.errors = [];
     this.messages = [];
     this.submitted = true;
@@ -46,10 +35,10 @@ export class NgxLoginComponent extends NbLoginComponent {
       password: this.user.password, 
       remember: this.rememberMe
     }).subscribe((result: NbAuthResult) => {
-      // console.log(result)
       this.submitted = false;
       if (result.isSuccess()) {
         this.messages = result.getMessages();
+        localStorage.setItem('user', JSON.stringify(result.getResponse().body.user))
       } else {
         this.errors = result.getErrors();
       }

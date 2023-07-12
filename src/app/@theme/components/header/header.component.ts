@@ -46,7 +46,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.user = { name : 'David', picture : 'https://th.bing.com/th/id/R.1897f97542abc7ed782d257ee781bc40?rik=xFlJ%2bhoKSCg5cA&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-male-user-icon-512.png&ehk=pivQjzqNrQFIa6FjMTnQevAdjpeQ4Sh3OXEgbMFIE2o%3d&risl=&pid=ImgRaw&r=0' }
+    const user = JSON.parse(localStorage.getItem('user'))
+    this.user = { name : user.name , picture : 'https://th.bing.com/th/id/R.1897f97542abc7ed782d257ee781bc40?rik=xFlJ%2bhoKSCg5cA&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-male-user-icon-512.png&ehk=pivQjzqNrQFIa6FjMTnQevAdjpeQ4Sh3OXEgbMFIE2o%3d&risl=&pid=ImgRaw&r=0' }
     this.currentTheme = this.themeService.currentTheme;
 
     const { xl } = this.breakpointService.getBreakpointsMap();

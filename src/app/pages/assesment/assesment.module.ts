@@ -34,6 +34,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { FormsModule } from "@angular/forms";
 import { MatSortModule } from "@angular/material/sort";
 import { ThicknessPDF } from "./thickness/pdf-thickness/thickness-pdf";
+import { VisualConditionsPDF } from "./visual-condition/pdf-visual-conditions/visual-conditions-pdf";
 
 @NgModule({
     imports: [
@@ -75,7 +76,8 @@ import { ThicknessPDF } from "./thickness/pdf-thickness/thickness-pdf";
         DemageMechanismComponent,
         ThicknessComponent,
         VisualConditionComponent,
-        ThicknessPDF
+        ThicknessPDF,
+        VisualConditionsPDF
     ],
   })
 export class AssesmentModule { }

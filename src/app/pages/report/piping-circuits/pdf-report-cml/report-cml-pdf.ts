@@ -50,15 +50,25 @@ export class PDFReportCML implements OnInit {
     tableData : any
     tableStyle = {'font-size' : '12px'}
 
-    pdfHead = [
-        { name : "Id", props : 'cml_id', width : "*" },
-        { name : "Gauge Point", props : 'gauge_point', width : "auto" },
-        { name : "Location", props : 'point_location', width : "auto" },
-        { name : "Nom Thickness", props : 'nominal_thickness', width : "auto" },
-        { name : "Min Req Thickness", props : 'min_required_thickness', width : "auto" },
-        { name : "Last Thick Read", props : 'last_thickness_reading', width : "auto" },
-        { name : "Last Thick Date", props : 'last_thickness_reading_date', width : "auto" },
-        { name : "Calc CR", props : 'calculated_cr', width : "*" },
+    thickness = [
+        { name : "Id", props : 'piping_id', width : "*" },
+        { name : "Reading", props : 'reading', width : "auto" },
+        { name : "T min", props : 'min_required_thickness', width : "auto" },
+        { name : "LT CR", props : 'lt_cr', width : "auto" },
+        { name : "ST CR", props : 'min_required_thickness', width : "auto" },
+        { name : "RL", props : 'remaining_life', width : "auto" },
+        { name : "HL", props : 'half_life', width : "auto" },
+        { name : "Retirement Date", props : 'retirement_date', width : "*" },
+        { name : "Next TM", props : 'next_tm_insp_date', width : "*" },
+        { name : "Next VE", props : 'next_ve_insp_date', width : "*" },
+        { name : "MAWP", props : 'mawp', width : "*" },
+    ]
+
+    inspectionHistory = [
+      { name : "Insp Id", props : 'proposal_id', width : "*" },
+      { name : "Insp Date", props : 'inspection_date', width : "auto" },
+      { name : "Insp Summary", props : 'inspection_summary', width : "auto" },
+      { name : "Carried Out", props : 'carried_out', width : "auto" },
     ]
 
     public printAsPDF(data) {
