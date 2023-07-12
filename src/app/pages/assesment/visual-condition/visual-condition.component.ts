@@ -82,6 +82,7 @@ export class VisualConditionComponent implements OnInit {
       source : [ 
         { title : "Process", props : 'leaks_process'}, 
         { title : "Steam Tracking", props : 'leaks_steam_tracing'}, 
+        { title : "Existing Clamp", props : 'leaks_existing_clamps' }, 
       ] 
     },
     { 
@@ -98,7 +99,6 @@ export class VisualConditionComponent implements OnInit {
       [ 
         { title : "Piping Misalignment", props : 'misalignment_piping_misalignment' }, 
         { title : "Expainsion Joint Misalignment", props : 'misalignment_expainsion_joint' }, 
-        { title : "Existing Clamp", props : 'misalignment_existing_clamps' }, 
       ] 
     },
     { 
