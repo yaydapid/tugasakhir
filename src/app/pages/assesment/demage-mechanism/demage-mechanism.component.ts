@@ -25,10 +25,15 @@ export class DemageMechanismComponent implements OnInit {
   ngOnInit(): void {
     this.damageMechanismService.getDamageMechanism()
     .subscribe(({data} : any) => {
-      this.selectionData = data[0];
       this.regenerateTableData(data[0]?.damage_mechanism)
-
-      this.dataSource = new MatTableDataSource(data);
+      const tableData = data.map(item => {
+        return {
+          ...item,
+          piping_id : item.piping.piping_id
+        }
+      })
+      this.selectionData = tableData[0];
+      this.dataSource = new MatTableDataSource(tableData);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })
@@ -114,5 +119,5 @@ export class DemageMechanismComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
+}
 }

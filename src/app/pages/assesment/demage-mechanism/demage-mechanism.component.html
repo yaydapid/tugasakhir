@@ -4,8 +4,10 @@
             <h5>Damage Mechanism</h5>
             <mat-form-field>
                 <mat-label>Hit Enter To Search</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Damage Mechanism" #input>
-            </mat-form-field>
+                <input matInput 
+                (keyup)="applyFilter($event)"
+                    placeholder="Ex. Mia" #input>
+            </mat-form-field>   
         </div>
 
         <div class="row ">
@@ -36,7 +38,7 @@
                             ? nameCell.style.color = '#0492c2' 
                             : nameCell.style.color = 'black'"
                             (click)="showData(element)"
-                        > {{element?.piping?.piping_id}} </td>
+                        > {{element?.piping_id}} </td>
                     </ng-container>
         
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
