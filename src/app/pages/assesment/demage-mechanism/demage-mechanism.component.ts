@@ -67,7 +67,6 @@ export class DemageMechanismComponent implements OnInit {
   ]
 
   selectionData : any;
-
   dataSource 
   displayedColumns: string[] = [ 'piping_id' ];
 

@@ -81,7 +81,7 @@ export class VisualConditionComponent implements OnInit {
       },
       source : [ 
         { title : "Process", props : 'leaks_process'}, 
-        { title : "Steam Tracking", props : 'leaks_steam_tracing'}, 
+        { title : "Steam Tracing", props : 'leaks_steam_tracing'}, 
         { title : "Existing Clamp", props : 'leaks_existing_clamps' }, 
       ] 
     },
@@ -98,7 +98,7 @@ export class VisualConditionComponent implements OnInit {
       source : 
       [ 
         { title : "Piping Misalignment", props : 'misalignment_piping_misalignment' }, 
-        { title : "Expainsion Joint Misalignment", props : 'misalignment_expainsion_joint' }, 
+        { title : "Expansion Joint Misalignment", props : 'misalignment_expainsion_joint' }, 
       ] 
     },
     { 
@@ -136,7 +136,7 @@ export class VisualConditionComponent implements OnInit {
         { title : 'Coating/Painting Deterioration', props : 'corrosion_coating_painting'},
         { title : 'Soil-to-air Interfaces', props : 'corrosion_soil_to_air'},
         { title : 'Insulation Interfaces', props : 'corrosion_insulation_interface'},
-        { title : 'Biloogical Growth', props : 'corrosion_biological_growth'},
+        { title : 'Bilogical Growth', props : 'corrosion_biological_growth'},
       ] 
     },
     { 
