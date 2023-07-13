@@ -49,7 +49,7 @@ export class PipingCircuitsComponent implements OnInit {
   tableHeader = { 
     title : 'Piping Circuits', 
     filter : [
-      { name : "Class", value : ["All",1,2,3,4], title : 'class-circuit' } 
+      { name : "Class", value : ["All",1,2,3,4], title : 'class-circuit', selection : 'All' } 
     ]
   }
 

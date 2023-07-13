@@ -11,7 +11,7 @@
         <div class="row row-cols-4">
           <div class="col">Class</div>
           <div class="col">
-            <nb-select placeholder="Class" class="" status="primary" size="small">
+            <nb-select placeholder="Class" class="" status="primary" size="small" [selected]="'All'">
               <nb-option 
               (click)="filterByClass(option)"
               [value]="option"
@@ -22,7 +22,7 @@
 
           <div class="col">Conditions</div>
           <div class="col">
-            <nb-select placeholder="Conditions" class="" status="primary" size="small">
+            <nb-select placeholder="Conditions" class="" status="primary" size="small" [selected]="'No Filter'">
               <nb-option 
               (click)="filterByClass(option)"
               [value]="option"
@@ -33,7 +33,7 @@
 
           <div class="col">Susceptibility</div>
           <div class="col">
-            <nb-select placeholder="Susceptibility" class="" status="primary" size="small">
+            <nb-select placeholder="Susceptibility" class="" status="primary" size="small" [selected]="'No Filter'">
               <nb-option 
               (click)="filterByClass(option)"
               [value]="option"
@@ -44,7 +44,7 @@
 
           <div class="col">MAWP</div>
           <div class="col">
-            <nb-select placeholder="MAWP" class="" status="primary" size="small">
+            <nb-select placeholder="MAWP" class="" status="primary" size="small" [selected]="'No Filter'">
               <nb-option 
               (click)="filterByMawp(option)"
               [value]="option"

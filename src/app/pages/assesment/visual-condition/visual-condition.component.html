@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col">Conditions</div>
             <div class="col">
-              <nb-select placeholder="Conditions" class="" status="primary" size="small">
+              <nb-select placeholder="Conditions" class="" status="primary" size="small" [selected]="'No Filter'">
                 <nb-option 
                 (click)="filterByConditions(option)"
                 [value]="option"

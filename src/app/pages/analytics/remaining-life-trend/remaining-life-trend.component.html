@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col">Class</div>
             <div class="col">
-              <nb-select placeholder="Class" class="mx-5" status="primary" size="small">
+              <nb-select placeholder="Class" class="mx-5" status="primary" size="small" [selected]="'All'">
                 <nb-option 
                 (click)="filterByClass(option)"
                 [value]="option"

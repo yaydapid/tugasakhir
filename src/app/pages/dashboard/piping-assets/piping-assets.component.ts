@@ -63,7 +63,7 @@ export class PipingAssetsComponent implements OnInit {
   tableHeader = { 
     title : 'Piping Assets', 
     filter : [
-      { name : "Class", value : ["All",1,2,3,4], title : 'class-assets' } 
+      { name : "Class", value : ["All",1,2,3,4], title : 'class-assets', selection : 'All' } 
     ]
   }
 

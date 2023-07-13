@@ -10,7 +10,7 @@
         <div *ngFor="let filter of tableHeader?.filter" class="row">
             <div class="col">{{ filter?.name }}</div>
             <div class="col"> 
-                <nb-select [placeholder]="filter?.name" size='small' class="mx-5" status="primary">
+                <nb-select [placeholder]="filter?.name" size='small' class="mx-5" status="primary" [selected]="filter?.selection">
                     <nb-option 
                     [value]="option" 
                     *ngFor="let option of filter?.value"

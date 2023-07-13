@@ -53,7 +53,7 @@ export class ThicknessComponent implements OnInit {
   tableHeader = { 
     title : 'Thickness', 
     filter : [
-      { name : "MAWP", value : ["No Filter", "Normal", "Abnormal"], title : 'sort-mawp' } 
+      { name : "MAWP", value : ["No Filter", "Normal", "Abnormal"], title : 'sort-mawp', selection : 'No Filter' } 
     ]
   }
 
