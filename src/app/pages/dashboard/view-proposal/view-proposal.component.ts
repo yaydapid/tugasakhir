@@ -68,6 +68,7 @@ export class ViewProposalComponent implements OnInit {
     })
     .onClose
     .subscribe(newData => {
+      // return console.log(newData)
       if(!newData) return
       const {inspection_planned_date, recomendation_date} = newData
       newData = {

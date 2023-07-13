@@ -32,6 +32,7 @@ export class AddProposalComponent implements OnInit {
 
   circuitData
   choosenPipe = []
+  choosenCircuit = []
 
   selectCircuit(index) {
     this.selectionPipe = null;
@@ -42,6 +43,10 @@ export class AddProposalComponent implements OnInit {
     this.selectionPipe = index; 
     if(!this.choosenPipe.includes(pipe))
     this.choosenPipe.push(pipe)
+
+    const circuit_id = this.circuitData[this.selectionCircuit].id
+    if(!this.choosenCircuit.includes(circuit_id))
+    this.choosenCircuit.push(circuit_id)
   }
 
   selectMethod(index) {
@@ -152,7 +157,8 @@ export class AddProposalComponent implements OnInit {
       arr = {
         ...arr,
         list_of_piping_id : this.choosenPipe.map(item => item.id),
-        inspection_method : this.inspectionMethodList
+        inspection_method : this.inspectionMethodList,
+        circuit : this.choosenCircuit
       }
       this.dialog.close(arr)
     }
