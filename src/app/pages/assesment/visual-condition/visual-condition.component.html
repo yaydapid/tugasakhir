@@ -31,7 +31,7 @@
             <div class="col">
               <nb-select placeholder="Conditions" class="" status="primary" size="small">
                 <nb-option 
-                (click)="filterByClass(option)"
+                (click)="filterByConditions(option)"
                 [value]="option"
                 *ngFor="let option of ['No Filter','Excellent','Good', 'Average', 'Below Average', 'Poor']"
                 >{{ option }}</nb-option>

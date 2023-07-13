@@ -43,6 +43,28 @@ export class Variables {
         { id : "25", piping_damage_mechanism : "Hydrogen Embrittlement" },
     ]
 
+    visualToPoint(c) {
+        if(c == 'Excellent')        return 4
+        if(c == 'Good')             return 3
+        if(c == 'Average')          return 2
+        if(c == 'Below Average')    return 1
+        if(c == 'Poor')             return 0
+    }
+
+    visualToLevel(l) {
+        if(l == 4) return 'Excellent'
+        if(l == 3) return 'Good'
+        if(l == 2) return 'Average'
+        if(l == 1) return 'Below Average'
+        if(l == 0) return 'Poor'
+        return null
+    }
+
+    visualConditionAvg(asset, props) {
+        return asset?.map(x => this.visualToPoint(x?.visual_condition?.[props]))
+        .reduce((x,y) =>  x + y , 0)
+    }
+
     getCMLCalc(asset) {
         const { cml } = asset ?? [];
 

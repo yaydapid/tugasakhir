@@ -6,6 +6,7 @@ import { VisualConditionService } from "./visual-condition.service";
 import { NbToastrService } from "@nebular/theme";
 import { ThicknessPDF } from '../thickness/pdf-thickness/thickness-pdf';
 import { VisualConditionsPDF } from "./pdf-visual-conditions/visual-conditions-pdf";
+import { Variables } from "../../../component/common-variable";
 
 
 @Component({
@@ -15,7 +16,8 @@ import { VisualConditionsPDF } from "./pdf-visual-conditions/visual-conditions-p
 export class VisualConditionComponent implements OnInit {
   constructor(
     private visualConditionService : VisualConditionService,
-    private toastrService : NbToastrService
+    private toastrService : NbToastrService,
+    private variables : Variables
   ) {}
 
   @ViewChild(ThicknessPDF) pdfThickness: ThicknessPDF;
@@ -23,10 +25,28 @@ export class VisualConditionComponent implements OnInit {
   ngOnInit(): void {
     this.visualConditionService.getVisualConditions()
     .subscribe(({data} : any) => {
-      const tableData = data.map(item  => ({
-        ...item.piping,
-        visual_condition : {...item, piping : null}
-      }))
+      const tableData = data.map(item  => {
+        const { 
+          general_condition, 
+          leaks_condition, 
+          misalignment_condition, 
+          vibration_condition, 
+          corrosion_condition, 
+          supports_condition,
+          insulation_condition
+        } = item;
+
+        const point_sort = [general_condition, leaks_condition, misalignment_condition, vibration_condition, corrosion_condition, supports_condition, insulation_condition]
+        .map(i => this.variables.visualToPoint(i))
+        .reduce((x, y) => x + y, 0) / 7
+
+        return {
+          ...item.piping,
+          visual_condition : {...item, piping : null},
+          visual_sort : this.variables.visualToLevel(Math.round(point_sort))
+        }
+      })
+
       this.tableData = tableData
       this.selectionData = this.selectionData ?? tableData[0];
 
@@ -34,6 +54,17 @@ export class VisualConditionComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })
+  }
+  
+  filterByConditions(val) {
+    let tableData;
+    if(val == 'No Filter') tableData = this.tableData
+    if(val == 'Excellent') tableData = this.tableData.filter(i => i.visual_sort == 'Excellent')
+    if(val == 'Good') tableData = this.tableData.filter(i => i.visual_sort == 'Good')
+    if(val == 'Average') tableData = this.tableData.filter(i => i.visual_sort == 'Average')
+    if(val == 'Below Average') tableData = this.tableData.filter(i => i.visual_sort == 'Below Average')
+    if(val == 'Poor') tableData = this.tableData.filter(i => i.visual_sort == 'Poor')
+    this.dataSource = new MatTableDataSource(tableData);
   }
 
   tableData

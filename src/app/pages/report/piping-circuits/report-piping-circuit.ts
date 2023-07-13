@@ -81,7 +81,7 @@ export class ReportPipingCircuit implements OnInit {
 
             this.pipingVisual = this.pipingVisual.map(({name, props}) => ({
                 name, props,
-                data : this.switchToLevel(Math.round(this.visualConditionAvg(assets, props) / assets.length))  
+                data : this.variables.visualToLevel(Math.round(this.variables.visualConditionAvg(assets, props) / assets.length))  
             }))
 
             assets.filter(x => x !=null).forEach(({damage_mechanism, proposal } : any) => {
@@ -178,29 +178,6 @@ export class ReportPipingCircuit implements OnInit {
         chart.chart.update();
     } 
 
-    visualConditionAvg(asset, props) {
-        return asset?.map(x => this.switchToPoint(x?.visual_condition?.[props]))
-        .reduce((x,y) =>  x + y , 0)
-    }
-
-    switchToPoint(c) {
-        if(c == 'Excellent')        return 5
-        if(c == 'Good')             return 4
-        if(c == 'Average')          return 3
-        if(c == 'Below Average')    return 2
-        if(c == 'Poor')             return 1  
-        return 0
-    }
-
-    switchToLevel(l) {
-        if(l == 5) return 'Excellent'
-        if(l == 4) return 'Good'
-        if(l == 3) return 'Average'
-        if(l == 2) return 'Below Average'
-        if(l == 1) return 'Poor'
-        return null
-    }
-    
     filterByClass(val) {
         let tableData = this.tablePosition.filter(item => item.class == val)
         if(val == "All") tableData = this.tablePosition
