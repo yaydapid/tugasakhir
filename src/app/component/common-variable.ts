@@ -65,6 +65,19 @@ export class Variables {
         .reduce((x,y) =>  x + y , 0)
     }
 
+    damageToPoint(c) {
+        if(c == 'Low')      return 1
+        if(c == 'Medium')   return 2
+        if(c == 'High')     return 3
+    }
+
+    damageToLevel(l) {
+        if(l == 1) return 'Low'
+        if(l == 2) return 'Medium'
+        if(l == 3) return 'High'
+        return null
+    }
+
     getCMLCalc(asset) {
         const { cml } = asset ?? [];
 

@@ -9,22 +9,12 @@ export class ProfileComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user'))
+    this.profileDesc = [
+      { title : 'Name', data : user.name },
+      { title : 'Email', data : user.email }
+    ] 
   }
 
-  updateProfile() {
-    console.log('update profile')
-
-  }
-
-  profileData : any = {
-    name : 'David', job : 'Director', address : 'Surabaya, Indonesia', email : 'david@gmail.com'
-  }
-
-  profileDesc : any = [
-    { title : 'Name', prop : 'name' },
-    { title : 'Job', prop : 'job' },
-    { title : 'Address', prop : 'address' },
-    { title : 'Email', prop : 'email' },
-  ]
-
+  profileDesc : any 
 }

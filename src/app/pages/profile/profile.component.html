@@ -8,15 +8,15 @@
                 <div class="row" *ngFor="let profile of profileDesc">
                     <span class="col-5 my-2">{{ profile.title }}</span>
                     <span class="col-2 my-2">:</span>
-                    <span *ngIf="editProfile.value == 0" class="col-5 my-2">{{ profileData[profile.prop] }}</span>
-                    <div *ngIf="editProfile.value == 1" class="col-5" >
+                    <span class="col-5 my-2">{{ profile.data }}</span>
+                    <!-- <div *ngIf="editProfile.value == 1" class="col-5" >
                         <input 
                             nbInput type="text" 
                             fieldSize="small"
                             [placeholder]="profile.title" 
                             [ngModel]="profileData[profile.prop]"
                             >
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
             </div>
         </div>
         <input type="hidden" #editProfile value="0">
-        <button 
+        <!-- <button 
             nbButton 
             [status]="editProfile.value == 0 ? 'primary' : 'success'" 
             (click)="
@@ -39,6 +39,6 @@
                 "
             >
             {{ editProfile.value == 0 ? 'Edit Profile' : 'Update Profile' }}
-        </button>
+        </button> -->
     </nb-card-body>
 </nb-card>

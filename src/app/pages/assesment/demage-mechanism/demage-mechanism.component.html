@@ -15,7 +15,7 @@
             <div class="col">
               <nb-select placeholder="Susceptibility" class="" status="primary" size="small" [selected]="'No Filter'">
                 <nb-option 
-                (click)="filterByClass(option)"
+                (click)="filterBySuspec(option)"
                 [value]="option"
                 *ngFor="let option of ['No Filter','Low','Medium', 'High']"
                 >{{ option }}</nb-option>

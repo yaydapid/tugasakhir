@@ -160,6 +160,8 @@ export class AddProposalComponent implements OnInit {
         inspection_method : this.inspectionMethodList,
         circuit : this.choosenCircuit
       }
+
+      // return console.log(arr)
       this.dialog.close(arr)
     }
   }

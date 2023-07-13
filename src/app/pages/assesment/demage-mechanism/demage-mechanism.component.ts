@@ -26,14 +26,23 @@ export class DemageMechanismComponent implements OnInit {
     this.damageMechanismService.getDamageMechanism()
     .subscribe(({data} : any) => {
       this.regenerateTableData(data[0]?.damage_mechanism)
-      const tableData = data.map(item => {
+      this.tableData = data.map(item => {
+        const { damage_mechanism, piping } = item
+        const damageToPoint : any = damage_mechanism 
+        ? Object.values(damage_mechanism)
+          .map(({susceptibility} : any) => this.variables.damageToPoint(susceptibility))
+        : [null]
+
+        const suspec = damageToPoint.reduce((x, y) => x + y, 0) / damageToPoint.length
         return {
           ...item,
-          piping_id : item.piping.piping_id
+          piping_id : piping.piping_id,
+          suspec : this.variables.damageToLevel(Math.round(suspec))
         }
       })
-      this.selectionData = tableData[0];
-      this.dataSource = new MatTableDataSource(tableData);
+
+      this.selectionData = this.tableData[0];
+      this.dataSource = new MatTableDataSource(this.tableData);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })
@@ -55,7 +64,6 @@ export class DemageMechanismComponent implements OnInit {
       return {...item}
     })
     this.viewTable.regenerateTable(tableData)
-    this.tableData = this.variables.damageMechanismName 
   }
 
   tableData
@@ -107,6 +115,15 @@ export class DemageMechanismComponent implements OnInit {
     )
   }
 
+  filterBySuspec(val) {
+    let tableData;
+    if(val == 'No Filter')
+    tableData = this.tableData
+    if(val != 'No Filter')
+    tableData = this.tableData.filter(({suspec}) => suspec == val)
+    this.dataSource = new MatTableDataSource(tableData);
+  }
+
   showData(element) {
       this.selectionData = element
       this.regenerateTableData(element?.damage_mechanism)
@@ -119,5 +136,5 @@ export class DemageMechanismComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-}
+  }
 }

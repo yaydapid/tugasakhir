@@ -68,7 +68,6 @@ export class ViewProposalComponent implements OnInit {
     })
     .onClose
     .subscribe(newData => {
-      // return console.log(newData)
       if(!newData) return
       const {inspection_planned_date, recomendation_date} = newData
       newData = {
@@ -95,7 +94,7 @@ export class ViewProposalComponent implements OnInit {
     this.dialogService.open(AddProposalComponent, {
       context: {
         dialogData : {
-          title: 'Add Proposal',
+          title: 'Update Proposal',
           data : {
             ...data,
             inspection_planned_date : new Date(data.inspection_planned_date),
