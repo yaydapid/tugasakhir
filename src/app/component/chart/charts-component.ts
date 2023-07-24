@@ -60,7 +60,7 @@ export class ChartsComponent implements OnInit {
                         id : 'A',
                         title: {
                             display: true,
-                            text: yTitle,
+                            text: 'mm/Year',
                             font: {
                                 family: 'Times',
                                 style: 'normal',

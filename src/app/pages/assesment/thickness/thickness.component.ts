@@ -28,8 +28,12 @@ export class ThicknessComponent implements OnInit {
           retirement_date, 
           next_tm_insp_date, 
           next_ve_insp_date, 
-          mawp 
+          mawp,
+          max_design_pressure
         } = this.variables.getThicknessCalculation(asset)
+
+        const mawp_color = mawp < max_design_pressure ? 'red' : 'black';
+
         return {
           ...asset,
           reading : reading.toFixed(3),
@@ -41,7 +45,8 @@ export class ThicknessComponent implements OnInit {
           retirement_date,
           next_tm_insp_date,
           next_ve_insp_date,
-          mawp : mawp.toFixed(2)
+          mawp : mawp.toFixed(2),
+          mawp_color
         }
       })
     })
@@ -69,7 +74,7 @@ export class ThicknessComponent implements OnInit {
     { type : 'text', prop : 'retirement_date', head : 'Retirement Date', width : '200px' },
     { type : 'text', prop : 'next_tm_insp_date', head : 'Next TM Insp Date', width : '200px' },
     { type : 'text', prop : 'next_ve_insp_date', head : 'Next VE Insp Date', width : '200px' },
-    { type : 'text', prop : 'mawp', head : 'MAWP (psi)', width : '200px' },
+    { type : 'text', prop : 'mawp', head : 'MAWP (psi)', width : '200px', color : 'mawp_color' },
   ]
 
   onClickTable(data, title) {

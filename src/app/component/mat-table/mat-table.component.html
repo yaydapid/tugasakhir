@@ -55,7 +55,11 @@
                 <!-- Column type text -->
                 <div *ngIf="column.type == 'text'">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]=" {'width' : column.width} " mat-sort-header> {{ column.head }} </th>
-                    <td mat-cell *matCellDef="let element" [attr.colspan]="element?.colspan" [ngStyle]="{ 'font-weight' : element?.bold ?  'bold' : '' }"> 
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="element?.colspan" 
+                    [ngStyle]="{ 
+                        'font-weight' : element?.bold ?  'bold' : '',
+                        'color' : element[column.color]
+                    }"> 
                         {{element[column.prop] || '-'}}
                     </td>
                 </div>

@@ -8,9 +8,10 @@ import { ChartsComponent } from "../../../../component/chart/charts-component";
 export class CorrosionRChartComponent extends ChartsComponent {
   constructor() {
     super()
+    
     this.defineOptions({
       chartTitle : "Corrosion Rate vs Year", 
-      yTitle : 'CR', 
+      yTitle : 'CR (mm/Year)', 
       xTitle : 'Piping'
     })
   }

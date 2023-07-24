@@ -115,16 +115,22 @@ export class Variables {
         ?.map(({last_thickness_reading_date}) => new Date(last_thickness_reading_date))
         ?.sort((a,b) => a-b)
 
-        function getAvg(i) {
-            const avg = cmls?.map(c => c[i])
-            .reduce((x,y) => x + y, 0) / cmls?.length;
-            if(!avg) return 0;
-            return avg;
+        function getMinVal(i) {
+            const min = cmls?.map(c => c[i])
+            console.log(cmls)
+            if(!min.length) return 0;
+            return Math.min.apply(Math, min)
         }
 
-        const reading = getAvg("last_thickness_reading");
-        const lt_cr = getAvg("calculated_cr");
-        const st_cr = getAvg("calculated_st");
+        function getMaxVal(i) {
+            const max = cmls?.map(c => c[i])
+            if(!max.length) return 0;
+            return Math.max.apply(Math, max)
+        }
+
+        const reading = getMinVal("last_thickness_reading");
+        const lt_cr = getMaxVal("calculated_cr");
+        const st_cr = getMaxVal("calculated_st");
 
         return { 
             cml_details : cmls?.find(c => c.year = year),
@@ -221,14 +227,14 @@ export class Variables {
 
     getAssetsFormula(asset) {
         const {
-            min_design_pressure, outside_diameter, longtd_quality_factor, weld_joint_factor, allowable_unit_stress, 
+            max_design_pressure, outside_diameter, longtd_quality_factor, weld_joint_factor, allowable_unit_stress, 
             coefficient, min_alert_thickness, min_structural_thickness, corrosion_allowance, mechanical_allowance
         } = asset;
       
         const pressure_design_thickness = 
-        (min_design_pressure * outside_diameter) / 
+        (max_design_pressure * outside_diameter) / 
         (2 * ((longtd_quality_factor * weld_joint_factor * allowable_unit_stress) 
-        + (coefficient * min_design_pressure)
+        + (coefficient * max_design_pressure)
         ))
 
         const min_required_thickness = 

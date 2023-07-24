@@ -132,11 +132,14 @@ export class PDFReportAssets implements OnInit {
     public downloadAsPDF() {   
         const pdfTable = this.pdfThickness.nativeElement;
         let html = htmlToPdfmake(pdfTable.innerHTML);
-        
+
         if(this.tableData?.qr_code)
         html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.tableData.qr_code, fit: '135' }
         if(!this.tableData.qr_code)
         html[2].table.body[0][2].stack[0] = { qr : environment.apiUrl + "/qr_code/" + this.randomString, fit: '135' }
+
+        html[2].table.body[0][2].stack[1] = { text : this.tableData.piping_id, alignment: 'center', 
+        bold: true }
 
         const documentDefinition = { 
           content: [

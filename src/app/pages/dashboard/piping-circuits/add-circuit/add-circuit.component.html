@@ -108,6 +108,19 @@
                             id="addImage"
                             (change)="onFileChange($event)"
                         >
+
+                        <div class="col-12">
+                            <label class="d-block" for="comment">Comment</label>
+                            <textarea 
+                            nbInput 
+                            name="comment" 
+                            id="comment" 
+                            fullWidth
+                            rows="2"
+                            [ngModel]="dialogData?.data?.comment"
+                            ></textarea>
+                        </div>
+                        
                     </div>
         
                     <div>
