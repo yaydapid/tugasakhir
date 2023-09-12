@@ -109,7 +109,6 @@ export class ReportPipingAssets implements OnInit {
                     data : dataThickness[props],
                 }
             })
-
             this.reportData = {
                 ...asset, 
                 corrosion_allowance : asset.corrosion_allowance.toFixed(3),

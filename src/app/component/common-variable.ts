@@ -117,14 +117,13 @@ export class Variables {
 
         function getMinVal(i) {
             const min = cmls?.map(c => c[i])
-            console.log(cmls)
-            if(!min.length) return 0;
+            if(!min?.length) return 0;
             return Math.min.apply(Math, min)
         }
 
         function getMaxVal(i) {
             const max = cmls?.map(c => c[i])
-            if(!max.length) return 0;
+            if(!max?.length) return 0;
             return Math.max.apply(Math, max)
         }
 
@@ -168,11 +167,12 @@ export class Variables {
                 return null;
             })
             .filter(c => c != null)
-            avgCML = avgCML.reduce((x,y) => x + y, 0) / avgCML?.length;
+
+            // avgCML = avgCML.reduce((x,y) => x + y, 0) / avgCML?.length;
 
             return {
                 ...cml.find(c => c.cml_id == allid && c.year == allyear),
-                last_thickness_reading : avgCML
+                last_thickness_reading : Math.min.apply(Math, avgCML)
             }
         })
     
@@ -238,8 +238,11 @@ export class Variables {
         ))
 
         const min_required_thickness = 
-        Math.max(min_structural_thickness, min_alert_thickness, pressure_design_thickness ) 
-        + corrosion_allowance + mechanical_allowance
+        Math.max(min_structural_thickness, min_alert_thickness, pressure_design_thickness)
+        + parseFloat(corrosion_allowance) 
+        + parseFloat(mechanical_allowance) 
+
+        // console.log(typeof corrosion_allowance)
 
         return {...asset, pressure_design_thickness, min_required_thickness}
     }

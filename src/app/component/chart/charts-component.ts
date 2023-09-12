@@ -91,7 +91,7 @@ export class ChartsComponent implements OnInit {
             labels: this.yLabels, 
             datasets: this.datasets
         }
-        
+
         this.chart = new Chart(id, {
             type: this.chartType,
             data: this.data,

@@ -79,6 +79,7 @@ export class RemainingLifeTrendComponent implements OnInit {
     const pipingCalc = piping.map(p => this.variables.getThicknessCalculation(p)) 
 
     chart.data.labels = allPipe
+
     const dataSet =
     this.datasets
     .map(item => {
@@ -91,6 +92,7 @@ export class RemainingLifeTrendComponent implements OnInit {
         data
       }
     })
+
     chart.chart.data.datasets = dataSet
     chart.chart.update();
   } 

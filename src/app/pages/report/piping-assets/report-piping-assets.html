@@ -8,7 +8,7 @@
             </mat-form-field>
         </div>
         
-        <div class="row row-cols-2">
+        <div class="row row-cols-4">
           <div class="col">Class</div>
           <div class="col">
             <nb-select placeholder="Class" class="" status="primary" size="small" [selected]="'All'">
@@ -20,7 +20,7 @@
             </nb-select>
           </div>
 
-          <!-- <div class="col">Conditions</div>
+          <div class="col">Conditions</div>
           <div class="col">
             <nb-select placeholder="Conditions" class="" status="primary" size="small" [selected]="'No Filter'">
               <nb-option 
@@ -40,7 +40,7 @@
               *ngFor="let option of ['No Filter','Low','Medium', 'High']"
               >{{ option }}</nb-option>
             </nb-select>
-          </div> -->
+          </div>
 
           <div class="col">MAWP</div>
           <div class="col">

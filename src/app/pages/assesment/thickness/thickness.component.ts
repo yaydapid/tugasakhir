@@ -32,6 +32,8 @@ export class ThicknessComponent implements OnInit {
           max_design_pressure
         } = this.variables.getThicknessCalculation(asset)
 
+        // console.log(min_required_thickness)
+
         const mawp_color = mawp < max_design_pressure ? 'red' : 'black';
 
         return {

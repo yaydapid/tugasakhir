@@ -28,16 +28,10 @@ export class ViewProposalComponent implements OnInit {
     this.proposalService.getProposals()
     .subscribe(({data} : any) => {
       this.tableData = data.map(item => {
-        const list_circuit = item.circuit.map(circuit => {
-          return [
-            circuit.piping_circuit_id,
-            ...circuit.piping.map(({piping_id}) => " " + piping_id)
-          ]
-        })
 
         return {
           ...item,
-          list_circuit : [...list_circuit]
+          list_circuit : item.circuit.map(({piping_circuit_id}) => piping_circuit_id)
         }
       })
 
