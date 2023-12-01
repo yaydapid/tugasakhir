@@ -26,7 +26,7 @@ export class CorrosionRateTrendComponent implements OnInit {
     .subscribe(({data} : any) => {
       this.selectionData = data[0];
       this.tableData = data;
-      
+
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

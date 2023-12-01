@@ -21,17 +21,17 @@ export class AddCircuitComponent {
     private apiUrl = environment.apiUrl;
 
     ngOnInit(): void {
+        console.log(this.dialogData)
+        const data = this.dialogData.data
         this.assetsService.getPipingAssets()
-        .subscribe(({data} : any) => {
-            this.piping = data.filter(item => !item.piping_circuit 
-                || this.dialogData?.data?.piping_id.includes(item.id)
-                );
+        .subscribe(({data : pipe} : any) => { 
+            this.piping = pipe.filter(item => (data.id == item.circuit?.id || !item.circuit))
         })
 
-        const images = this.dialogData?.data?.images
+        const images = data?.images
         if(images)
         this.imageLink = images.map(image => (
-          {src : this.apiUrl + "/image/" + image, alt : 'Piping Assets'}
+            {src : this.apiUrl + "/image/" + image, alt : 'Piping Assets'}
         ))
     }
 

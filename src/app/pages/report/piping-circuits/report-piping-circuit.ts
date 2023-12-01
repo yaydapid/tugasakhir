@@ -74,9 +74,9 @@ export class ReportPipingCircuit implements OnInit {
     getCircuitReport(id) {
 
         this.reportService.getCircuitReport(id)
-        .subscribe(({data : { assets }} : any) => {
-
+        .subscribe(({data : { assets, proposals }} : any) => {
             const chartData = assets.map(({asset, cml} : any) => ({...asset, cml}))
+
             this.circuitChartData(this.circuitChart, {piping : chartData})
 
             this.pipingVisual = this.pipingVisual.map(({name, props}) => ({
@@ -84,17 +84,33 @@ export class ReportPipingCircuit implements OnInit {
                 data : this.variables.visualToLevel(Math.round(this.variables.visualConditionAvg(assets, props) / assets.length))  
             }))
 
-            assets.filter(x => x !=null).forEach(({damage_mechanism, proposal } : any) => {
-                const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal?.id)
-                if(!inspectionProposal) {
-                    const inspection_summary = proposal 
-                    ? proposal.inspection_method
-                    ?.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
-                    : []
+            let proposalsArray : any = []
+            for(let proposal of proposals){
+                proposal?.inspection_method
+                ?.forEach(({type, method, technique, coverage, active}) => {
+                    proposalsArray.push(
+                        { ...proposal,
+                            inspection_summary : ` ${type} ${method} ${technique}`,
+                        type, method, technique, coverage, active 
+                        })
+                }) 
+            }
 
-                    if(inspection_summary.length)
-                    this.inspectionHistoryData.push({...proposal, inspection_summary})
-                }
+            this.inspectionHistoryData = proposalsArray
+            
+            assets.filter(x => x !=null).forEach(({damage_mechanism, proposal } : any) => {
+
+                // const inspectionProposal = this.inspectionHistoryData.find(i => i.id == proposal?.id)
+
+                // if(!inspectionProposal) {
+                //     const inspection_summary = proposal 
+                //     ? proposal.inspection_method
+                //     ?.map(({type, technique,method}) => ` ${type} ${method} ${technique}`)
+                //     : []
+
+                //     if(inspection_summary.length)
+                //     this.inspectionHistoryData.push({...proposal, inspection_summary})
+                // }
 
                 const damage = this.variables.damageMechanismName
                 .map(({id ,piping_damage_mechanism} : any) => {
@@ -104,7 +120,6 @@ export class ReportPipingCircuit implements OnInit {
                 })  
                 .filter(item => item!=null)
                 .map(({piping_damage_mechanism}) => piping_damage_mechanism)
-
                 damage.forEach(element => {
                     if(!this.activeDamageMechaninsm.includes(element)) 
                     this.activeDamageMechaninsm.push(element)
@@ -141,6 +156,8 @@ export class ReportPipingCircuit implements OnInit {
                 }
             })
 
+            console.log(this.pipingThicknessData)
+
             this.reportData = {
                 ...this.selectionData,
                 piping_visual : this.pipingVisual,
@@ -149,8 +166,6 @@ export class ReportPipingCircuit implements OnInit {
                 inspection_history : this.inspectionHistoryData,
                 trend_chart : this.circuitChart.chart.toBase64Image()
             }
-
-            console.log(this.pipingThicknessData)
 
         })
     }
@@ -203,7 +218,7 @@ export class ReportPipingCircuit implements OnInit {
     ]
 
     activeDamageMechaninsm : any[] = [ ]
-    pipingThicknessData:any[]
+    pipingThicknessData:any[] =  []
     columnDetails = [ 
         { type : 'text', prop : 'piping_id', head : 'Piping Id', width : '200px' },
         { type : 'text', prop : 'reading', head : 'Reading (mm)', width : '200px' },
@@ -223,6 +238,7 @@ export class ReportPipingCircuit implements OnInit {
         { type : 'text', prop : 'proposal_id', head : 'Inspection Id', width : '100px' },
         { type : 'editable date', prop : 'inspection_date', head : 'Inspection Date', width : '200px' },
         { type : 'text', prop : 'inspection_summary', head : 'Inspection Summary', width : '300px' },
+        { type : 'text', prop : 'coverage', head : '%', width : '30px' },
         { type : 'check', prop : 'caried_out', head : 'Caried Out', width : '50px' },
     ]
 

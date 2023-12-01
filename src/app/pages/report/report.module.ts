@@ -22,6 +22,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { PDFReportAssets } from "./piping-assets/pdf-report-assets/report-assets-pdf";
 import { PDFReportCML } from "./piping-circuits/pdf-report-cml/report-cml-pdf";
 import { DashboardCorrosionRChart } from "./piping-assets/chart/corrosionR-chart.component";
+import { InspectionHistoryTable } from "./piping-assets/inspeciton_history-table/inspection_history-table";
 
 @NgModule({
     imports: [
@@ -63,7 +64,8 @@ import { DashboardCorrosionRChart } from "./piping-assets/chart/corrosionR-chart
         ReportPipingCircuit,
         PipingCircuitChart,
         PDFReportAssets,
-        PDFReportCML
+        PDFReportCML,
+        InspectionHistoryTable
     ],
   })
 export class ReportModule { }

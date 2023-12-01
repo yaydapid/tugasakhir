@@ -18,6 +18,8 @@ export class AddProposalComponent implements OnInit {
     this.circuitService.getPipingCircuits()
     .subscribe(({data : circuitData} : any) => {
       this.circuitData = circuitData
+      this.inspectionMethodList = this.dialogData.data?.inspection_method || []
+      this.choosenPipe = this.dialogData.data?.assets || []
     })
   }
 

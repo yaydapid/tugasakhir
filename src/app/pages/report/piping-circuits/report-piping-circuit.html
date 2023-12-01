@@ -202,8 +202,9 @@
 
                 <section class="mt-3">
                     <h6 class="fw-bolder text-primary mb-2 d-block">Piping Thickness</h6>
+                    <div *ngIf="!pipingThicknessData.length">No data</div>
                     <ngx-mat-table 
-                      *ngIf="pipingThicknessData"
+                      *ngIf="pipingThicknessData.length"
                       [tableHeader]="{ show : false }"
                       [tableFooter]="{ pageSize : 5 }"
                       [columnDetails]="columnDetails"
@@ -226,13 +227,20 @@
                 <section>
                   <h6 class="fw-bolder text-primary mb-2 d-block">Inspection History</h6>
 
-                  <ngx-mat-table 
+                  <!-- <ngx-mat-table 
                     *ngIf="inspectionHistoryData.length"
                     [tableHeader]="{ show : false }"
                     [tableFooter]="{ pageSize : 5 }"
                     [columnDetails]="inspectionHistoryDetails"
                     [tableData]="inspectionHistoryData"
-                ></ngx-mat-table>
+                ></ngx-mat-table> -->
+                  <div *ngIf="!inspectionHistoryData.length">No data</div>
+                  <ngx-inspection_history_table 
+                      *ngIf="inspectionHistoryData.length"
+                      [tableHeader]="{ show : false }"
+                      [tableFooter]="{ show : false }"
+                      [tableData]="inspectionHistoryData"
+                  ></ngx-inspection_history_table>
                 </section>
 
                 <section>

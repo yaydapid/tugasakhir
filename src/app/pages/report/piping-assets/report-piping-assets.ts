@@ -54,8 +54,7 @@ export class ReportPipingAssets implements OnInit {
     @ViewChild(MatTableComponent) viewTable : MatTableComponent;
     getReportData(id) {
         this.reportService.getAssetsReport(id)
-        .subscribe(({data : {damage_mechanism, visual_condition, proposal, asset, cml}} : any) => {
-
+        .subscribe(({data : {damage_mechanism, visual_condition, asset, cml, proposals = [] }} : any) => {
             this.damageMechanismData = this.variables.damageMechanismName?.map(({id ,piping_damage_mechanism} : any) => {
                 const damage = damage_mechanism?.[id]
                 if(damage) return {...damage, piping_damage_mechanism}
@@ -68,14 +67,20 @@ export class ReportPipingAssets implements OnInit {
                 name, props, data : visual_condition[props] ?? null
             })) 
 
-            this.inspectionHistoryData = proposal 
-            ? [{
-                ...proposal, 
-                inspection_summary : proposal
-                ?.inspection_method
-                ?.map(({type, method, technique}) => ` ${type} ${method} ${technique}`) 
-            }]
-            : []
+            
+            let proposalsArray : any = []
+            for(let proposal of proposals){
+                proposal?.inspection_method
+                ?.forEach(({type, method, technique, coverage, active}) => {
+                    proposalsArray.push(
+                        { ...proposal,
+                            inspection_summary : ` ${type} ${method} ${technique}`,
+                        type, method, technique, coverage, active 
+                        })
+                }) 
+            }
+
+            this.inspectionHistoryData = proposalsArray
 
             this.pipingThickness = this.pipingThickness.map(({name, props}) => {
                 const { 
@@ -109,11 +114,12 @@ export class ReportPipingAssets implements OnInit {
                     data : dataThickness[props],
                 }
             })
+
             this.reportData = {
                 ...asset, 
-                corrosion_allowance : asset.corrosion_allowance.toFixed(3),
-                mechanical_allowance : asset.mechanical_allowance.toFixed(3),
-                nominal_thickness : asset.nominal_thickness.toFixed(3),
+                corrosion_allowance : asset.corrosion_allowance,
+                mechanical_allowance : asset.mechanical_allowance,
+                nominal_thickness : asset.nominal_thickness,
                 damage_mechanism : this.damageMechanismData,
                 piping_visual : this.pipingVisual,
                 inspection : this.inspectionHistoryData,
@@ -262,13 +268,7 @@ export class ReportPipingAssets implements OnInit {
     ]
 
     inspectionHistoryData:any[] = []
-    inspectionHistoryDetails = [ 
-        { type : 'text', prop : 'proposal_id', head : 'Inspection Id', width : '100px' },
-        { type : 'editable date', prop : 'inspection_date', head : 'Inspection Date', width : '200px' },
-        { type : 'text', prop : 'inspection_summary', head : 'Inspection Summary', width : '300px' },
-        { type : 'check', prop : 'caried_out', head : 'Caried Out', width : '50px' },
-    ]
-
+    
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();

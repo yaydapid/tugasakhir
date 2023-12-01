@@ -235,13 +235,14 @@
                 <section>
                   <h6 class="fw-bolder text-primary mb-2 d-block">Inspection History</h6>
                   <span *ngIf="!inspectionHistoryData.length">Data Not Available</span>
-                  <ngx-mat-table 
+
+                  <ngx-inspection_history_table 
                     *ngIf="inspectionHistoryData.length"
                     [tableHeader]="{ show : false }"
                     [tableFooter]="{ show : false }"
-                    [columnDetails]="inspectionHistoryDetails"
                     [tableData]="inspectionHistoryData"
-                ></ngx-mat-table>
+                ></ngx-inspection_history_table>
+
                 </section>
 
                 <section>

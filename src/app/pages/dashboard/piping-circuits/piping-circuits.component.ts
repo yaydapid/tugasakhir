@@ -140,7 +140,6 @@ export class PipingCircuitsComponent implements OnInit {
       }
     })
 
-    console.log(resultData)
     this.circuitService.importCircuits(resultData)
     .subscribe(
       () => this.ngOnInit(),

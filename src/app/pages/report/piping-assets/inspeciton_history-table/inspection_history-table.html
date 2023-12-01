@@ -1,0 +1,8 @@
+<ngx-mat-table 
+    *ngIf="tableData.length"
+    [tableHeader]="{ show : false }"
+    [tableFooter]="{ show : false }"
+    [columnDetails]="inspectionHistoryDetails"
+    [tableData]="tableData"
+    (onClickTable)="onClickTable($event)"
+></ngx-mat-table>

@@ -82,7 +82,7 @@
                     <td mat-cell *matCellDef="let element"> 
                         <div class="d-flex justify-content-center w-50 m-2" *ngIf="element.show ?? true">
                             <nb-checkbox 
-                            (checkedChange)="toggle($event)" 
+                            (checkedChange)="onClickTable.emit({$event, element})" 
                             [checked]="element[column.prop]" 
                             [(ngModel)]="element[column.prop]"
                             ></nb-checkbox>
