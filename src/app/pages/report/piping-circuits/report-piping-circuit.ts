@@ -87,11 +87,12 @@ export class ReportPipingCircuit implements OnInit {
             let proposalsArray : any = []
             for(let proposal of proposals){
                 proposal?.inspection_method
-                ?.forEach(({type, method, technique, coverage, active}) => {
+                ?.forEach(({type, method, technique, coverage, active, inspection_date, carried_out}) => {
                     proposalsArray.push(
-                        { ...proposal,
+                        { 
+                            ...proposal,
                             inspection_summary : ` ${type} ${method} ${technique}`,
-                        type, method, technique, coverage, active 
+                            type, method, technique, coverage, active, carried_out, inspection_date
                         })
                 }) 
             }
@@ -155,8 +156,6 @@ export class ReportPipingCircuit implements OnInit {
                     mawp : mawp.toFixed(2)
                 }
             })
-
-            console.log(this.pipingThicknessData)
 
             this.reportData = {
                 ...this.selectionData,

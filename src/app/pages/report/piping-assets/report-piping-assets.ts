@@ -67,15 +67,16 @@ export class ReportPipingAssets implements OnInit {
                 name, props, data : visual_condition[props] ?? null
             })) 
 
-            
             let proposalsArray : any = []
+            console.log(proposals)
             for(let proposal of proposals){
                 proposal?.inspection_method
-                ?.forEach(({type, method, technique, coverage, active}) => {
+                ?.forEach(({type, method, technique, coverage, active, inspection_date, carried_out}) => {
                     proposalsArray.push(
-                        { ...proposal,
+                        { 
+                            ...proposal,
                             inspection_summary : ` ${type} ${method} ${technique}`,
-                        type, method, technique, coverage, active 
+                            type, method, technique, coverage, active, carried_out, inspection_date
                         })
                 }) 
             }

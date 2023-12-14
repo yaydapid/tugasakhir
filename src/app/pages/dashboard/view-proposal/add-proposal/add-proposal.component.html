@@ -40,7 +40,7 @@
                             <div class="w-100 ms-4">
                                 <span class="text-secondary">Piping ID</span>
                                 <nb-list>
-                                    <nb-list-item *ngFor="let piping of circuitData[selectionCircuit]?.piping; let index = index;" style="max-height: .7rem;">
+                                    <nb-list-item *ngFor="let piping of pipingId; let index = index;" style="max-height: .7rem;">
                                         <span
                                         #pipingcell
                                         style="cursor : pointer"
@@ -203,6 +203,7 @@
                     <div class="col-6 p-1">
                         <nb-card style="max-height: 24rem;">
                             <nb-list>
+
                                 <nb-list-item 
                                 *ngFor="let method of inspectionMethodList; let index = index;" 
                                 style="cursor: pointer;" 
@@ -234,7 +235,7 @@
                                             + {{ method?.technique }}
                                         </span>
 
-                                        <input type="number" nbInput min="0" max="100" [(ngModel)]="method.coverage" name="coverage" fieldSize="tiny" class="col-2">
+                                        <input type="number" id="coverage{{ index }}" nbInput min="0" max="100" [(ngModel)]="method.coverage" fieldSize="tiny" [ngModelOptions]="{standalone: true}" name="coverage" class="col-2">
 
                                         <div class="col-1 d-flex justify-content-center align-items-center">
                                             <button nbButton status="danger" size="tiny" (click)="deleteMethod(index)">
@@ -243,8 +244,10 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </nb-list-item>
+
+
+
                               </nb-list>
                         </nb-card>
                     </div>

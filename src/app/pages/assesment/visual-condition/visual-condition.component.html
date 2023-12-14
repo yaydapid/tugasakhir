@@ -173,7 +173,7 @@
                                     class="d-flex justify-content-between">
                                         <span>{{ source?.title }}</span>
                                         <nb-checkbox 
-                                        [ngModel]="selectionData?.visual_condition[source.props]"
+                                        [ngModel]="convertToBool(selectionData?.visual_condition[source.props])"
                                         [name]="source?.props"
                                         class="mx-2"
                                         ></nb-checkbox>

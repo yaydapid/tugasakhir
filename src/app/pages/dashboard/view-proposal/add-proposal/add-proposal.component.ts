@@ -20,11 +20,17 @@ export class AddProposalComponent implements OnInit {
       this.circuitData = circuitData
       this.inspectionMethodList = this.dialogData.data?.inspection_method || []
       this.choosenPipe = this.dialogData.data?.assets || []
+      console.log(this.choosenPipe.map(i => i.id))
+      this.pipingId = this.circuitData[this.selectionCircuit]?.piping
+      .filter(p => {
+        if(!this.choosenPipe.map(i => i.id).includes(p.id)) return p
+      })
     })
   }
 
   @Input() dialogData;
 
+  pipingId = []
   selectionCircuit = 0;
   selectionPipe;
   selectionTechnique
@@ -163,7 +169,6 @@ export class AddProposalComponent implements OnInit {
         circuit : this.choosenCircuit
       }
 
-      // return console.log(arr)
       this.dialog.close(arr)
     }
   }

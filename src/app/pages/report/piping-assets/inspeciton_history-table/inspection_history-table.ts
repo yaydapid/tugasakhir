@@ -14,10 +14,12 @@ export class InspectionHistoryTable implements OnInit {
         private datePipe : DatePipe,
     ){ }
     ngOnInit(): void {
-        this.tableData = this.tableData.map(item => {
+        this.tableData = this.tableData.map((item, index) => {
+            const { inspection_date } = item
             return {
                 ...item,
-                inspection_date : new Date(item.inspection_date),
+                method_index : index,
+                inspection_date : inspection_date ? new Date(inspection_date) : null,
             }
         })
     }
@@ -25,10 +27,14 @@ export class InspectionHistoryTable implements OnInit {
     @Input() tableData = []
 
     onClickTable({$event : carried_out, element : e}){
-        let {inspection_date, id} = e
+        let {inspection_date, id, inspection_method, method_index} = e
+        
         if(!inspection_date) return this.toastr.danger("Please input Inspection date", "Inspection Date is Empty");
         inspection_date = this.datePipe.transform(inspection_date, 'yyyy-MM-dd')
-        e = {...e, inspection_date, carried_out}
+        console.log(inspection_date)
+        inspection_method[method_index] = { ...inspection_method[method_index], carried_out, inspection_date } 
+
+        e = {...e, inspection_method}
 
         this.proposalService.updateProposal(e, id)
         .subscribe(

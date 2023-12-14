@@ -39,7 +39,7 @@ export class VisualConditionComponent implements OnInit {
         const point_sort = [general_condition, leaks_condition, misalignment_condition, vibration_condition, corrosion_condition, supports_condition, insulation_condition]
         .map(i => this.variables.visualToPoint(i))
         .reduce((x, y) => x + y, 0) / 7
-
+        
         return {
           ...item.piping,
           visual_condition : {...item, piping : null},
@@ -78,6 +78,11 @@ export class VisualConditionComponent implements OnInit {
 
   showData(element) {
       this.selectionData = element
+  }
+
+  convertToBool(e){
+    if(e == 0) return false
+    else return true
   }
 
   onSubmit(data) {
